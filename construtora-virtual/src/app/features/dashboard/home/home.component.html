@@ -1,0 +1,100 @@
+<div class="dashboard">
+
+  <h2>
+
+    {{
+      obrasConcluidas > 0
+      ? (
+        obrasConcluidas /
+        totalObras * 100
+      ).toFixed(0)
+      : 0
+    }}%
+
+  </h2>
+
+  <p>Produtividade</p>
+
+  <h1>Dashboard Executivo</h1>
+
+  <div class="cards">
+
+    <div class="card-dashboard">
+      <h2>{{ totalObras }}</h2>
+      <p>Total de Obras</p>
+    </div>
+
+    <div class="card-dashboard">
+      <h2>{{ obrasPlanejamento }}</h2>
+      <p>Planejamento</p>
+    </div>
+
+    <div class="card-dashboard">
+      <h2>{{ obrasAndamento }}</h2>
+      <p>Em Andamento</p>
+    </div>
+
+    <div class="card-dashboard">
+      <h2>{{ obrasConcluidas }}</h2>
+      <p>Concluídas</p>
+    </div>
+
+  </div>
+
+  <div class="orcamento-card">
+
+    <h2>
+      R$
+      {{ orcamentoTotal.toLocaleString('pt-BR') }}
+    </h2>
+
+    <p>Orçamento Total</p>
+
+  </div>
+
+  <div class="tabela-obras">
+
+    <h2>Últimas Obras</h2>
+
+    <table class="table">
+
+      <thead>
+
+        <tr>
+          <th>Nome</th>
+          <th>Cidade</th>
+          <th>Status</th>
+          <th>Orçamento</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="
+            let obra of
+            obraService.listar()
+          "
+        >
+
+          <td>{{ obra.nome }}</td>
+
+          <td>{{ obra.cidade }}</td>
+
+          <td>{{ obra.status }}</td>
+
+          <td>
+            R$
+            {{ obra.orcamento }}
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

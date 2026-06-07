@@ -1,0 +1,62 @@
+<div class="sidebar"
+  [class.collapsed]="collapsed">
+
+  <button
+    class="toggle-btn"
+    (click)="toggleSidebar()">
+
+    ☰
+
+  </button>
+
+  <h3 class="logo">
+    🏗 Construtora
+  </h3>
+
+  <ul>
+
+    <li>
+      <a routerLink="/dashboard">
+        📊 Dashboard
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/obras">
+        🏢 Obras
+      </a>
+    </li>
+
+  <li>
+    <a routerLink="/cadastro-obra">
+      Nova Obra
+    </a>
+  </li>
+
+    <li>
+      <a routerLink="/funcionarios">
+        👷 Funcionários
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/fornecedores">
+        🚚 Fornecedores
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/materiais">
+        🧱 Materiais
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/custos">
+        💰 Custos
+      </a>
+    </li>
+
+  </ul>
+
+</div>

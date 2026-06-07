@@ -1,0 +1,62 @@
+<div class="container mt-4">
+
+<h2>Obras Cadastradas</h2>
+
+<input
+  class="form-control mb-3"
+  placeholder="Pesquisar obra"
+  [(ngModel)]="filtro">
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+<th>Nome</th>
+<th>Cidade</th>
+<th>Status</th>
+<th>Orçamento</th>
+<th>Ações</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr
+*ngFor="
+let obra of
+obrasFiltradas
+">
+
+<td>{{ obra.nome }}</td>
+
+<td>{{ obra.cidade }}</td>
+
+<td>{{ obra.status }}</td>
+
+<td>
+R$ {{ obra.orcamento }}
+</td>
+
+<td>
+
+<button
+class="btn btn-danger btn-sm"
+(click)="
+excluir(obra.id)
+">
+
+Excluir
+
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>

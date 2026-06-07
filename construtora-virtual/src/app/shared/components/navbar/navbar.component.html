@@ -1,0 +1,31 @@
+<nav class="navbar-custom">
+
+  <span>
+
+    {{
+      auth.getUsuario().nome
+    }}
+
+  </span>
+
+  <div>
+
+    <button
+      class="btn btn-secondary me-2"
+      (click)="theme.toggleTheme()">
+
+      🌙
+
+    </button>
+
+    <button
+      class="btn btn-danger"
+      (click)="logout()">
+
+      Sair
+
+    </button>
+
+  </div>
+
+</nav>

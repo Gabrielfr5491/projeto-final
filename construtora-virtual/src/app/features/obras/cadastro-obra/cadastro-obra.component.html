@@ -1,0 +1,75 @@
+<div class="container mt-4">
+
+  <h2>Cadastrar Obra</h2>
+
+  <input
+    class="form-control mb-2"
+    placeholder="Nome"
+    [(ngModel)]="obra.nome">
+
+  <input
+    class="form-control mb-2"
+    placeholder="Endereço"
+    [(ngModel)]="obra.endereco">
+
+  <input
+    class="form-control mb-2"
+    placeholder="Cidade"
+    [(ngModel)]="obra.cidade">
+
+  <input
+    class="form-control mb-2"
+    placeholder="Estado"
+    [(ngModel)]="obra.estado">
+
+  <input
+    type="date"
+    class="form-control mb-2"
+    [(ngModel)]="obra.dataInicio">
+
+  <input
+    type="date"
+    class="form-control mb-2"
+    [(ngModel)]="obra.dataPrevista">
+
+  <select
+    class="form-control mb-2"
+    [(ngModel)]="obra.status">
+
+    <option>
+      Planejamento
+    </option>
+
+    <option>
+      Fundação
+    </option>
+
+    <option>
+      Estrutura
+    </option>
+
+    <option>
+      Acabamento
+    </option>
+
+    <option>
+      Concluída
+    </option>
+
+  </select>
+
+  <input
+    type="number"
+    class="form-control mb-3"
+    placeholder="Orçamento"
+    [(ngModel)]="obra.orcamento">
+
+  <button
+    class="btn btn-success"
+    (click)="salvar()">
+
+    Salvar Obra
+
+  </button>
+
+</div>
