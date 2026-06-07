@@ -6,6 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ObrasModule } from './obras/obras.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { AuthModule } from './auth/auth.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [
@@ -31,6 +33,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
     ObrasModule,
 
     DashboardModule,
+
+    AuthModule,
+
+    UsuariosModule,
   ],
 
   controllers: [AppController],
