@@ -1,41 +1,88 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { ObraService }
-from '../../../core/services/obra.service';
+import { ObraService } from '../../../core/services/obra.service';
+import { Obra } from '../../../models/obra';
 
 @Component({
   selector: 'app-lista-obras',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl:
-  './lista-obras.component.html'
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  templateUrl: './lista-obras.component.html'
 })
-export class ListaObrasComponent {
+export class ListaObrasComponent
+implements OnInit {
+
   filtro = '';
-  
+
+  obras: Obra[] = [];
+
   constructor(
-    public obraService:
-    ObraService
+    private obraService: ObraService
   ) {}
 
+  ngOnInit() {
+
+    this.carregarObras();
+
+  }
+
+  carregarObras() {
+
+    this.obraService
+      .listar()
+      .subscribe({
+
+        next: (dados) => {
+
+          this.obras = dados;
+
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao carregar obras',
+            erro
+          );
+
+        }
+
+      });
+
+  }
+
   excluir(id: number) {
-    this.obraService.excluir(id);
+
+    this.obraService
+      .excluir(id)
+      .subscribe({
+
+        next: () => {
+
+          this.carregarObras();
+
+        }
+
+      });
+
   }
 
   get obrasFiltradas() {
 
-  return this.obraService
-    .listar()
-    .filter(
+    return this.obras.filter(
       obra =>
-      obra.nome
-      .toLowerCase()
-      .includes(
-        this.filtro
-        .toLowerCase()
-      )
+        obra.nome
+          .toLowerCase()
+          .includes(
+            this.filtro.toLowerCase()
+          )
     );
-}
+
+  }
+
 }

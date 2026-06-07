@@ -71,14 +71,9 @@
 
       <tbody>
 
-        <tr
-          *ngFor="
-            let obra of
-            obraService.listar()
-          "
-        >
+        <tr *ngFor="let obra of obras">
 
-          <td>{{ obra.nome }}</td>
+          <td>{{ obra.nome }}</td>  
 
           <td>{{ obra.cidade }}</td>
 

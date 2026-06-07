@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ObraService } from '../../../core/services/obra.service';
+import { Obra } from '../../../models/obra';
 
 @Component({
   selector: 'app-home',
@@ -10,43 +11,83 @@ import { ObraService } from '../../../core/services/obra.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+
+  obras: Obra[] = [];
 
   constructor(
-    public obraService: ObraService
+    private obraService: ObraService
   ) {}
 
+  ngOnInit(): void {
+
+    this.obraService
+      .listar()
+      .subscribe({
+
+        next: (dados) => {
+
+          this.obras = dados;
+
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao carregar obras',
+            erro
+          );
+
+        }
+
+      });
+
+  }
+
   get totalObras() {
-    return this.obraService.listar().length;
+
+    return this.obras.length;
+
   }
 
   get obrasPlanejamento() {
-    return this.obraService
-      .listar()
-      .filter(o => o.status === 'Planejamento')
+
+    return this.obras
+      .filter(
+        o => o.status === 'Planejamento'
+      )
       .length;
+
   }
 
   get obrasConcluidas() {
-    return this.obraService
-      .listar()
-      .filter(o => o.status === 'Concluída')
+
+    return this.obras
+      .filter(
+        o => o.status === 'Concluída'
+      )
       .length;
+
   }
 
   get obrasAndamento() {
-    return this.totalObras -
-      this.obrasPlanejamento -
-      this.obrasConcluidas;
+
+    return this.obras
+      .filter(
+        o => o.status === 'Em andamento'
+      )
+      .length;
+
   }
 
   get orcamentoTotal() {
-    return this.obraService
-      .listar()
-      .reduce(
-        (total, obra) =>
-          total + obra.orcamento,
-        0
-      );
+
+    return this.obras.reduce(
+      (total, obra) =>
+        total + Number(obra.orcamento),
+      0
+    );
+
   }
+
 }

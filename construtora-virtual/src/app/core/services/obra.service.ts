@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { Observable } from 'rxjs';
+
 import { Obra } from '../../models/obra';
 
 @Injectable({
@@ -6,54 +10,43 @@ import { Obra } from '../../models/obra';
 })
 export class ObraService {
 
-  private obras: Obra[] = [];
+  private http = inject(HttpClient);
 
-  constructor() {
-    const dados = localStorage.getItem('obras');
+  private api =
+    'http://localhost:3000/obras';
 
-    if (dados) {
-      this.obras = JSON.parse(dados);
-    }
-  }
+  listar(): Observable<Obra[]> {
 
-  private salvarStorage() {
-    localStorage.setItem(
-      'obras',
-      JSON.stringify(this.obras)
+    return this.http.get<Obra[]>(
+      this.api
     );
-  }
 
-  listar(): Obra[] {
-    return this.obras;
   }
 
   adicionar(obra: Obra) {
-    this.obras.push(obra);
-    this.salvarStorage();
+
+    return this.http.post(
+      this.api,
+      obra
+    );
+
   }
 
   excluir(id: number) {
-    this.obras =
-      this.obras.filter(
-        obra => obra.id !== id
-      );
 
-    this.salvarStorage();
+    return this.http.delete(
+      `${this.api}/${id}`
+    );
+
   }
 
-  atualizar(obraAtualizada: Obra) {
+  atualizar(obra: Obra) {
 
-    const index =
-      this.obras.findIndex(
-        obra => obra.id === obraAtualizada.id
-      );
+    return this.http.patch(
+      `${this.api}/${obra.id}`,
+      obra
+    );
 
-    if (index !== -1) {
-
-      this.obras[index] =
-        obraAtualizada;
-
-      this.salvarStorage();
-    }
   }
+
 }

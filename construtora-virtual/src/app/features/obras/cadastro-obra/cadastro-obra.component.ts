@@ -31,23 +31,25 @@ export class CadastroObraComponent {
 
   salvar() {
 
-    this.obraService.adicionar({
-      ...this.obra,
-      id: Date.now()
+  this.obraService
+    .adicionar(this.obra)
+    .subscribe({
+
+      next: () => {
+
+        alert(
+          'Obra cadastrada com sucesso!'
+        );
+
+      },
+
+      error: erro => {
+
+        console.error(erro);
+
+      }
+
     });
 
-    alert('Obra cadastrada!');
-
-    this.obra = {
-      id: 0,
-      nome: '',
-      endereco: '',
-      cidade: '',
-      estado: '',
-      dataInicio: '',
-      dataPrevista: '',
-      status: '',
-      orcamento: 0
-    };
   }
 }
