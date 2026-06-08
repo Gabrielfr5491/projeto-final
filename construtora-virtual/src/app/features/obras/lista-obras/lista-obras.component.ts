@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, LOCALE_ID } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import localePt from '@angular/common/locales/pt';
 
 import { ObraService } from '../../../core/services/obra.service';
 import { Obra } from '../../../models/obra';
+
+// Registra a localização brasileira para que o pipe 'currency' funcione perfeitamente na tabela
+registerLocaleData(localePt);
 
 @Component({
   selector: 'app-lista-obras',
@@ -12,13 +16,18 @@ import { Obra } from '../../../models/obra';
     CommonModule,
     FormsModule
   ],
-  templateUrl: './lista-obras.component.html'
+  providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' }
+  ],
+  templateUrl: './lista-obras.component.html',
+  styleUrl: './lista-obras.component.scss' // Vinculação com o SCSS Premium
 })
-export class ListaObrasComponent
-implements OnInit {
+export class ListaObrasComponent implements OnInit {
+
+  // Sincroniza a largura e o recuo da tabela com a abertura/fechamento da barra lateral
+  collapsed: boolean = false;
 
   filtro = '';
-
   obras: Obra[] = [];
 
   constructor(
@@ -26,54 +35,40 @@ implements OnInit {
   ) {}
 
   ngOnInit() {
-
     this.carregarObras();
-
   }
 
   carregarObras() {
-
     this.obraService
       .listar()
       .subscribe({
-
         next: (dados) => {
-
           this.obras = dados;
-
         },
-
         error: (erro) => {
-
-          console.error(
-            'Erro ao carregar obras',
-            erro
-          );
-
+          console.error('Erro ao carregar obras', erro);
         }
-
       });
-
   }
 
   excluir(id: number) {
-
-    this.obraService
-      .excluir(id)
-      .subscribe({
-
-        next: () => {
-
-          this.carregarObras();
-
-        }
-
-      });
-
+    // Um leve aviso nativo antes de deletar diretamente para melhorar a experiência do usuário (UX)
+    if (confirm('Tem certeza que deseja remover esta obra permanentemente?')) {
+      this.obraService
+        .excluir(id)
+        .subscribe({
+          next: () => {
+            this.carregarObras();
+          },
+          error: (erro) => {
+            console.error('Erro ao excluir obra', erro);
+          }
+        });
+    }
   }
 
+  // Seu filtro inteligente por aproximação de string (Case Insensitive)
   get obrasFiltradas() {
-
     return this.obras.filter(
       obra =>
         obra.nome
@@ -82,7 +77,5 @@ implements OnInit {
             this.filtro.toLowerCase()
           )
     );
-
   }
-
 }

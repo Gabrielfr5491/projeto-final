@@ -1,62 +1,86 @@
-<div class="sidebar"
-  [class.collapsed]="collapsed">
-
-  <button
-    class="toggle-btn"
-    (click)="toggleSidebar()">
-
-    ☰
-
+<aside class="sidebar" [class.collapsed]="collapsed">
+  
+  <button type="button" class="sidebar__toggle" (click)="toggleSidebar()" aria-label="Menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+    </svg>
   </button>
 
-  <h3 class="logo">
-    🏗 Construtora
-  </h3>
+  <div class="sidebar__brand">
+    <span class="sidebar__brand-icon">🏗️</span>
+    <span class="sidebar__brand-text">Construtora</span>
+  </div>
 
-  <ul>
+  <nav class="sidebar__nav">
+    <ul class="sidebar__list">
+      
+      <li class="sidebar__item">
+        <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+          </svg>
+          <span class="sidebar__text">Dashboard</span>
+        </a>
+      </li>
 
-    <li>
-      <a routerLink="/dashboard">
-        📊 Dashboard
-      </a>
-    </li>
+      <li class="sidebar__item">
+        <a routerLink="/obras" routerLinkActive="active" title="Obras" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 21h18M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M5 21V7m14 14V7M9 7v14m6-14v14"/>
+          </svg>
+          <span class="sidebar__text">Obras</span>
+        </a>
+      </li>
 
-    <li>
-      <a routerLink="/obras">
-        🏢 Obras
-      </a>
-    </li>
+      <li class="sidebar__item">
+        <a routerLink="/cadastro-obra" routerLinkActive="active" title="Nova Obra" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <span class="sidebar__text">Nova Obra</span>
+        </a>
+      </li>
 
-  <li>
-    <a routerLink="/cadastro-obra">
-      Nova Obra
-    </a>
-  </li>
+      <li class="sidebar__item">
+        <a routerLink="/funcionarios" routerLinkActive="active" title="Funcionários" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm13 10v-2a4 4 0 0 0-3-3.87"/>
+          </svg>
+          <span class="sidebar__text">Funcionários</span>
+        </a>
+      </li>
 
-    <li>
-      <a routerLink="/funcionarios">
-        👷 Funcionários
-      </a>
-    </li>
+      <li class="sidebar__item">
+        <a routerLink="/fornecedores" routerLinkActive="active" title="Fornecedores" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 18H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v10M14 18h4m2 0a2 2 0 1 1-4 0M20 10V6h-3M3 10h16"/>
+          </svg>
+          <span class="sidebar__text">Fornecedores</span>
+        </a>
+      </li>
 
-    <li>
-      <a routerLink="/fornecedores">
-        🚚 Fornecedores
-      </a>
-    </li>
+      <li class="sidebar__item">
+        <a routerLink="/materiais" routerLinkActive="active" title="Materiais" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+          <span class="sidebar__text">Materiais</span>
+        </a>
+      </li>
 
-    <li>
-      <a routerLink="/materiais">
-        🧱 Materiais
-      </a>
-    </li>
+      <li class="sidebar__item">
+        <a routerLink="/custos" routerLinkActive="active" title="Custos" class="sidebar__link">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" x2="12" y1="1" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <span class="sidebar__text">Custos</span>
+        </a>
+      </li>
 
-    <li>
-      <a routerLink="/custos">
-        💰 Custos
-      </a>
-    </li>
-
-  </ul>
-
-</div>
+    </ul>
+  </nav>
+</aside>

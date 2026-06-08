@@ -18,3 +18,56 @@
 ::-webkit-scrollbar {
   width: 8px;
 }
+
+// Altere o container principal que envelopa seu dashboard e navbar
+.main-content {
+  margin-left: 250px;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // Quando o componente pai detectar o estado colapsado
+  &.sidebar-collapsed {
+    margin-left: 70px;
+  }
+}
+
+// Sua Navbar customizada do passo anterior segue a mesma regra
+.navbar-custom {
+  margin-left: 250px;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.collapsed-nav {
+    margin-left: 70px;
+  }
+}
+// --- PALETA LIGHT (PADRÃO) ---
+:root {
+  --bg-dashboard: #f8fafc;
+  --surface-card: #ffffff;
+  --border-color: #e2e8f0;
+  --text-main: #0f172a;
+  --text-sub: #64748b;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-border: rgba(226, 232, 240, 0.8);
+  --table-th-bg: #f8fafc;
+  --table-hover: #f1f5f9;
+}
+
+// --- PALETA DARK PREMIUM (ATIVADA PELO SERVIÇO) ---
+[data-theme="dark"] {
+  --bg-dashboard: #0b0f19;  // Preto azulado profundo
+  --surface-card: #131c2e;  // Card escuro sutil
+  --border-color: #1e293b;  // Bordas suaves
+  --text-main: #f8fafc;     // Texto quase branco
+  --text-sub: #94a3b8;      // Cinza muted legível
+  --nav-bg: rgba(19, 28, 46, 0.8);
+  --nav-border: rgba(30, 41, 59, 0.8);
+  --table-th-bg: #0f172a;
+  --table-hover: #1e293b;
+}
+
+// Transição global suave ao trocar de tema
+body {
+  background-color: var(--bg-dashboard);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

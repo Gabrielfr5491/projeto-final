@@ -1,75 +1,112 @@
-<div class="container mt-4">
+<main class="cadastro-container" [style.--sidebar-width]="collapsed ? '70px' : '250px'">
+  
+  <header class="cadastro-header">
+    <h1 class="cadastro-header__title">Cadastrar Nova Obra</h1>
+    <p class="cadastro-header__subtitle">Insira os dados técnicos e orçamentários para iniciar o gerenciamento do projeto.</p>
+  </header>
 
-  <h2>Cadastrar Obra</h2>
+  <section class="cadastro-card">
+    <form class="cadastro-form" (ngSubmit)="salvar()">
+      
+      <div class="form-group full-width">
+        <label class="form-group__label" for="nome">Nome do Empreendimento</label>
+        <input 
+          id="nome"
+          type="text" 
+          class="form-group__input" 
+          placeholder="Ex: Residencial Alpha" 
+          [(ngModel)]="obra.nome" 
+          name="nome"
+          required>
+      </div>
 
-  <input
-    class="form-control mb-2"
-    placeholder="Nome"
-    [(ngModel)]="obra.nome">
+      <div class="form-group full-width">
+        <label class="form-group__label" for="endereco">Endereço Completo</label>
+        <input 
+          id="endereco" 
+          type="text" 
+          class="form-group__input" 
+          placeholder="Ex: Av. Tancredo Neves, 1200" 
+          [(ngModel)]="obra.endereco" 
+          name="endereco">
+      </div>
 
-  <input
-    class="form-control mb-2"
-    placeholder="Endereço"
-    [(ngModel)]="obra.endereco">
+      <div class="form-group split-70">
+        <label class="form-group__label" for="cidade">Cidade</label>
+        <input 
+          id="cidade" 
+          type="text" 
+          class="form-group__input" 
+          placeholder="Ex: Salvador" 
+          [(ngModel)]="obra.cidade" 
+          name="cidade">
+      </div>
 
-  <input
-    class="form-control mb-2"
-    placeholder="Cidade"
-    [(ngModel)]="obra.cidade">
+      <div class="form-group split-30">
+        <label class="form-group__label" for="estado">Estado</label>
+        <input 
+          id="estado" 
+          type="text" 
+          class="form-group__input" 
+          placeholder="Ex: BA" 
+          [(ngModel)]="obra.estado" 
+          name="estado"
+          maxLength="2">
+      </div>
 
-  <input
-    class="form-control mb-2"
-    placeholder="Estado"
-    [(ngModel)]="obra.estado">
+      <div class="form-group">
+        <label class="form-group__label" for="dataInicio">Data de Início</label>
+        <input 
+          id="dataInicio" 
+          type="date" 
+          class="form-group__input" 
+          [(ngModel)]="obra.dataInicio" 
+          name="dataInicio">
+      </div>
 
-  <input
-    type="date"
-    class="form-control mb-2"
-    [(ngModel)]="obra.dataInicio">
+      <div class="form-group">
+        <label class="form-group__label" for="dataPrevista">Previsão de Entrega</label>
+        <input 
+          id="dataPrevista" 
+          type="date" 
+          class="form-group__input" 
+          [(ngModel)]="obra.dataPrevista" 
+          name="dataPrevista">
+      </div>
 
-  <input
-    type="date"
-    class="form-control mb-2"
-    [(ngModel)]="obra.dataPrevista">
+      <div class="form-group">
+        <label class="form-group__label" for="status">Status Inicial</label>
+        <div class="select-wrapper">
+          <select id="status" class="form-group__input select-custom" [(ngModel)]="obra.status" name="status">
+            <option value="Planejamento">Planejamento</option>
+            <option value="Fundação">Fundação</option>
+            <option value="Estrutura">Estrutura</option>
+            <option value="Acabamento">Acabamento</option>
+            <option value="Concluída">Concluída</option>
+          </select>
+        </div>
+      </div>
 
-  <select
-    class="form-control mb-2"
-    [(ngModel)]="obra.status">
+      <div class="form-group">
+        <label class="form-group__label" for="orcamento">Aporte Orçamentário (R$)</label>
+        <input 
+          id="orcamento" 
+          type="number" 
+          class="form-group__input" 
+          placeholder="0,00" 
+          [(ngModel)]="obra.orcamento" 
+          name="orcamento">
+      </div>
 
-    <option>
-      Planejamento
-    </option>
+      <div class="form-actions full-width">
+        <button type="submit" class="btn-submit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span>Salvar Projeto</span>
+        </button>
+      </div>
 
-    <option>
-      Fundação
-    </option>
-
-    <option>
-      Estrutura
-    </option>
-
-    <option>
-      Acabamento
-    </option>
-
-    <option>
-      Concluída
-    </option>
-
-  </select>
-
-  <input
-    type="number"
-    class="form-control mb-3"
-    placeholder="Orçamento"
-    [(ngModel)]="obra.orcamento">
-
-  <button
-    class="btn btn-success"
-    (click)="salvar()">
-
-    Salvar Obra
-
-  </button>
-
-</div>
+    </form>
+  </section>
+</main>

@@ -1,19 +1,165 @@
-.navbar-custom{
+// Variáveis do Design System Corporativo
+$nav-bg: rgba(255, 255, 255, 0.8); // Fundo semi-transparente para efeito Glass
+$nav-border: rgba(226, 232, 240, 0.8); // Slate 200 sutil
+$text-main: #0f172a; // Slate 900
+$text-muted: #64748b; // Slate 500
+$accent-color: #3b82f6; // Azul Executivo
+$danger-color: #ef4444; // Vermelho Soft
 
-  margin-left:250px;
+$navbar-height: 70px;
+$transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  height:70px;
+.navbar-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  height: $navbar-height;
+  padding: 0 2rem;
+  
+  // Efeito Glassmorphism espetacular
+  background-color: $nav-bg;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  border-bottom: 1px solid $nav-border;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  
+  // Mantém a sincronia com a largura da Sidebar automática que configuramos antes
+  margin-left: var(--sidebar-width, 250px);
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  background:white;
+  // --- SEÇÃO ESQUERDA (SAUDAÇÃO) ---
+  &__welcome {
+    display: flex;
+    flex-direction: column;
+  }
 
-  display:flex;
+  &__greeting {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-main;
+    letter-spacing: -0.2px;
+  }
 
-  justify-content:space-between;
+  &__date {
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-weight: 500;
+  }
 
-  align-items:center;
+  // --- SEÇÃO DIREITA ---
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
 
-  padding:20px;
+  &__actions {
+    display: flex;
+    align-items: center;
+  }
 
-  box-shadow:0 2px 10px rgba(0,0,0,.1);
+  // Botão de Tema Clean (Ícone interativo)
+  &__btn-action {
+    background: transparent;
+    border: 1px solid $nav-border;
+    color: $text-muted;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: $transition-premium;
 
+    &:hover {
+      color: $accent-color;
+      border-color: $accent-color;
+      background-color: rgba($accent-color, 0.05);
+      transform: translateY(-1px);
+    }
+  }
+
+  &__divider {
+    width: 1px;
+    height: 24px;
+    background-color: $nav-border;
+  }
+
+  // --- PERFIL DO USUÁRIO ---
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, $accent-color, #1d4ed8);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba($accent-color, 0.2);
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-main;
+    line-height: 1.2;
+  }
+
+  &__user-role {
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-weight: 500;
+  }
+
+  // --- BOTÃO LOGOUT PREMIUM ---
+  &__btn-logout {
+    background: transparent;
+    border: 1px solid transparent;
+    color: $text-muted;
+    padding: 0.5rem 0.85rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: $transition-premium;
+
+    &:hover {
+      color: $danger-color;
+      background-color: rgba($danger-color, 0.08);
+      border-color: rgba($danger-color, 0.15);
+    }
+  }
+}
+
+// Otimização para Telas Menores
+@media (max-width: 768px) {
+  .navbar-custom {
+    margin-left: 0 !important;
+    padding: 0 1rem;
+
+    &__welcome, &__user-info, &__divider {
+      display: none; // Esconde detalhes para não espremer no celular
+    }
+  }
 }

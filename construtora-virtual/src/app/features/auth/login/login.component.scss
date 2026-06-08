@@ -1,24 +1,300 @@
-.login-container {
+$accent-color: #3b82f6;
+$accent-hover: #2563eb;
+$bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
+
+.login-wrapper {
   height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 450px 1fr; // Fixa o formulário e deixa o carrossel expandir
+  background-color: $bg-form-side;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
 
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  background: #f3f4f6;
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr; // O carrossel some em telas pequenas/tablets
+  }
 }
 
-.login-card {
-  width: 400px;
+// --- COLUNA 1: ESPAÇO DO FORMULÁRIO ---
+.login-aside-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  background-color: $bg-form-side;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 20;
+}
 
-  background: white;
+.login-card-clean {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between; // Alinha cabeçalho, meio e rodapé matematicamente
 
-  padding: 40px;
+  &__header {
+    margin-top: auto;
+    margin-bottom: 2.5rem;
+  }
 
-  border-radius: 20px;
+  &__logo-icon {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, $accent-color, #1d4ed8);
+    color: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 20px rgba($accent-color, 0.25);
+  }
 
-  box-shadow:
-  0 10px 25px rgba(0,0,0,.1);
+  &__title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: auto;
+  }
+
+  &__footer {
+    margin-top: auto;
+    p {
+      font-size: 0.75rem;
+      color: #475569;
+      margin: 0;
+    }
+  }
+}
+
+// --- INPUTS CUSTOMIZADOS ---
+.input-premium-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &__label {
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: #cbd5e1;
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    position: absolute;
+    left: 1.1rem;
+    color: #64748b;
+    pointer-events: none;
+    transition: color 0.2s ease;
+  }
+
+  &__input {
+    width: 100%;
+    background: #1e293b; 
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    padding: 0.8rem 1rem 0.8rem 2.8rem;
+    border-radius: 10px;
+    font-size: 0.925rem;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #475569;
+    }
+
+    &:focus {
+      border-color: $accent-color;
+      background: #0f172a;
+      box-shadow: 0 0 0 4px rgba($accent-color, 0.15);
+
+      & + .input-premium-group__icon {
+        color: $accent-color;
+      }
+    }
+  }
+}
+
+// --- BOTÃO DE SUBMIT ---
+.btn-login-premium {
+  background: linear-gradient(135deg, $accent-color, #2563eb);
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem;
+  border-radius: 10px;
+  font-size: 0.925rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 12px rgba($accent-color, 0.2);
+  transition: all 0.2s ease;
+
+  svg { transition: transform 0.2s ease; }
+
+  &:hover {
+    background: linear-gradient(135deg, $accent-hover, #1d4ed8);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba($accent-color, 0.35);
+    svg { transform: translateX(2px); }
+  }
+}
+
+// --- COLUNA 2: ESPAÇO DO CARROSSEL ---
+.login-aside-carousel {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: #020617;
+  display: flex;
+  align-items: flex-end;
+  padding: 5rem;
+
+  @media (max-width: 1024px) {
+    display: none; // Desliga o carrossel no mobile por UX
+  }
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  display: flex;
+  align-items: flex-end;
+  padding: 5rem;
+
+  &--active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    transition: transform 6s ease; // Efeito "Ken Burns" sutil ao trocar de slide
+    
+    // Gradiente de sobreposição cinematográfico (escurece o fundo para destacar a tipografia)
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(#020617, 0.85) 0%, rgba(#020617, 0.3) 50%, rgba(0,0,0,0) 100%);
+    }
+  }
+
+  &--active &__bg {
+    transform: scale(1);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 10;
+    max-width: 550px;
+    color: #ffffff;
+    transform: translateY(20px);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  }
+
+  &--active &__content {
+    transform: translateY(0);
+  }
+
+  &__tag {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: inline-block;
+    margin-bottom: 1.25rem;
+  }
+
+  &__title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin: 0 0 1rem 0;
+  }
+
+  &__description {
+    font-size: 1rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// --- PONTOS INDICADORES (DOTS) ---
+.carousel-indicators {
+  position: absolute;
+  right: 5rem;
+  bottom: 5rem;
+  z-index: 30;
+  display: flex;
+  gap: 0.5rem;
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+
+    &--active {
+      background: #ffffff;
+      width: 24px; // Transforma o ponto ativo em uma barra horizontal elegante
+      border-radius: 4px;
+    }
+  }
 }

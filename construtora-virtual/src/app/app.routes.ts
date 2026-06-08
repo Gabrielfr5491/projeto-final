@@ -9,49 +9,84 @@ import { ListaFuncionariosComponent } from './features/funcionarios/lista-funcio
 import { ListaFornecedoresComponent } from './features/fornecedores/lista-fornecedores/lista-fornecedores.component';
 import { ListaMateriaisComponent } from './features/materiais/lista-materiais/lista-materiais.component';
 
+// IMPORTANTE: Importe o seu componente de Layout aqui
+import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
+
 export const routes: Routes = [
-
+  // 1. ROTA DE LOGIN: 100% isolada do resto do sistema
   {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    path: 'login',
+    component: LoginComponent
   },
 
+  // 2. ROTA DO DASHBOARD: Força o uso do Layout e coloca a Home dentro dele
   {
-    
-  path: 'dashboard',
-  component: HomeComponent,
-  canActivate: [authGuard]
-
+    path: 'dashboard',
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: HomeComponent }
+    ]
   },
 
+  // 3. ROTA DE OBRAS: Força o uso do Layout e coloca a Listagem dentro dele
   {
     path: 'obras',
-    component: ListaObrasComponent,
-    canActivate: [authGuard]
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: ListaObrasComponent }
+    ]
   },
 
+  // 4. ROTA DE CADASTRO DE OBRA
   {
     path: 'cadastro-obra',
-    component: CadastroObraComponent
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: CadastroObraComponent }
+    ]
   },
 
+  // 5. ROTA DE FUNCIONÁRIOS
   {
     path: 'funcionarios',
-    component: ListaFuncionariosComponent
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: ListaFuncionariosComponent }
+    ]
   },
 
+  // 6. ROTA DE FORNECEDORES
   {
     path: 'fornecedores',
-    component: ListaFornecedoresComponent
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: ListaFornecedoresComponent }
+    ]
   },
 
+  // 7. ROTA DE MATERIAIS
   {
     path: 'materiais',
-    component: ListaMateriaisComponent
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: ListaMateriaisComponent }
+    ]
+  },
+
+  // Redirecionamentos padrão de segurança
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
-  path: 'login',
-  component: LoginComponent
+    path: '**',
+    redirectTo: 'login'
   }
 ];

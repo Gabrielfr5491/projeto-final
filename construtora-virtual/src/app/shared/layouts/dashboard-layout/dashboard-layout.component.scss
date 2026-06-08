@@ -1,0 +1,39 @@
+.dashboard-structure {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-dashboard);
+}
+
+.dashboard-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-structure {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-dashboard);
+  overflow-x: hidden;
+
+  // Garante que a Sidebar volte a aparecer ignorando qualquer bloqueio anterior
+  app-sidebar {
+    display: block !important;
+    position: relative;
+    z-index: 100;
+  }
+}
+
+.dashboard-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; // Evita que tabelas quebrem o layout para os lados
+
+  // Garante que a Navbar apareça no topo do conteúdo
+  app-navbar {
+    display: block !important;
+    width: 100%;
+    z-index: 90;
+  }
+}

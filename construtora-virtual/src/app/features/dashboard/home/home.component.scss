@@ -1,86 +1,265 @@
+// Variáveis Globais de Design System (Slate/Zinc)
+$bg-dashboard: var(--bg-dashboard);
+$surface-card: var(--surface-card);
+$border-color: var(--border-color);
+$text-main: var(--text-main);
+$text-sub: var(--text-sub);
+
+// Paleta de Cores de Status
+$cls-primary: #3b82f6;        
+$cls-success: #10b981;        
+$cls-warning: #f59e0b;        
+$cls-info: #06b6d4;
+
 .dashboard {
-  margin-left: 250px;
-  padding: 30px;
-  background: #f5f7fb;
+  // Ajusta automaticamente a margem esquerda baseada na sidebar aberta ou fechada
+  margin-left: var(--sidebar-width, 250px);
+  padding: 2.5rem;
+  background-color: $bg-dashboard;
   min-height: 100vh;
-}
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: $text-main;
 
-.cards {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(220px, 1fr));
-
-  gap: 20px;
-
-  margin-top: 25px;
-}
-
-.card-dashboard {
-  background: white;
-  border-radius: 16px;
-
-  padding: 25px;
-
-  box-shadow:
-    0 4px 15px rgba(0,0,0,.08);
-
-  transition: .3s;
-}
-
-.card-dashboard:hover {
-  transform: translateY(-5px);
-}
-
-.card-dashboard h2 {
-  font-size: 36px;
-  color: #2563eb;
-}
-
-.card-dashboard p {
-  margin-top: 10px;
-  color: #6b7280;
-}
-
-.orcamento-card {
-  background: white;
-
-  margin-top: 25px;
-
-  padding: 30px;
-
-  border-radius: 16px;
-
-  box-shadow:
-    0 4px 15px rgba(0,0,0,.08);
-}
-
-.orcamento-card h2 {
-  color: #16a34a;
-}
-
-.tabela-obras {
-  margin-top: 30px;
-
-  background: white;
-
-  padding: 25px;
-
-  border-radius: 16px;
-
-  box-shadow:
-    0 4px 15px rgba(0,0,0,.08);
-}
-@media (max-width: 768px) {
-
-  .dashboard {
-
-    margin-left: 0;
-
-    padding: 15px;
+  // --- CABEÇALHO ---
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1.5rem;
   }
 
-  .cards {
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-main;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
 
-    grid-template-columns: 1fr;
+  &__subtitle {
+    font-size: 0.925rem;
+    color: $text-sub;
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+  }
+
+  // --- GRID DE METRICAS ---
+  &__metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// --- CARD DE MÉTRICA INDIVIDUAL ---
+.metric-card {
+  background: $surface-card;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  }
+
+  &__value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+    display: block;
+    
+    // Classes Utilitárias de Cor Dinâmica
+    &.text-primary { color: $cls-primary; }
+    &.text-success { color: $cls-success; }
+    &.text-warning { color: $cls-warning; }
+    &.text-info { color: $cls-info; }
+  }
+
+  &__label {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-sub;
+  }
+}
+
+// --- CARD DE ORÇAMENTO COMPACTO ---
+.budget-card {
+  background: $surface-card;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  &__label {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-sub;
+  }
+
+  &__value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $cls-success;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+
+  &__icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba($cls-success, 0.1);
+    color: $cls-success;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+// --- WIDGET DE PRODUTIVIDADE NO TOPO ---
+.productivity-widget {
+  background: $surface-card;
+  border: 1px solid $border-color;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  &__value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-main;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $text-sub;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// --- CONTAINER DA TABELA ---
+.table-container {
+  background: $surface-card;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+
+  &__header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: $text-main;
+    margin: 0;
+  }
+}
+
+// --- TABELA ESTILIZADA ---
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+
+  th {
+    color: $text-sub;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid $border-color;
+    background-color: var(--table-th-bg);
+
+  }
+
+  td {
+    padding: 1rem 1.5rem;
+    color: $text-main;
+    border-bottom: 1px solid $border-color;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    transition: background-color 0.15s ease;
+    &:hover {
+      background-color: var(--table-hover);
+    }
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+// --- BADGES DE STATUS ---
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.775rem;
+  font-weight: 600;
+
+  &--success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #059669;
+  }
+  &--info {
+    background-color: rgba(6, 182, 212, 0.1);
+    color: #0891b2; 
+  }
+  &--warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #d97706; 
+  }
+}
+
+// --- UTILS COMPLEMENTARES ---
+.text-right { text-align: right !important; }
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+.text-muted { color: $text-sub; }
+
+// --- RESPONSIVIDADE ---
+@media (max-width: 768px) {
+  .dashboard {
+    margin-left: 0 !important;
+    padding: 1.25rem;
+    
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .productivity-widget {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }

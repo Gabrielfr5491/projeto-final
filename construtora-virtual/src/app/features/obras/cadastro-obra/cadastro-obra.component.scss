@@ -1,0 +1,205 @@
+// Vinculação com o Design System Global
+$bg-dashboard: var(--bg-dashboard);
+$surface-card: var(--surface-card);
+$border-color: var(--border-color);
+$text-main: var(--text-main);
+$text-sub: var(--text-sub);
+$accent-color: #3b82f6; // Azul corporativo
+
+.cadastro-container {
+  margin-left: var(--sidebar-width, 250px);
+  padding: 2.5rem;
+  background-color: $bg-dashboard;
+  min-height: 100vh;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+// --- CABEÇALHO ---
+.cadastro-header {
+  margin-bottom: 2rem;
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-main;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: 0.925rem;
+    color: $text-sub;
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+  }
+}
+
+// --- CARD DO FORMULÁRIO ---
+.cadastro-card {
+  background: $surface-card;
+  border: 1px solid $border-color;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  max-width: 850px;
+}
+
+// --- GRID DO FORMULÁRIO ---
+.cadastro-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+// Elementos utilitários de tamanho para o Grid
+.full-width {
+  grid-column: span 2;
+}
+
+.split-70 {
+  grid-column: span 1;
+  @media (min-width: 769px) { grid-column: span 1; }
+}
+
+// --- COMPONENTES DOS CAMPOS ---
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-main;
+    letter-spacing: -0.1px;
+  }
+
+  &__input {
+    background-color: $bg-dashboard;
+    border: 1px solid $border-color;
+    color: $text-main;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: $text-sub;
+      opacity: 0.6;
+    }
+
+    &:focus {
+      border-color: $accent-color;
+      background-color: $surface-card;
+      box-shadow: 0 0 0 4px rgba($accent-color, 0.1);
+    }
+  }
+}
+
+// Estilização customizada para o Select
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  select {
+    width: 100%;
+    appearance: none; // Remove a seta nativa feia do sistema operacional
+    cursor: pointer;
+    padding-right: 2.5rem;
+  }
+
+  // Seta customizada minimalista via CSS pura
+  &::after {
+    content: '';
+    position: absolute;
+    right: 1.25rem;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid $text-sub;
+    border-bottom: 2px solid $text-sub;
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+}
+
+// Ajuste específico para os campos de data nativos ficarem bonitos
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.5); // Dá um tom cinza elegante no ícone de calendário
+}
+
+// --- BOTÃO SALVAR ---
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn-submit {
+  background-color: $accent-color;
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 12px rgba($accent-color, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba($accent-color, 0.35);
+
+    svg {
+      transform: scale(1.05);
+    }
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// --- RESPONSIVIDADE COMPLETA ---
+@media (max-width: 768px) {
+  .cadastro-container {
+    margin-left: 0 !important;
+    padding: 1.25rem;
+  }
+
+  .cadastro-card {
+    padding: 1.5rem;
+  }
+
+  .cadastro-form {
+    grid-template-columns: 1fr; // Vira 1 coluna inteira no celular
+    gap: 1.25rem;
+  }
+
+  .full-width, .split-70, .split-30 {
+    grid-column: span 1;
+  }
+
+  .form-actions {
+    margin-top: 0.5rem;
+    
+    .btn-submit {
+      width: 100%; // Botão vira largura inteira no celular para facilitar o clique
+      justify-content: center;
+    }
+  }
+}
