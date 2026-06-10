@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { Observable } from 'rxjs';
+
 import { Funcionario } from '../../models/funcionario';
 
 @Injectable({
@@ -6,38 +10,31 @@ import { Funcionario } from '../../models/funcionario';
 })
 export class FuncionarioService {
 
-  private funcionarios: Funcionario[] = [];
+  private api =
+    'http://localhost:3000/funcionarios';
 
-  constructor() {
-    const dados = localStorage.getItem('funcionarios');
+  constructor(
+    private http: HttpClient
+  ) {}
 
-    if (dados) {
-      this.funcionarios = JSON.parse(dados);
-    }
-  }
+  listar(): Observable<Funcionario[]> {
 
-  salvarStorage() {
-    localStorage.setItem(
-      'funcionarios',
-      JSON.stringify(this.funcionarios)
+    return this.http.get<Funcionario[]>(
+      this.api
     );
+
   }
 
-  listar() {
-    return this.funcionarios;
+  excluir(id: number | string) {
+
+    return this.http.delete(
+      `${this.api}/${id}`
+    );
+
   }
 
-  adicionar(funcionario: Funcionario) {
-    this.funcionarios.push(funcionario);
-    this.salvarStorage();
+  adicionar(funcionario: Funcionario): Observable<Funcionario> {
+    return this.http.post<Funcionario>(this.api, funcionario);
   }
 
-  excluir(id: number) {
-    this.funcionarios =
-      this.funcionarios.filter(
-        f => f.id !== id
-      );
-
-    this.salvarStorage();
-  }
 }

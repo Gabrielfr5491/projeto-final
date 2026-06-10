@@ -92,16 +92,45 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   entrar() {
-    const sucesso = this.authService.login(
+
+  this.authService
+    .login(
       this.email,
       this.senha
-    );
+    )
+    .subscribe({
 
-    if (sucesso) {
-      this.router.navigate(['/dashboard']);
-      return;
-    }
+      next: (resposta: any) => {
 
-    alert('E-mail ou senha inválidos.');
+  localStorage.setItem(
+    'token',
+    resposta.access_token
+  );
+
+  localStorage.setItem(
+    'usuario',
+    JSON.stringify(
+      resposta.usuario
+    )
+  );
+
+  this.router.navigate([
+    '/dashboard'
+  ]);
+
+},
+
+      error: (erro) => {
+
+        console.error(erro);
+
+        alert(
+          'E-mail ou senha inválidos.'
+        );
+
+      }
+
+    });
+
   }
 }

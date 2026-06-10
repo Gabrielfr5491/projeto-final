@@ -1,0 +1,167 @@
+// Variáveis do Tema (Nativas do CSS que mudam no style.scss)
+$bg: var(--bg-dashboard);
+$surface: var(--surface-card);
+$border: var(--border-color);
+$text: var(--text-main);
+$text-muted: var(--text-sub);
+$table-th: var(--table-th-bg);
+$table-hover-bg: var(--table-hover); // Renomeada para evitar conflito com a pseudo-classe :hover
+
+// Cores de Destaque Estáticas (Funcionam bem em ambos os temas)
+$primary: #2563eb;
+$success: #10b981;
+$danger: #ef4444;
+$warning: #f59e0b;
+
+.container {
+  padding: 2rem;
+  min-height: 100vh;
+  background: $bg;
+  transition: background 0.3s ease; // Transição suave
+}
+
+h1 {
+  color: $text;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $surface !important; // !important anula o fundo padrão do Bootstrap
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid $border !important;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+  // Ajustado o Box-shadow para não ficar estourado/muito escuro no Dark Mode
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.03), 
+    0 1px 3px rgba(0, 0, 0, 0.05);
+
+  thead {
+    background: $table-th !important;
+    border-bottom: 2px solid $border !important;
+
+    th {
+      color: $text !important; // Força o título a seguir o tema
+      padding: 1rem;
+      text-align: left;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+  }
+
+  tbody {
+    tr {
+      background: transparent !important; // Remove o fundo branco que o Bootstrap força nas linhas
+      transition: all .25s ease;
+
+      &:hover {
+        background: $table-hover-bg !important; // Aplica o hover correto do tema ativo
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $border !important;
+      }
+    }
+
+    td {
+      padding: 1rem;
+      color: $text !important; // Força o texto das células a ficar visível/legível
+      font-size: .95rem;
+      transition: color 0.3s ease;
+    }
+  }
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  padding: .65rem 1rem;
+  transition: .25s;
+
+  &.btn-danger {
+    background: $danger;
+    color: white;
+
+    &:hover {
+      transform: translateY(-2px);
+      background: #dc2626;
+    }
+  }
+}
+
+.status {
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 600;
+  display: inline-block;
+
+  &.ativo {
+    background: rgba(16, 185, 129, 0.15);
+    color: $success;
+  }
+
+  &.inativo {
+    background: rgba(239, 68, 68, 0.15);
+    color: $danger;
+  }
+
+  &.ferias {
+    background: rgba(245, 158, 11, 0.15);
+    color: $warning;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: .5rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add {
+  background: $primary;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: .85rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .25s;
+
+  &:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}

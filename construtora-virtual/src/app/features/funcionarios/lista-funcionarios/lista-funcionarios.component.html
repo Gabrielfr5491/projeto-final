@@ -1,1 +1,86 @@
-<p>lista-funcionarios works!</p>
+<div class="container">
+
+  <div class="card-header">
+
+    <h1>Funcionários</h1>
+
+    <button
+      class="btn-add"
+      routerLink="/cadastro-funcionario"
+    >
+      + Novo Funcionário
+    </button>
+
+  </div>
+
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Cargo</th>
+        <th>Email</th>
+        <th>Telefone</th>
+        <th>Status</th>
+        <th>Salário</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let funcionario of funcionarios">
+
+        <td>{{ funcionario.nome }}</td>
+
+        <td>{{ funcionario.cargo }}</td>
+
+        <td>{{ funcionario.email }}</td>
+
+        <td>{{ funcionario.telefone }}</td>
+
+        <td>
+
+          <span
+            class="status"
+            [ngClass]="{
+              'ativo': funcionario.status === 'Ativo',
+              'inativo': funcionario.status === 'Inativo',
+              'ferias': funcionario.status === 'Férias'
+            }"
+          >
+            {{ funcionario.status }}
+          </span>
+
+        </td>
+
+        <td>
+
+          {{
+            funcionario.salario
+            | currency:'BRL':'symbol':'1.2-2':'pt-BR'
+          }}
+
+        </td>
+
+        <td>
+
+          <div class="actions">
+
+            <button
+              class="btn btn-danger"
+              (click)="excluir(funcionario.id)">
+              Excluir
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

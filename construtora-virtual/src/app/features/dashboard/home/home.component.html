@@ -52,6 +52,25 @@
     </div>
   </section>
 
+
+    <section class="grafico-card">
+
+  <div class="table-container__header">
+    <h2 class="table-container__title">
+      Status das Obras
+    </h2>
+  </div>
+
+  <apx-chart
+    *ngIf="chartOptions"
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [dataLabels]="chartOptions.dataLabels">
+  </apx-chart>
+
+</section>
+  
   <section class="table-container">
     <div class="table-container__header">
       <h2 class="table-container__title">Últimas Obras Registradas</h2>

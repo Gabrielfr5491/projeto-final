@@ -1,8 +1,12 @@
 export interface Funcionario {
-  id: number;
+
+  id?: number | string;
   nome: string;
+  cpf: string;
   cargo: string;
+  salario: number;
   telefone: string;
   email: string;
-  salario: number;
+  status: string;
+
 }

@@ -8,6 +8,7 @@ import { ObrasModule } from './obras/obras.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { AuthModule } from './auth/auth.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { FuncionariosModule } from './funcionarios/funcionarios.module';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     AuthModule,
 
     UsuariosModule,
+
+    FuncionariosModule,
   ],
 
   controllers: [AppController],

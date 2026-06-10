@@ -1,6 +1,13 @@
 import { Component, OnInit, LOCALE_ID } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import {
+  NgApexchartsModule,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels
+} from 'ng-apexcharts';
 
 import { ObraService } from '../../../core/services/obra.service';
 import { Obra } from '../../../models/obra';
@@ -8,10 +15,22 @@ import { Obra } from '../../../models/obra';
 // Registra a localização em português para os Pipes (R$ e %) funcionarem perfeitamente
 registerLocaleData(localePt);
 
+export type ChartOptions = {
+
+  series: ApexAxisChartSeries;
+
+  chart: ApexChart;
+
+  xaxis: ApexXAxis;
+
+  dataLabels: ApexDataLabels;
+
+};
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgApexchartsModule],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
@@ -21,8 +40,9 @@ registerLocaleData(localePt);
 export class HomeComponent implements OnInit {
 
   obras: Obra[] = [];
+
+  public chartOptions: any;
   
-  // SOLUÇÃO DO BUG: Propriedade que o HTML estava procurando para ajustar a margem
   collapsed: boolean = false;
 
   constructor(
@@ -30,18 +50,69 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.obraService
-      .listar()
-      .subscribe({
-        next: (dados) => {
-          this.obras = dados;
-        },
-        error: (erro) => {
-          console.error('Erro ao carregar obras', erro);
-        }
-      });
-  }
 
+  this.obraService
+    .listar()
+    .subscribe({
+
+      next: (dados) => {
+
+        this.obras = dados;
+
+        this.carregarGrafico();
+
+      },
+
+      error: (erro) => {
+
+        console.error(
+          'Erro ao carregar obras',
+          erro
+        );
+
+      }
+
+    });
+
+}
+      carregarGrafico() {
+
+  this.chartOptions = {
+
+    series: [
+      {
+        name: 'Quantidade',
+        data: [
+          this.obrasPlanejamento,
+          this.obrasAndamento,
+          this.obrasConcluidas
+        ]
+      }
+    ],
+
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false
+      }
+    },
+
+    dataLabels: {
+      enabled: true
+    },
+
+    xaxis: {
+      categories: [
+        'Planejamento',
+        'Andamento',
+        'Concluídas'
+      ]
+    }
+
+  };
+
+}
   // Seus métodos analíticos reativos mantidos intactos:
   get totalObras() {
     return this.obras.length;

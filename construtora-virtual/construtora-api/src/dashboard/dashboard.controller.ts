@@ -5,13 +5,15 @@ import { DashboardService } from './dashboard.service';
 export class DashboardController {
 
   constructor(
-    private readonly dashboardService: DashboardService
+    private dashboardService:
+    DashboardService
   ) {}
 
   @Get('resumo')
   resumo() {
 
-    return this.dashboardService.resumo();
+    return this.dashboardService
+      .resumo();
 
   }
 

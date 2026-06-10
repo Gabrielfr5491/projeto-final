@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
 
 import { Obra } from '../obras/entities/obra.entity';
@@ -10,7 +9,7 @@ export class DashboardService {
 
   constructor(
     @InjectRepository(Obra)
-    private obraRepository: Repository<Obra>,
+    private obraRepository: Repository<Obra>
   ) {}
 
   async resumo() {
@@ -18,32 +17,42 @@ export class DashboardService {
     const obras =
       await this.obraRepository.find();
 
+    const totalObras =
+      obras.length;
+
+    const concluidas =
+      obras.filter(
+        o => o.status === 'Concluída'
+      ).length;
+
+    const planejamento =
+      obras.filter(
+        o => o.status === 'Planejamento'
+      ).length;
+
+    const andamento =
+      obras.filter(
+        o => o.status === 'Em andamento'
+      ).length;
+
+    const orcamentoTotal =
+      obras.reduce(
+        (soma, obra) =>
+          soma + Number(obra.orcamento),
+        0
+      );
+
     return {
 
-      totalObras:
-        obras.length,
+      totalObras,
 
-      obrasAndamento:
-        obras.filter(
-          obra =>
-            obra.status ===
-            'Em andamento'
-        ).length,
+      concluidas,
 
-      obrasConcluidas:
-        obras.filter(
-          obra =>
-            obra.status ===
-            'Concluída'
-        ).length,
+      planejamento,
 
-      investimentoTotal:
-        obras.reduce(
-          (total, obra) =>
-            total +
-            Number(obra.orcamento),
-          0
-        )
+      andamento,
+
+      orcamentoTotal
 
     };
 

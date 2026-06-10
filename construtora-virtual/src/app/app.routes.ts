@@ -8,6 +8,7 @@ import { CadastroObraComponent } from './features/obras/cadastro-obra/cadastro-o
 import { ListaFuncionariosComponent } from './features/funcionarios/lista-funcionarios/lista-funcionarios.component';
 import { ListaFornecedoresComponent } from './features/fornecedores/lista-fornecedores/lista-fornecedores.component';
 import { ListaMateriaisComponent } from './features/materiais/lista-materiais/lista-materiais.component';
+import { CadastroFuncionarioComponent } from './features/funcionarios/cadastro-funcionario/cadastro-funcionario.component';
 
 // IMPORTANTE: Importe o seu componente de Layout aqui
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
@@ -58,6 +59,18 @@ export const routes: Routes = [
       { path: '', component: ListaFuncionariosComponent }
     ]
   },
+
+  {
+  path: 'cadastro-funcionario',
+  component: DashboardLayoutComponent,
+  canActivate: [authGuard],
+  children: [
+    {
+      path: '',
+      component: CadastroFuncionarioComponent
+    }
+  ]
+},
 
   // 6. ROTA DE FORNECEDORES
   {

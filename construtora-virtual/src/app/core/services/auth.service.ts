@@ -1,43 +1,52 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  constructor(
+    private http: HttpClient
+  ) {}
+
   login(email: string, senha: string) {
 
-    if (
-      email === 'admin@admin.com' &&
-      senha === '123456'
-    ) {
+    return this.http.post<any>(
+      'http://localhost:3000/auth/login',
+      {
+        email,
+        senha
+      }
+    );
 
-      localStorage.setItem(
-        'usuario',
-        JSON.stringify({
-          nome: 'Administrador',
-          email,
-          perfil: 'ADMIN'
-        })
-      );
-
-      return true;
-    }
-
-    return false;
   }
 
   logout() {
+
+    localStorage.removeItem('token');
     localStorage.removeItem('usuario');
+
   }
 
   estaLogado() {
-    return !!localStorage.getItem('usuario');
+
+    return !!localStorage.getItem('token');
+
+  }
+
+  getToken() {
+
+    return localStorage.getItem('token');
+
   }
 
   getUsuario() {
+
     return JSON.parse(
       localStorage.getItem('usuario') || '{}'
     );
+
   }
+
 }

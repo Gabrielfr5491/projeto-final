@@ -8,9 +8,15 @@ import { Obra } from '../obras/entities/obra.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Obra])
+    TypeOrmModule.forFeature([
+      Obra
+    ])
   ],
-  controllers: [DashboardController],
-  providers: [DashboardService],
+  controllers: [
+    DashboardController
+  ],
+  providers: [
+    DashboardService
+  ]
 })
 export class DashboardModule {}
