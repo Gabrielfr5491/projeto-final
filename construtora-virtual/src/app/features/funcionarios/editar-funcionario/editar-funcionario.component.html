@@ -1,0 +1,85 @@
+<div class="cadastro-container">
+
+  <div class="page-header">
+    <h1>Editar Funcionário</h1>
+    <p>Atualize os dados do colaborador</p>
+  </div>
+
+  <div class="form-card">
+
+    <form (ngSubmit)="salvar()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Nome</label>
+          <input
+            type="text"
+            [(ngModel)]="funcionario.nome"
+            name="nome">
+        </div>
+
+        <div class="form-group">
+          <label>CPF</label>
+          <input
+            type="text"
+            [(ngModel)]="funcionario.cpf"
+            name="cpf">
+        </div>
+
+        <div class="form-group">
+          <label>Cargo</label>
+          <input
+            type="text"
+            [(ngModel)]="funcionario.cargo"
+            name="cargo">
+        </div>
+
+        <div class="form-group">
+          <label>Salário</label>
+          <input
+            type="number"
+            [(ngModel)]="funcionario.salario"
+            name="salario">
+        </div>
+
+        <div class="form-group">
+          <label>Telefone</label>
+          <input
+            type="text"
+            [(ngModel)]="funcionario.telefone"
+            name="telefone">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            [(ngModel)]="funcionario.email"
+            name="email">
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cancelar()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-salvar">
+          Atualizar Funcionário
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

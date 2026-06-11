@@ -1,58 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Fornecedor } from '../../models/fornecedor';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FornecedorService {
 
-  private fornecedores: Fornecedor[] = [];
+  private api =
+    'http://localhost:3000/fornecedores';
 
-  constructor() {
-
-    const dados =
-      localStorage.getItem(
-        'fornecedores'
-      );
-
-    if (dados) {
-      this.fornecedores =
-        JSON.parse(dados);
-    }
-  }
-
-  salvarStorage() {
-
-    localStorage.setItem(
-      'fornecedores',
-      JSON.stringify(
-        this.fornecedores
-      )
-    );
-  }
+  constructor(
+    private http: HttpClient
+  ) {}
 
   listar() {
-    return this.fornecedores;
+    return this.http.get<any[]>(
+      this.api
+    );
   }
 
-  adicionar(
-    fornecedor: Fornecedor
-  ) {
+  buscarPorId(id: number) {
+    return this.http.get<any>(
+      `${this.api}/${id}`
+    );
+  }
 
-    this.fornecedores.push(
+  adicionar(fornecedor: any) {
+    return this.http.post(
+      this.api,
       fornecedor
     );
+  }
 
-    this.salvarStorage();
+  atualizar(
+    id: number,
+    fornecedor: any
+  ) {
+    return this.http.patch(
+      `${this.api}/${id}`,
+      fornecedor
+    );
   }
 
   excluir(id: number) {
-
-    this.fornecedores =
-      this.fornecedores.filter(
-        f => f.id !== id
-      );
-
-    this.salvarStorage();
+    return this.http.delete(
+      `${this.api}/${id}`
+    );
   }
 }

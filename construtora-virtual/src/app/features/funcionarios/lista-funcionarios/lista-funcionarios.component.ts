@@ -53,7 +53,7 @@ export class ListaFuncionariosComponent implements OnInit {
   }
 
   this.funcionarioService
-    .excluir(id)
+    .excluir(Number(id))
     .subscribe({
       next: () => {
         // Atualiza a lista na tela após excluir

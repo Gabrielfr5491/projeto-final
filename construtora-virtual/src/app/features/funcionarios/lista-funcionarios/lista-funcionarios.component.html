@@ -67,6 +67,16 @@
 
           <div class="actions">
 
+              <button
+              class="btn-editar"
+              [routerLink]="[
+                '/editar-funcionario',
+                funcionario.id
+              ]"
+            >
+              Editar
+            </button>
+
             <button
               class="btn btn-danger"
               (click)="excluir(funcionario.id)">

@@ -1,4 +1,4 @@
-// Variáveis do Tema (Nativas do CSS que mudam no style.scss)
+// --- Variáveis do Tema (Nativas do CSS que mudam no style.scss) ---
 $bg: var(--bg-dashboard);
 $surface: var(--surface-card);
 $border: var(--border-color);
@@ -7,7 +7,7 @@ $text-muted: var(--text-sub);
 $table-th: var(--table-th-bg);
 $table-hover-bg: var(--table-hover); // Renomeada para evitar conflito com a pseudo-classe :hover
 
-// Cores de Destaque Estáticas (Funcionam bem em ambos os temas)
+// Cores de Destaque Estáticas (Funcionam perfeitamente em ambos os temas)
 $primary: #2563eb;
 $success: #10b981;
 $danger: #ef4444;
@@ -28,42 +28,49 @@ h1 {
   transition: color 0.3s ease;
 }
 
+// --- Substitua APENAS o bloco .table por este aqui ---
+
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  background: $surface !important; // !important anula o fundo padrão do Bootstrap
-  border-radius: 16px;
-  overflow: hidden;
+  width: 100% !important;
+  border-collapse: collapse !important;
+  background-color: $surface !important; 
+  border-radius: 16px !important;
+  overflow: hidden !important;
   border: 1px solid $border !important;
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 0 !important; // Remove margens extras do bootstrap
 
-  // Ajustado o Box-shadow para não ficar estourado/muito escuro no Dark Mode
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.03), 
-    0 1px 3px rgba(0, 0, 0, 0.05);
+  // 1. ATACANDO AS LINHAS E CÉLULAS DIRETAMENTE (Zera o fundo que o Bootstrap força)
+  tr, th, td {
+    background-color: transparent !important; 
+    background: transparent !important;
+    border-color: $border !important;
+  }
 
+  // 2. CABEÇALHO DA TABELA
   thead {
-    background: $table-th !important;
-    border-bottom: 2px solid $border !important;
-
-    th {
-      color: $text !important; // Força o título a seguir o tema
-      padding: 1rem;
-      text-align: left;
+    // Aqui usamos o seletor do bootstrap combinado com a sua variável
+    tr, th {
+      background-color: $table-th !important;
+      color: $text !important;
       font-size: .9rem;
       font-weight: 600;
       letter-spacing: .5px;
       text-transform: uppercase;
+      padding: 1rem;
     }
+    border-bottom: 2px solid $border !important;
   }
 
+  // 3. CORPO DA TABELA (Dados dos Funcionários)
   tbody {
     tr {
-      background: transparent !important; // Remove o fundo branco que o Bootstrap força nas linhas
       transition: all .25s ease;
 
+      // Efeito Hover calibrado com o tema ativo
       &:hover {
-        background: $table-hover-bg !important; // Aplica o hover correto do tema ativo
+        background-color: $table-hover-bg !important; 
       }
 
       &:not(:last-child) {
@@ -73,13 +80,13 @@ h1 {
 
     td {
       padding: 1rem;
-      color: $text !important; // Força o texto das células a ficar visível/legível
+      color: $text !important; // Garante que o texto fique branco no dark mode e escuro no light mode
       font-size: .95rem;
+      vertical-align: middle !important; // Alinha os textos com os botões
       transition: color 0.3s ease;
     }
   }
 }
-
 .btn {
   border: none;
   border-radius: 8px;
@@ -125,6 +132,7 @@ h1 {
 .actions {
   display: flex;
   gap: .5rem;
+  align-items: center; // Mantém botões alinhados verticalmente
 }
 
 .card-header {
@@ -147,6 +155,29 @@ h1 {
   &:hover {
     background: #1d4ed8;
     transform: translateY(-2px);
+  }
+}
+
+.btn-editar {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, .25);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, .35);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+
+  &:active {
+    transform: scale(.98);
   }
 }
 

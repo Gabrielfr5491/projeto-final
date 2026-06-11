@@ -25,16 +25,45 @@ export class FuncionarioService {
 
   }
 
-  excluir(id: number | string) {
+  buscarPorId(
+    id: number
+  ): Observable<Funcionario> {
 
-    return this.http.delete(
+    return this.http.get<Funcionario>(
       `${this.api}/${id}`
     );
 
   }
 
-  adicionar(funcionario: Funcionario): Observable<Funcionario> {
-    return this.http.post<Funcionario>(this.api, funcionario);
+  adicionar(
+    funcionario: Funcionario
+  ) {
+
+    return this.http.post(
+      this.api,
+      funcionario
+    );
+
+  }
+
+  atualizar(
+    id: number,
+    funcionario: Funcionario
+  ) {
+
+    return this.http.patch(
+      `${this.api}/${id}`,
+      funcionario
+    );
+
+  }
+
+  excluir(id: number) {
+
+    return this.http.delete(
+      `${this.api}/${id}`
+    );
+
   }
 
 }

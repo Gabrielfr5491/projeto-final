@@ -1,0 +1,117 @@
+<div class="screen-container">
+  <div class="header-screen">
+    <div>
+      <h1>Editar Fornecedor #{{ fornecedorId }}</h1>
+      <p>Atualize os dados cadastrais do parceiro de suprimentos e gerencie o catálogo completo de produtos.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="fornecedorForm" (ngSubmit)="salvar()">
+      <div class="grid-layout">
+        
+        <div class="form-fields">
+          <h2 class="section-title">Informações da Empresa</h2>
+          
+          <div class="row">
+            <div class="form-group full-width">
+              <label for="nome">Razão Social / Nome Fantasia *</label>
+              <input id="nome" type="text" formControlName="nome" [class.error]="fornecedorForm.get('nome')?.touched && fornecedorForm.get('nome')?.invalid">
+            </div>
+          </div>
+
+          <div class="row cols-2">
+            <div class="form-group">
+              <label for="cnpj">CNPJ *</label>
+              <input id="cnpj" type="text" formControlName="cnpj" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+            </div>
+            
+            <div class="form-group">
+              <label for="telefone">Telefone de Contato *</label>
+              <input id="telefone" type="text" formControlName="telefone">
+            </div>
+          </div>
+
+          <div class="row cols-2">
+            <div class="form-group">
+              <label for="email">E-mail Comercial *</label>
+              <input id="email" type="email" formControlName="email">
+            </div>
+
+            <div class="form-group">
+              <label for="categoria">Categoria de Insumo *</label>
+              <select id="categoria" formControlName="categoria">
+                <option *ngFor="let cat of categorias" [value]="cat.value">{{ cat.label }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="products-section mt-5">
+            <div class="products-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <div>
+                <h2 class="section-title" style="margin: 0;">Produtos / Materiais Fornecidos</h2>
+                <p class="subtitle" style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--text-sub);">Adicione ou remova itens do catálogo deste fornecedor.</p>
+              </div>
+              <button type="button" class="btn-create" style="padding: 0.5rem 1rem; font-size: 0.875rem;" (click)="adicionarProduto()">
+                + Adicionar Produto
+              </button>
+            </div>
+
+            <div formArrayName="produtos" class="products-list">
+              <div *ngFor="let produto of produtosFormArray.controls; let i = index" [formGroup]="getControl(produto)" class="product-row" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                
+                <span class="product-number" style="font-weight: 600; color: var(--text-sub); min-width: 25px;">#{{ i + 1 }}</span>
+
+                <div class="form-group" style="flex: 2; margin: 0;">
+                  <label *ngIf="i === 0" style="display: block; margin-bottom: 0.25rem;">Nome do Insumo / Material *</label>
+                  <input type="text" formControlName="nome" placeholder="Ex: Vergalhão CA-50 10mm" [class.error]="getControl(produto).get('nome')?.touched && getControl(produto).get('nome')?.invalid">
+                </div>
+
+                <div class="form-group" style="flex: 1; margin: 0; min-width: 120px;">
+                  <label *ngIf="i === 0" style="display: block; margin-bottom: 0.25rem;">Preço Unitário (R$)</label>
+                  <input type="number" formControlName="precoBase" placeholder="0.00" step="0.01">
+                </div>
+
+                <button type="button" class="btn-action btn-delete" [style.margin-top]="i === 0 ? '1.4rem' : '0'" (click)="removerProduto(i)" title="Remover este produto" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.25rem;">
+                  🗑️
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-upload-panel">
+          <h2 class="section-title">Foto do Insumo / Produto</h2>
+          <p class="subtitle">Insira ou altere a imagem de referência do produto entregue.</p>
+          
+          <div class="upload-box" [class.has-image]="imagemPreview">
+            <input type="file" id="fotoProduto" accept="image/*" (change)="aoSelecionarImagem($event)">
+            
+            <label for="fotoProduto" class="upload-label">
+              <div *ngIf="!imagemPreview" class="upload-placeholder">
+                <span class="icon">🏗️</span>
+                <span class="text">Clique para enviar a foto do produto</span>
+              </div>
+              
+              <div *ngIf="imagemPreview" class="upload-preview">
+                <img [src]="imagemPreview" alt="Preview do Produto">
+                <div class="change-overlay">Alterar Imagem</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="router.navigate(['/fornecedores'])">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="fornecedorForm.invalid">
+          Salvar Alterações
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

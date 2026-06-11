@@ -9,97 +9,44 @@ import { ListaFuncionariosComponent } from './features/funcionarios/lista-funcio
 import { ListaFornecedoresComponent } from './features/fornecedores/lista-fornecedores/lista-fornecedores.component';
 import { ListaMateriaisComponent } from './features/materiais/lista-materiais/lista-materiais.component';
 import { CadastroFuncionarioComponent } from './features/funcionarios/cadastro-funcionario/cadastro-funcionario.component';
-
-// IMPORTANTE: Importe o seu componente de Layout aqui
+import { EditarFuncionarioComponent } from './features/funcionarios/editar-funcionario/editar-funcionario.component';
+import { CadastroFornecedorComponent } from './features/fornecedores/cadastro-fornecedor/cadastro-fornecedor.component';
+import { EditarFornecedorComponent } from './features/fornecedores/editar-fornecedor/editar-fornecedor.component';
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
 
 export const routes: Routes = [
-  // 1. ROTA DE LOGIN: 100% isolada do resto do sistema
-  {
-    path: 'login',
-    component: LoginComponent
-  },
+  // 1. ROTA PÚBLICA (Fora do Painel)
+  { path: 'login', component: LoginComponent },
 
-  // 2. ROTA DO DASHBOARD: Força o uso do Layout e coloca a Home dentro dele
-  {
-    path: 'dashboard',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: HomeComponent }
-    ]
-  },
-
-  // 3. ROTA DE OBRAS: Força o uso do Layout e coloca a Listagem dentro dele
-  {
-    path: 'obras',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: ListaObrasComponent }
-    ]
-  },
-
-  // 4. ROTA DE CADASTRO DE OBRA
-  {
-    path: 'cadastro-obra',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: CadastroObraComponent }
-    ]
-  },
-
-  // 5. ROTA DE FUNCIONÁRIOS
-  {
-    path: 'funcionarios',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: ListaFuncionariosComponent }
-    ]
-  },
-
-  {
-  path: 'cadastro-funcionario',
-  component: DashboardLayoutComponent,
-  canActivate: [authGuard],
-  children: [
-    {
-      path: '',
-      component: CadastroFuncionarioComponent
-    }
-  ]
-},
-
-  // 6. ROTA DE FORNECEDORES
-  {
-    path: 'fornecedores',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: ListaFornecedoresComponent }
-    ]
-  },
-
-  // 7. ROTA DE MATERIAIS
-  {
-    path: 'materiais',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: ListaMateriaisComponent }
-    ]
-  },
-
-  // Redirecionamentos padrão de segurança
+  // 2. ROTAS PRIVADAS DO SISTEMA (Todas usam o mesmo Layout e o mesmo Guard)
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    component: DashboardLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      // Ao acessar '/dashboard', abre a Home
+      { path: 'dashboard', component: HomeComponent },
+
+      // Módulo de Obras
+      { path: 'obras', component: ListaObrasComponent },
+      { path: 'cadastro-obra', component: CadastroObraComponent },
+
+      // Módulo de Funcionários
+      { path: 'funcionarios', component: ListaFuncionariosComponent },
+      { path: 'cadastro-funcionario', component: CadastroFuncionarioComponent },
+      { path: 'editar-funcionario/:id', component: EditarFuncionarioComponent },
+
+      // Módulo de Fornecedores 🏗️
+      { path: 'fornecedores', component: ListaFornecedoresComponent },
+      { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
+      { path: 'editar-fornecedor/:id', component: EditarFornecedorComponent },
+
+      // Módulo de Materiais
+      { path: 'materiais', component: ListaMateriaisComponent },
+    ]
   },
-  {
-    path: '**',
-    redirectTo: 'login'
-  }
+
+  // 3. REDIRECIONAMENTOS DE SEGURANÇA
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];

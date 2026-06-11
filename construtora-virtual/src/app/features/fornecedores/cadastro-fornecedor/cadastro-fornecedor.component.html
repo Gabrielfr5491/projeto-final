@@ -1,0 +1,115 @@
+<div class="screen-container">
+  <div class="header-screen">
+    <div>
+      <h1>{{ isEdicao ? 'Editar Fornecedor' : 'Novo Fornecedor' }}</h1>
+      <p>{{ isEdicao ? 'Atualize as informações do fornecedor e seu catálogo de produtos.' : 'Cadastre um novo parceiro e seus insumos principais.' }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="fornecedorForm" (ngSubmit)="salvar()">
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nome">Razão Social / Nome *</label>
+          <input type="text" id="nome" formControlName="nome" placeholder="Ex: Gerdau Comercial de Aços S.A.">
+          <span class="error-msg" *ngIf="fornecedorForm.get('nome')?.touched && fornecedorForm.get('nome')?.errors?.['required']">
+            O nome é obrigatório.
+          </span>
+          <span class="error-msg" *ngIf="fornecedorForm.get('nome')?.touched && fornecedorForm.get('nome')?.errors?.['minlength']">
+            O nome deve ter no mínimo 3 caracteres.
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="cnpj">CNPJ *</label>
+          <input type="text" id="cnpj" formControlName="cnpj" placeholder="00.000.000/0000-00">
+          <span class="error-msg" *ngIf="fornecedorForm.get('cnpj')?.touched && fornecedorForm.get('cnpj')?.errors?.['required']">
+            O CNPJ é obrigatório.
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone / WhatsApp *</label>
+          <input type="text" id="telefone" formControlName="telefone" placeholder="(00) 00000-0000">
+          <span class="error-msg" *ngIf="fornecedorForm.get('telefone')?.touched && fornecedorForm.get('telefone')?.errors?.['required']">
+            O telefone é obrigatório.
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail de Contato *</label>
+          <input type="email" id="email" formControlName="email" placeholder="vendas@fornecedor.com">
+          <span class="error-msg" *ngIf="fornecedorForm.get('email')?.touched && fornecedorForm.get('email')?.errors?.['required']">
+            O e-mail é obrigatório.
+          </span>
+          <span class="error-msg" *ngIf="fornecedorForm.get('email')?.touched && fornecedorForm.get('email')?.errors?.['email']">
+            Insira um e-mail válido.
+          </span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="categoria">Categoria de Insumo *</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="" disabled selected>Selecione uma categoria...</option>
+            <option *ngFor="let cat of categorias" [value]="cat.value">
+              {{ cat.label }}
+            </option>
+          </select>
+          <span class="error-msg" *ngIf="fornecedorForm.get('categoria')?.touched && fornecedorForm.get('categoria')?.errors?.['required']">
+            Selecione uma categoria.
+          </span>
+        </div>
+      </div>
+
+      <hr class="form-divider">
+
+      <div class="products-section">
+        <div class="products-header">
+          <div>
+            <h3>Portfólio de Produtos / Materiais</h3>
+            <p class="section-desc">Adicione os itens fornecidos por esta empresa e seus respectivos preços de tabela.</p>
+          </div>
+          <button type="button" class="btn-add-product" (click)="adicionarProduto()">
+            + Adicionar Produto
+          </button>
+        </div>
+
+        <div formArrayName="produtos" class="products-list">
+          <div *ngFor="let produto of produtosFormArray.controls; let i = index" [formGroup]="getControl(produto)" class="product-row">
+            
+            <span class="product-number">#{{ i + 1 }}</span>
+
+            <div class="form-group flex-grow">
+              <label *ngIf="i === 0">Nome do Material / Insumo *</label>
+              <input type="text" formControlName="nome" placeholder="Ex: Vergalhão CA-50 10mm">
+              <span class="error-msg" *ngIf="getControl(produto).get('nome')?.touched && getControl(produto).get('nome')?.errors?.['required']">
+                Nome do produto é obrigatório.
+              </span>
+            </div>
+
+            <div class="form-group price-width">
+              <label *ngIf="i === 0">Preço Base (R$)</label>
+              <input type="number" formControlName="precoBase" placeholder="0.00" step="0.01">
+            </div>
+
+            <button type="button" class="btn-remove-product" [class.with-label]="i === 0" (click)="removerProduto(i)" title="Remover este produto">
+              🗑️
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="router.navigate(['/fornecedores'])">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primary">
+          {{ isEdicao ? 'Salvar Alterações' : 'Cadastrar Fornecedor' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

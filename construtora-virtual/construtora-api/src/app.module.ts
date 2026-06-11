@@ -9,6 +9,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { AuthModule } from './auth/auth.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { FuncionariosModule } from './funcionarios/funcionarios.module';
+import { FornecedoresModule } from './fornecedores/fornecedores.module';
+
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { FuncionariosModule } from './funcionarios/funcionarios.module';
     UsuariosModule,
 
     FuncionariosModule,
+
+    FornecedoresModule,
   ],
 
   controllers: [AppController],

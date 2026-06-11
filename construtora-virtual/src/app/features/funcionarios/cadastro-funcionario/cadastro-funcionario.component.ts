@@ -63,5 +63,12 @@ export class CadastroFuncionarioComponent {
       });
 
   }
+  cancelar() {
+
+  this.router.navigate([
+    '/funcionarios'
+  ]);
+
+}
 
 }
