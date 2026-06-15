@@ -1,0 +1,107 @@
+<div class="container">
+
+  <div class="card-header">
+
+
+<h1>Equipamentos</h1>
+
+<button
+  class="btn-add"
+  routerLink="/cadastro-equipamento"
+>
+  + Novo Equipamento
+</button>
+
+
+  </div>
+
+  <table class="table">
+
+
+<thead>
+
+  <tr>
+    <th>Nome</th>
+    <th>Tipo</th>
+    <th>Marca</th>
+    <th>Modelo</th>
+    <th>Placa</th>
+    <th>Status</th>
+    <th>Valor/Hora</th>
+    <th>Ações</th>
+  </tr>
+
+</thead>
+
+<tbody>
+
+  <tr
+    *ngFor="let equipamento of equipamentos"
+  >
+
+    <td>{{ equipamento.nome }}</td>
+
+    <td>{{ equipamento.tipo }}</td>
+
+    <td>{{ equipamento.marca }}</td>
+
+    <td>{{ equipamento.modelo }}</td>
+
+    <td>{{ equipamento.placa }}</td>
+
+    <td>
+
+      <span
+        class="status"
+      >
+        {{ equipamento.status }}
+      </span>
+
+    </td>
+
+    <td>
+
+      {{
+        equipamento.valorHora
+        | currency:'BRL'
+      }}
+
+    </td>
+
+    <td>
+
+      <div class="actions">
+
+        <button
+          class="btn-editar"
+          [routerLink]="[
+            '/editar-equipamento',
+            equipamento.id
+          ]"
+        >
+          Editar
+        </button>
+
+        <button
+          class="btn-danger"
+          (click)="
+            excluir(
+              equipamento.id
+            )
+          "
+        >
+          Excluir
+        </button>
+
+      </div>
+
+    </td>
+
+  </tr>
+
+</tbody>
+
+
+  </table>
+
+</div>

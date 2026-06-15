@@ -1,46 +1,48 @@
+// src/app/core/services/equipamento.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Material } from '../../models/material';
+import { Equipamento } from '../../models/equipamento';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MaterialService {
+export class EquipamentoService {
 
   private api =
-    'http://localhost:3000/materiais';
+    'http://localhost:3000/equipamentos';
 
   constructor(
     private http: HttpClient
   ) {}
 
   listar() {
-    return this.http.get<Material[]>(
+    return this.http.get<Equipamento[]>(
       this.api
     );
   }
 
   buscarPorId(id: number) {
-    return this.http.get<Material>(
+    return this.http.get<Equipamento>(
       `${this.api}/${id}`
     );
   }
 
-  adicionar(material: Material) {
+  adicionar(equipamento: Equipamento) {
     return this.http.post(
       this.api,
-      material
+      equipamento
     );
   }
 
   atualizar(
     id: number,
-    material: Material
+    equipamento: Equipamento
   ) {
     return this.http.patch(
       `${this.api}/${id}`,
-      material
+      equipamento
     );
   }
 

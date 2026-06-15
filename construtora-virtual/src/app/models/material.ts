@@ -1,7 +1,19 @@
 export interface Material {
-  id: number;
+
+  id?: number;
+
   nome: string;
+
   categoria: string;
+
+  unidade: string;
+
+  valorUnitario: number;
+
   quantidade: number;
-  preco: number;
+
+  estoqueMinimo: number;
+
+  fornecedor: string;
+
 }

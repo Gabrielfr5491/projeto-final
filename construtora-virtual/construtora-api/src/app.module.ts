@@ -10,6 +10,9 @@ import { AuthModule } from './auth/auth.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { FuncionariosModule } from './funcionarios/funcionarios.module';
 import { FornecedoresModule } from './fornecedores/fornecedores.module';
+import { MateriaisModule } from './materiais/materiais.module';
+import { EquipamentosModule } from './equipamentos/equipamentos.module';
+
 
 
 @Module({
@@ -44,6 +47,10 @@ import { FornecedoresModule } from './fornecedores/fornecedores.module';
     FuncionariosModule,
 
     FornecedoresModule,
+
+    MateriaisModule,
+
+    EquipamentosModule,
   ],
 
   controllers: [AppController],

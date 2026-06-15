@@ -1,1 +1,106 @@
-<p>lista-materiais works!</p>
+<div class="container">
+
+  <div class="card-header">
+
+
+<div>
+  <h1>Materiais</h1>
+  <p>Controle completo de estoque e insumos</p>
+</div>
+
+<button
+  class="btn-add"
+  routerLink="/cadastro-material"
+>
+  + Novo Material
+</button>
+
+
+  </div>
+
+  <table class="table">
+
+
+<thead>
+
+  <tr>
+    <th>Material</th>
+    <th>Categoria</th>
+    <th>Fornecedor</th>
+    <th>Quantidade</th>
+    <th>Valor Unitário</th>
+    <th>Status</th>
+    <th>Ações</th>
+  </tr>
+
+</thead>
+
+<tbody>
+
+  <tr *ngFor="let material of materiais">
+
+    <td>{{ material.nome }}</td>
+
+    <td>{{ material.categoria }}</td>
+
+    <td>{{ material.fornecedor }}</td>
+
+    <td>
+      {{ material.quantidade }}
+      {{ material.unidade }}
+    </td>
+
+    <td>
+      {{ material.valorUnitario | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+    </td>
+
+    <td>
+
+      <span
+        class="status"
+        [ngClass]="{
+          'baixo': material.quantidade <= material.estoqueMinimo,
+          'normal': material.quantidade > material.estoqueMinimo
+        }"
+      >
+        {{
+          material.quantidade <= material.estoqueMinimo
+          ? 'Estoque Baixo'
+          : 'Disponível'
+        }}
+      </span>
+
+    </td>
+
+    <td>
+
+      <div class="actions">
+
+        <button
+          class="btn-editar"
+          [routerLink]="[
+            '/editar-material',
+            material.id
+          ]"
+        >
+          Editar
+        </button>
+
+        <button
+          class="btn-excluir"
+          (click)="excluir(material.id)"
+        >
+          Excluir
+        </button>
+
+      </div>
+
+    </td>
+
+  </tr>
+
+</tbody>
+
+  </table>
+
+</div>

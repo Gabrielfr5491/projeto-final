@@ -1,0 +1,111 @@
+<div class="container">
+
+  <div class="card">
+
+    <h1>Cadastro de Equipamento</h1>
+
+    <form (ngSubmit)="salvar()">
+
+      <div class="grid">
+
+        <div class="form-group">
+          <label>Nome</label>
+          <input
+            type="text"
+            [(ngModel)]="equipamento.nome"
+            name="nome"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Tipo</label>
+          <input
+            type="text"
+            [(ngModel)]="equipamento.tipo"
+            name="tipo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Marca</label>
+          <input
+            type="text"
+            [(ngModel)]="equipamento.marca"
+            name="marca"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Modelo</label>
+          <input
+            type="text"
+            [(ngModel)]="equipamento.modelo"
+            name="modelo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Placa</label>
+          <input
+            type="text"
+            [(ngModel)]="equipamento.placa"
+            name="placa"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+
+          <select
+            [(ngModel)]="equipamento.status"
+            name="status"
+            required
+          >
+            <option value="">
+              Selecione
+            </option>
+
+            <option value="Disponível">
+              Disponível
+            </option>
+
+            <option value="Em Obra">
+              Em Obra
+            </option>
+
+            <option value="Manutenção">
+              Manutenção
+            </option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+          <label>Valor por Hora</label>
+
+          <input
+            type="number"
+            [(ngModel)]="equipamento.valorHora"
+            name="valorHora"
+            required
+          >
+        </div>
+
+      </div>
+
+      <button
+        class="btn-salvar"
+        type="submit"
+      >
+        Salvar Equipamento
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
