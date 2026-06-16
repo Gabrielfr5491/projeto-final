@@ -6,6 +6,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DashboardService {
 
+  private api =
+    'http://localhost:3000/dashboard';
+
   constructor(
     private http: HttpClient
   ) {}
@@ -13,7 +16,15 @@ export class DashboardService {
   resumo() {
 
     return this.http.get(
-      'http://localhost:3000/dashboard/resumo'
+      `${this.api}/resumo`
+    );
+
+  }
+
+  financeiro() {
+
+    return this.http.get<any>(
+      `${this.api}/financeiro`
     );
 
   }

@@ -1,80 +1,168 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
 
 import { CustoService } from '../../../core/services/custo.service';
-import { Custo } from '../../../models/custo';
+import { ObraService } from '../../../core/services/obra.service';
+
+import { Obra } from '../../../models/obra';
 
 @Component({
   selector: 'app-editar-custo',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    RouterLink
+    FormsModule
   ],
   templateUrl: './editar-custo.component.html',
   styleUrl: './editar-custo.component.scss'
 })
 export class EditarCustoComponent implements OnInit {
 
-  custoId!: number;
-  
+  id!: number;
+
+  obras: Obra[] = [];
+
   custo = {
-    id: 0,
+
     descricao: '',
+
     categoria: '',
+
     valor: 0,
+
     data: '',
-    obra: '',
+
+    obraId: 0,
+
     tipo: ''
+
   };
 
   constructor(
-    private custoService: CustoService,
+    private route: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute
+    private custoService: CustoService,
+    private obraService: ObraService
   ) {}
 
   ngOnInit(): void {
-    // Captura o ID que passamos na rota (/editar-custo/:id)
-    const idParam = this.route.snapshot.paramMap.get('id');
-    
-    if (idParam) {
-      this.custoId = Number(idParam);
-      this.carregarCusto();
-    }
+
+    this.id = Number(
+      this.route.snapshot.paramMap.get('id')
+    );
+
+    this.carregarObras();
+
+    this.carregarCusto();
+
+  }
+
+  carregarObras() {
+
+    this.obraService
+      .listar()
+      .subscribe({
+
+        next: (dados) => {
+
+          this.obras = dados;
+
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao carregar obras',
+            erro
+          );
+
+        }
+
+      });
+
   }
 
   carregarCusto() {
-    // Busca o custo específico no service para preencher o formulário
-    this.custoService.buscarPorId(this.custoId).subscribe({
-      next: (dados: any) => {
-        this.custo = dados;
-        // Se a sua data vier no formato ISO do banco (Ex: 2026-06-15T00:00:00), 
-        // talvez precise dar um .split('T')[0] para o <input type="date"> aceitar.
-        if (this.custo.data) {
-          this.custo.data = this.custo.data.split('T')[0];
+
+    this.custoService
+      .buscarPorId(this.id)
+      .subscribe({
+
+        next: (dados: any) => {
+
+          this.custo = {
+
+            descricao: dados.descricao,
+
+            categoria: dados.categoria,
+
+            valor: dados.valor,
+
+            data: dados.data,
+
+            obraId: dados.obra?.id || dados.obraId,
+
+            tipo: dados.tipo
+
+          };
+
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao carregar custo',
+            erro
+          );
+
         }
-      },
-      error: () => {
-        alert('Erro ao carregar os dados do custo.');
-        this.router.navigate(['/custos']);
-      }
-    });
+
+      });
+
   }
 
   atualizar() {
-    // Chama o método de atualizar do seu service (ajuste o nome se for diferente, ex: editar/alterar)
-    this.custoService.atualizar(this.custoId, this.custo).subscribe({
-      next: () => {
-        alert('Custo atualizado com sucesso!');
-        this.router.navigate(['/custos']);
-      },
-      error: () => {
-        alert('Erro ao atualizar o custo.');
-      }
-    });
+
+    this.custoService
+      .atualizar(
+        this.id,
+        this.custo
+      )
+      .subscribe({
+
+        next: () => {
+
+          alert(
+            'Custo atualizado com sucesso!'
+          );
+
+          this.router.navigate([
+            '/custos'
+          ]);
+
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao atualizar custo',
+            erro
+          );
+
+          alert(
+            'Erro ao atualizar custo'
+          );
+
+        }
+
+      });
+
   }
+
 }

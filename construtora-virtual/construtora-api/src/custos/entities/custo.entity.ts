@@ -1,8 +1,12 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column
+  Column,
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
+
+import { Obra } from '../../obras/entities/obra.entity';
 
 @Entity('custos')
 export class Custo {
@@ -23,9 +27,18 @@ export class Custo {
   data!: string;
 
   @Column()
-  obra!: string;
+  tipo!: string;
 
   @Column()
-  tipo!: string;
+  obraId!: number;
+
+  @ManyToOne(
+    () => Obra,
+    { eager: true }
+  )
+  @JoinColumn({
+    name: 'obraId'
+  })
+  obra!: Obra;
 
 }

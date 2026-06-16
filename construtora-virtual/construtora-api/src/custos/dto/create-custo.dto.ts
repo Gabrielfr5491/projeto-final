@@ -8,8 +8,8 @@ export class CreateCustoDto {
 
   data!: string;
 
-  obra!: string;
-
   tipo!: string;
+
+  obraId!: number;
 
 }

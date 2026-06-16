@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
 import { CustoService } from '../../../core/services/custo.service';
+import { ObraService } from '../../../core/services/obra.service';
+
+import { Obra } from '../../../models/obra';
 
 @Component({
   selector: 'app-cadastro-custo',
@@ -16,28 +19,58 @@ import { CustoService } from '../../../core/services/custo.service';
   templateUrl: './cadastro-custo.component.html',
   styleUrl: './cadastro-custo.component.scss'
 })
-export class CadastroCustoComponent {
+export class CadastroCustoComponent implements OnInit {
+
+  obras: Obra[] = [];
 
   custo = {
 
-    descricao: '',
+  descricao: '',
 
-    categoria: '',
+  categoria: '',
 
-    valor: 0,
+  valor: 0,
 
-    data: '',
+  data: '',
 
-    obra: '',
+  obraId: 0,
 
-    tipo: ''
+  tipo: ''
+
+
 
   };
 
   constructor(
     private custoService: CustoService,
+    private obraService: ObraService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+
+    this.obraService
+      .listar()
+      .subscribe({
+
+        next: (dados) => {
+
+          this.obras = dados;
+
+        },
+
+        error: (erro) => {
+
+          console.error(
+            'Erro ao carregar obras',
+            erro
+          );
+
+        }
+
+      });
+
+  }
 
   salvar() {
 
@@ -54,6 +87,16 @@ export class CadastroCustoComponent {
           this.router.navigate([
             '/custos'
           ]);
+
+        },
+
+        error: (erro) => {
+
+          console.error(erro);
+
+          alert(
+            'Erro ao cadastrar custo'
+          );
 
         }
 

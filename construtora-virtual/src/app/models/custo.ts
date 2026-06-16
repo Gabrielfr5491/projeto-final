@@ -1,3 +1,5 @@
+import { Obra } from './obra';
+
 export interface Custo {
 
   id?: number;
@@ -10,8 +12,10 @@ export interface Custo {
 
   data: string;
 
-  obra: string;
-
   tipo: string;
+
+  obraId: number;
+
+  obra?: Obra;
 
 }

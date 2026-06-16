@@ -1,111 +1,439 @@
 <main class="dashboard" [style.--sidebar-width]="collapsed ? '70px' : '250px'">
-  
+
   <header class="dashboard__header">
+
     <div class="dashboard__title-group">
-      <h1 class="dashboard__title">Dashboard Executivo</h1>
-      <p class="dashboard__subtitle">Visão geral do gerenciamento de obras e controladoria</p>
+
+      <h1 class="dashboard__title">
+        Dashboard Executivo
+      </h1>
+
+      <p class="dashboard__subtitle">
+        Visão geral da construtora
+      </p>
+
     </div>
-    
+
     <div class="productivity-widget">
+
       <span class="productivity-widget__value">
-        {{ totalObras > 0 ? (obrasConcluidas / totalObras) : 0 | percent:'1.0-0' }}
+
+        {{
+          totalObras > 0
+            ? (obrasConcluidas / totalObras)
+            : 0
+          | percent:'1.0-0'
+        }}
+
       </span>
-      <span class="productivity-widget__label">Produtividade Geral</span>
+
+      <span class="productivity-widget__label">
+
+        Produtividade Geral
+
+      </span>
+
     </div>
+
   </header>
 
+  <!-- MÉTRICAS OPERACIONAIS -->
+
   <section class="dashboard__metrics-grid">
-    
+
     <div class="metric-card">
-      <span class="metric-card__value text-primary">{{ totalObras }}</span>
-      <p class="metric-card__label">Total de Obras</p>
+      <span class="metric-card__value text-primary">
+        {{ totalObras }}
+      </span>
+
+      <p class="metric-card__label">
+        Obras
+      </p>
     </div>
 
     <div class="metric-card">
-      <span class="metric-card__value text-warning">{{ obrasPlanejamento }}</span>
-      <p class="metric-card__label">Em Planejamento</p>
+      <span class="metric-card__value text-warning">
+        {{ obrasPlanejamento }}
+      </span>
+
+      <p class="metric-card__label">
+        Planejamento
+      </p>
     </div>
 
     <div class="metric-card">
-      <span class="metric-card__value text-info">{{ obrasAndamento }}</span>
-      <p class="metric-card__label">Em Andamento</p>
+      <span class="metric-card__value text-info">
+        {{ obrasAndamento }}
+      </span>
+
+      <p class="metric-card__label">
+        Em Andamento
+      </p>
     </div>
 
     <div class="metric-card">
-      <span class="metric-card__value text-success">{{ obrasConcluidas }}</span>
-      <p class="metric-card__label">Concluídas</p>
+      <span class="metric-card__value text-success">
+        {{ obrasConcluidas }}
+      </span>
+
+      <p class="metric-card__label">
+        Concluídas
+      </p>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-card__value text-primary">
+        {{ resumo.funcionarios }}
+      </span>
+
+      <p class="metric-card__label">
+        Funcionários
+      </p>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-card__value text-info">
+        {{ resumo.fornecedores }}
+      </span>
+
+      <p class="metric-card__label">
+        Fornecedores
+      </p>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-card__value text-warning">
+        {{ resumo.materiais }}
+      </span>
+
+      <p class="metric-card__label">
+        Materiais
+      </p>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-card__value text-success">
+        {{ resumo.equipamentos }}
+      </span>
+
+      <p class="metric-card__label">
+        Equipamentos
+      </p>
     </div>
 
   </section>
+
+  <!-- ORÇAMENTO -->
 
   <section class="budget-card">
+
     <div class="budget-card__content">
-      <p class="budget-card__label">Orçamento Consolidado</p>
+
+      <p class="budget-card__label">
+        Orçamento Consolidado
+      </p>
+
       <h2 class="budget-card__value">
-        {{ orcamentoTotal | currency:'BRL':'symbol':'1.0-0':'pt-BR' }}
+
+        {{
+          orcamentoTotal
+          | currency:'BRL':'symbol':'1.0-0':'pt-BR'
+        }}
+
       </h2>
+
     </div>
-    <div class="budget-card__icon-wrapper">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <line x1="12" x2="12" y1="1" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-      </svg>
-    </div>
+
   </section>
 
+  <!-- FINANCEIRO -->
 
-    <section class="grafico-card">
+  <section class="dashboard__metrics-grid">
 
-  <div class="table-container__header">
-    <h2 class="table-container__title">
-      Status das Obras
-    </h2>
-  </div>
+    <div class="metric-card">
 
-  <apx-chart
-    *ngIf="chartOptions"
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [xaxis]="chartOptions.xaxis"
-    [dataLabels]="chartOptions.dataLabels">
-  </apx-chart>
+      <span class="metric-card__value text-success">
+
+        {{
+          resumo.receitas
+          | currency:'BRL'
+        }}
+
+      </span>
+
+      <p class="metric-card__label">
+        Receitas
+      </p>
+
+    </div>
+
+    <div class="metric-card">
+
+      <span class="metric-card__value text-danger">
+
+        {{
+          resumo.despesas
+          | currency:'BRL'
+        }}
+
+      </span>
+
+      <p class="metric-card__label">
+        Despesas
+      </p>
+
+    </div>
+
+    <div class="metric-card">
+
+      <span class="metric-card__value text-primary">
+
+        {{
+          resumo.lucro
+          | currency:'BRL'
+        }}
+
+      </span>
+
+      <p class="metric-card__label">
+        Lucro
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- GRÁFICO -->
+
+  <section class="dashboard-graficos">
+
+  <!-- STATUS DAS OBRAS -->
+
+  <section class="grafico-card">
+
+
+<div class="table-container__header">
+
+  <h2>
+    Status das Obras
+  </h2>
+
+</div>
+
+<apx-chart
+
+  *ngIf="chartOptions"
+
+  [series]="chartOptions.series"
+
+  [chart]="chartOptions.chart"
+
+  [labels]="chartOptions.labels"
+
+  [plotOptions]="chartOptions.plotOptions"
+
+  [colors]="chartOptions.colors">
+
+</apx-chart>
+
+
+  </section>
+
+  <!-- FINANCEIRO -->
+
+  <section class="grafico-card">
+
+
+<div class="table-container__header">
+
+  <h2>
+    Financeiro
+  </h2>
+
+</div>
+
+<apx-chart
+
+  *ngIf="chartFinanceiro"
+
+  [series]="chartFinanceiro.series"
+
+  [chart]="chartFinanceiro.chart"
+
+  [xaxis]="chartFinanceiro.xaxis"
+
+  [stroke]="chartFinanceiro.stroke"
+
+  [fill]="chartFinanceiro.fill"
+
+  [markers]="chartFinanceiro.markers"
+
+  [colors]="chartFinanceiro.colors">
+
+</apx-chart>
+
+
+  </section>
+
+  <!-- INDICADORES -->
+
+  <section class="grafico-card">
+
+
+<div class="table-container__header">
+
+  <h2>
+    Indicadores Gerais
+  </h2>
+
+</div>
+
+<apx-chart
+
+  *ngIf="chartKpi"
+
+  [series]="chartKpi.series"
+
+  [chart]="chartKpi.chart"
+
+  [plotOptions]="chartKpi.plotOptions"
+
+  [xaxis]="chartKpi.xaxis"
+
+  [colors]="chartKpi.colors">
+
+</apx-chart>
+
+
+  </section>
+
+  <!-- CUSTOS POR CATEGORIA -->
+
+  <section class="grafico-card">
+
+
+<div class="table-container__header">
+
+  <h2>
+    Custos por Categoria
+  </h2>
+
+</div>
+
+<apx-chart
+
+  *ngIf="chartCustosCategoria"
+
+  [series]="chartCustosCategoria.series"
+
+  [chart]="chartCustosCategoria.chart"
+
+  [labels]="chartCustosCategoria.labels"
+
+  [colors]="chartCustosCategoria.colors"
+
+  [legend]="chartCustosCategoria.legend"
+
+  [plotOptions]="chartCustosCategoria.plotOptions"
+
+  [dataLabels]="chartCustosCategoria.dataLabels">
+
+</apx-chart>
+
+
+  </section>
 
 </section>
-  
+
+
+
+  <!-- TABELA -->
+
   <section class="table-container">
+
     <div class="table-container__header">
-      <h2 class="table-container__title">Últimas Obras Registradas</h2>
+
+      <h2 class="table-container__title">
+        Últimas Obras Registradas
+      </h2>
+
     </div>
 
     <div class="table-responsive">
+
       <table class="custom-table">
+
         <thead>
+
           <tr>
-            <th>Nome do Empreendimento</th>
-            <th>Localidade</th>
+
+            <th>Nome</th>
+
+            <th>Cidade</th>
+
             <th>Status</th>
-            <th class="text-right">Aporte Orçamentário</th>
+
+            <th>Orçamento</th>
+
           </tr>
+
         </thead>
+
         <tbody>
+
           <tr *ngFor="let obra of obras">
-            <td class="font-semibold">{{ obra.nome }}</td>  
-            <td class="text-muted">{{ obra.cidade }}</td>
+
             <td>
-              <span class="status-badge" [ngClass]="{
-                'status-badge--success': obra.status === 'Concluído' || obra.status === 'Concluída',
-                'status-badge--info': obra.status === 'Em andamento' || obra.status === 'Em Andamento',
-                'status-badge--warning': obra.status === 'Planejamento'
-              }">
+              {{ obra.nome }}
+            </td>
+
+            <td>
+              {{ obra.cidade }}
+            </td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="{
+
+                  'status-badge--success':
+                  obra.status === 'Concluído' ||
+                  obra.status === 'Concluída',
+
+                  'status-badge--info':
+                  obra.status === 'Em andamento' ||
+                  obra.status === 'Em Andamento',
+
+                  'status-badge--warning':
+                  obra.status === 'Planejamento'
+
+                }">
+
                 {{ obra.status }}
+
               </span>
+
             </td>
-            <td class="text-right font-medium">
-              {{ obra.orcamento | currency:'BRL':'symbol':'1.0-2':'pt-BR' }}
+
+            <td>
+
+              {{
+                obra.orcamento
+                | currency:'BRL'
+              }}
+
             </td>
+
           </tr>
+
         </tbody>
+
       </table>
+
     </div>
+
   </section>
 
 </main>
+

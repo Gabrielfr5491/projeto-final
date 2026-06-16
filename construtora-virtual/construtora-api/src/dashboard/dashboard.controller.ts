@@ -1,11 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
-import { DashboardService } from './dashboard.service';
+import {
+  Controller,
+  Get
+} from '@nestjs/common';
+
+import {
+  DashboardService
+} from './dashboard.service';
 
 @Controller('dashboard')
 export class DashboardController {
 
   constructor(
-    private dashboardService:
+    private readonly dashboardService:
     DashboardService
   ) {}
 
@@ -17,4 +23,13 @@ export class DashboardController {
 
   }
 
+  @Get('financeiro')
+  dashboardFinanceiro() {
+
+    return this.dashboardService
+      .dashboardFinanceiro();
+
+  }
+
 }
+

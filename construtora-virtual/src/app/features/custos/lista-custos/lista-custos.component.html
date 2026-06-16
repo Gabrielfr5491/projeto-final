@@ -1,44 +1,97 @@
 <div class="container">
-  <div class="header-actions">
-    <h2>Gerenciamento de Custos</h2>
-    <a routerLink="/cadastro-custo" class="btn btn-primary">
-      Novo Custo
+
+  <div class="card-header">
+
+    <h1>Custos</h1>
+
+    <a
+      routerLink="/cadastro-custo"
+      class="btn-add"
+    >
+      + Novo Custo
     </a>
+
   </div>
 
-  <div class="table-container" *ngIf="custos.length > 0; else listaVazia">
-    <table class="custos-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Data</th>
-          <th class="text-center">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let custo of custos">
-          <td>{{ custo.id }}</td>
-          <td class="font-semibold">{{ custo.descricao }}</td>
-          <td>{{ custo.valor | currency:'BRL':'symbol':'1.2-2' }}</td>
-          <td>{{ custo.data | date:'dd/MM/yyyy' }}</td>
-          <td class="text-center actions-cell">
-            <a [routerLink]="['/editar-custo', custo.id]" class="btn-icon btn-edit" title="Editar">
-              Editar
-            </a>
-            <button (click)="excluir(custo.id)" class="btn-icon btn-delete" title="Excluir">
-              Excluir
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table class="table">
 
-  <ng-template #listaVazia>
-    <div class="empty-state">
-      <p>Nenhum custo encontrado.</p>
-    </div>
-  </ng-template>
+    <thead>
+
+      <tr>
+
+        <th>Descrição</th>
+
+        <th>Categoria</th>
+
+        <th>Obra</th>
+
+        <th>Valor</th>
+
+        <th>Data</th>
+
+        <th>Tipo</th>
+
+        <th>Ações</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let custo of custos">
+
+        <td>{{ custo.descricao }}</td>
+
+        <td>{{ custo.categoria }}</td>
+
+        <td>{{ custo.obra }}</td>
+
+        <td>
+          R$ {{ custo.valor }}
+        </td>
+
+        <td>{{ custo.data }}</td>
+
+        <td>
+
+          <span
+            class="status"
+            [class.entrada]="custo.tipo === 'Entrada'"
+            [class.saida]="custo.tipo === 'Saida'"
+          >
+
+            {{ custo.tipo }}
+
+          </span>
+
+        </td>
+
+        <td class="actions">
+
+          <a
+            [routerLink]="[
+              '/editar-custo',
+              custo.id
+            ]"
+            class="btn-editar"
+          >
+            Editar
+          </a>
+
+          <button
+            class="btn-danger"
+            (click)="excluir(custo.id)"
+          >
+            Excluir
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
 </div>
