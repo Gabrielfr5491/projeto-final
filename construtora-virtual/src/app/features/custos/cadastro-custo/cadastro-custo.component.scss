@@ -1,0 +1,87 @@
+$primary-color: #4f46e5;
+$primary-hover: #4338ca;
+$text-main: #1f2937;
+$border-color: #d1d5db;
+$radius: 8px;
+
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: $radius;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: $text-main;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+
+  // Faz campos como "descrição" ocuparem a linha toda
+  .form-group:first-child {
+    grid-column: span 2;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  input, select {
+    padding: 0.6rem;
+    border: 1px solid $border-color;
+    border-radius: $radius;
+    font-size: 1rem;
+    outline: none;
+    
+    &:focus {
+      border-color: $primary-color;
+      ring: 2px solid rgba($primary-color, 0.2);
+    }
+  }
+}
+
+.actions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.7rem 1.5rem;
+  border-radius: $radius;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+
+  &-primary {
+    background: $primary-color;
+    color: white;
+    &:hover:not(:disabled) { background: $primary-hover; }
+    &:disabled { background: #9ca3af; cursor: not-allowed; }
+  }
+
+  &-cancel {
+    background: #f3f4f6;
+    color: #374151;
+    &:hover { background: #e5e7eb; }
+  }
+}

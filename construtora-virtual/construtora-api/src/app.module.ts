@@ -12,6 +12,7 @@ import { FuncionariosModule } from './funcionarios/funcionarios.module';
 import { FornecedoresModule } from './fornecedores/fornecedores.module';
 import { MateriaisModule } from './materiais/materiais.module';
 import { EquipamentosModule } from './equipamentos/equipamentos.module';
+import { CustosModule } from './custos/custos.module';
 
 
 
@@ -51,6 +52,8 @@ import { EquipamentosModule } from './equipamentos/equipamentos.module';
     MateriaisModule,
 
     EquipamentosModule,
+
+    CustosModule,
   ],
 
   controllers: [AppController],

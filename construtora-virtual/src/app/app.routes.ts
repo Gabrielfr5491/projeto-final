@@ -18,6 +18,9 @@ import { EditarMaterialComponent } from './features/materiais/editar-material/ed
 import { ListaEquipamentosComponent } from './features/equipamentos/lista-equipamentos/lista-equipamentos.component';
 import { CadastroEquipamentoComponent } from './features/equipamentos/cadastro-equipamento/cadastro-equipamento.component';
 import { EditarEquipamentoComponent } from './features/equipamentos/editar-equipamento/editar-equipamento.component';
+import { ListaCustosComponent } from './features/custos/lista-custos/lista-custos.component';
+import { CadastroCustoComponent } from './features/custos/cadastro-custo/cadastro-custo.component';
+import { EditarCustoComponent } from './features/custos/editar-custo/editar-custo.component';
 
 export const routes: Routes = [
   // 1. ROTA PÚBLICA (Fora do Painel)
@@ -55,6 +58,12 @@ export const routes: Routes = [
       {path: 'equipamentos',component: ListaEquipamentosComponent},
       {path: 'cadastro-equipamento',component: CadastroEquipamentoComponent},
       {path: 'editar-equipamento/:id',component: EditarEquipamentoComponent},
+
+      // Módulo de custos
+
+      {path: 'custos',component: ListaCustosComponent},
+      {path: 'cadastro-custo',component: CadastroCustoComponent},
+      {path: 'editar-custo/:id',component: EditarCustoComponent},
     ]
   },
 
