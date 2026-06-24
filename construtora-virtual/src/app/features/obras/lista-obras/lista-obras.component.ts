@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import localePt from '@angular/common/locales/pt';
 
 import { ObraService } from '../../../core/services/obra.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { Obra } from '../../../models/obra';
 
 // Registra a localização brasileira para que o pipe 'currency' funcione perfeitamente na tabela
@@ -31,7 +32,8 @@ export class ListaObrasComponent implements OnInit {
   obras: Obra[] = [];
 
   constructor(
-    private obraService: ObraService
+    private obraService: ObraService,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -54,16 +56,16 @@ export class ListaObrasComponent implements OnInit {
   excluir(id: number) {
     // Um leve aviso nativo antes de deletar diretamente para melhorar a experiência do usuário (UX)
     if (confirm('Tem certeza que deseja remover esta obra permanentemente?')) {
-      this.obraService
-        .excluir(id)
-        .subscribe({
-          next: () => {
-            this.carregarObras();
-          },
-          error: (erro) => {
-            console.error('Erro ao excluir obra', erro);
-          }
-        });
+      this.obraService.excluir(id).subscribe({
+        next: () => {
+          this.toast.sucesso('Obra excluída com sucesso.');
+          this.carregarObras();
+        },
+        error: (erro) => {
+          console.error('Erro ao excluir obra', erro);
+          this.toast.erro('Não foi possível excluir a obra. Verifique se há custos ou materiais vinculados.');
+        }
+      });
     }
   }
 

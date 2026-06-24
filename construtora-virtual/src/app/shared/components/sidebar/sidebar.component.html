@@ -1,6 +1,6 @@
-<aside class="sidebar" [class.collapsed]="collapsed">
+<aside class="sidebar" [class.collapsed]="layout.sidebarCollapsed$ | async" [class.mobile-open]="layout.mobileSidebarOpen$ | async">
   
-  <button type="button" class="sidebar__toggle" (click)="toggleSidebar()" aria-label="Menu">
+  <button type="button" class="sidebar__toggle" (click)="layout.toggleSidebar()" aria-label="Menu">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
     </svg>
@@ -15,7 +15,7 @@
     <ul class="sidebar__list">
       
       <li class="sidebar__item">
-        <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard" class="sidebar__link">
+        <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect width="7" height="9" x="3" y="3" rx="1"/>
             <rect width="7" height="5" x="14" y="3" rx="1"/>
@@ -27,7 +27,7 @@
       </li>
 
       <li class="sidebar__item">
-        <a routerLink="/obras" routerLinkActive="active" title="Obras" class="sidebar__link">
+        <a routerLink="/obras" routerLinkActive="active" title="Obras" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 21h18M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M5 21V7m14 14V7M9 7v14m6-14v14"/>
           </svg>
@@ -36,7 +36,7 @@
       </li>
 
       <li class="sidebar__item">
-        <a routerLink="/cadastro-obra" routerLinkActive="active" title="Nova Obra" class="sidebar__link">
+        <a routerLink="/cadastro-obra" routerLinkActive="active" title="Nova Obra" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14M5 12h14"/>
           </svg>
@@ -45,7 +45,7 @@
       </li>
 
       <li class="sidebar__item">
-        <a routerLink="/funcionarios" routerLinkActive="active" title="Funcionários" class="sidebar__link">
+        <a routerLink="/funcionarios" routerLinkActive="active" title="Funcionários" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm13 10v-2a4 4 0 0 0-3-3.87"/>
           </svg>
@@ -54,7 +54,7 @@
       </li>
 
       <li class="sidebar__item">
-        <a routerLink="/fornecedores" routerLinkActive="active" title="Fornecedores" class="sidebar__link">
+        <a routerLink="/fornecedores" routerLinkActive="active" title="Fornecedores" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 18H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v10M14 18h4m2 0a2 2 0 1 1-4 0M20 10V6h-3M3 10h16"/>
           </svg>
@@ -63,43 +63,28 @@
       </li>
 
       <li class="sidebar__item">
-        <a routerLink="/materiais" routerLinkActive="active" title="Materiais" class="sidebar__link">
+        <a routerLink="/materiais" routerLinkActive="active" title="Materiais" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
           </svg>
           <span class="sidebar__text">Materiais</span>
         </a>
       </li>
-      <li class="sidebar__item">
-        <a
-          routerLink="/equipamentos"
-          routerLinkActive="active"
-          title="Equipamentos"
-          class="sidebar__link"
-        >
 
-          <svg
-            class="sidebar__icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+      <li class="sidebar__item">
+        <a routerLink="/equipamentos" routerLinkActive="active" title="Equipamentos" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 17h18"/>
             <path d="M5 17V9l4-4h6l4 4v8"/>
             <circle cx="7" cy="17" r="2"/>
             <circle cx="17" cy="17" r="2"/>
           </svg>
-
-          <span class="sidebar__text">
-            Equipamentos
-          </span>
-
+          <span class="sidebar__text">Equipamentos</span>
         </a>
       </li>
 
       <li class="sidebar__item">
-        <a routerLink="/custos" routerLinkActive="active" title="Custos" class="sidebar__link">
+        <a routerLink="/custos" routerLinkActive="active" title="Custos" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" x2="12" y1="1" y2="23"/>
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
@@ -107,6 +92,25 @@
           <span class="sidebar__text">Custos</span>
         </a>
       </li>
+
+      <li class="sidebar__item">
+        <a routerLink="/usuarios" routerLinkActive="active" title="Usuários" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <span class="sidebar__text">Usuários</span>
+        </a>
+      </li>
+
+      <li *ngIf="isAdmin()" class="sidebar__item">
+        <a routerLink="/cadastro-usuario" routerLinkActive="active" title="Novo Usuário" class="sidebar__link sidebar__link--sub" (click)="layout.setMobileSidebarOpen(false)">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm13-3v6m-3-3h6"/>
+          </svg>
+          <span class="sidebar__text">Novo Usuário</span>
+        </a>
+      </li>
+
 
     </ul>
   </nav>

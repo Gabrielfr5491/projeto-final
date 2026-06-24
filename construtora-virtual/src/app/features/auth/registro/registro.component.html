@@ -1,0 +1,133 @@
+<main class="login-wrapper">
+  
+  <section class="login-aside-form">
+    <div class="login-card-clean">
+      
+      <header class="login-card-clean__header">
+        <div class="login-card-clean__logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M3 21h18M3 10h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14M9 10v11M15 10v11"/>
+          </svg>
+        </div>
+        <h1 class="login-card-clean__title">Criar Conta</h1>
+        <p class="login-card-clean__subtitle">Comece a digitalizar o controle e custos de suas obras hoje mesmo.</p>
+      </header>
+
+      <form class="login-card-clean__form" (ngSubmit)="registrar()">
+        
+        <div class="input-premium-group">
+          <label class="input-premium-group__label" for="nome">Nome Completo</label>
+          <div class="input-premium-group__wrapper">
+            <svg class="input-premium-group__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+            </svg>
+            <input
+              id="nome"
+              type="text"
+              class="input-premium-group__input"
+              placeholder="Ex: Carlos Silva"
+              [(ngModel)]="usuario.nome"
+              name="nome"
+              required>
+          </div>
+        </div>
+
+        <div class="input-premium-group">
+          <label class="input-premium-group__label" for="email">E-mail Corporativo</label>
+          <div class="input-premium-group__wrapper">
+            <svg class="input-premium-group__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input
+              id="email"
+              type="email"
+              class="input-premium-group__input"
+              placeholder="seu.nome@construtora.com"
+              [(ngModel)]="usuario.email"
+              name="email"
+              required>
+          </div>
+        </div>
+
+        <div class="input-premium-group">
+          <label class="input-premium-group__label" for="senha">Senha de Acesso</label>
+          <div class="input-premium-group__wrapper">
+            <svg class="input-premium-group__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="senha"
+              type="password"
+              class="input-premium-group__input"
+              placeholder="••••••••••••"
+              [(ngModel)]="usuario.senha"
+              name="senha"
+              required>
+          </div>
+        </div>
+
+        <div class="input-premium-group">
+          <label class="input-premium-group__label" for="confirmarSenha">Confirmar Senha</label>
+          <div class="input-premium-group__wrapper">
+            <svg class="input-premium-group__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="confirmarSenha"
+              type="password"
+              class="input-premium-group__input"
+              placeholder="••••••••••••"
+              [(ngModel)]="usuario.confirmarSenha"
+              name="confirmarSenha"
+              required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login-premium">
+          <span>Criar Minha Conta</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #94a3b8;">
+          Já possui conta? <a routerLink="/login" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Entrar</a>
+        </div>
+
+      </form>
+
+      <footer class="login-card-clean__footer">
+        <p>&copy; 2026 Construtora Virtual Tech. Todos os direitos reservados.</p>
+      </footer>
+    </div>
+  </section>
+
+  <section class="login-aside-carousel">
+    
+    <div 
+      *ngFor="let slide of slides; let i = index" 
+      class="carousel-slide" 
+      [class.carousel-slide--active]="i === currentSlideIndex">
+      
+      <div class="carousel-slide__bg" [style.background-image]="'url(' + slide.image + ')'"></div>
+      
+      <div class="carousel-slide__content">
+        <span class="carousel-slide__tag">{{ slide.tag }}</span>
+        <h2 class="carousel-slide__title">{{ slide.title }}</h2>
+        <p class="carousel-slide__description">{{ slide.description }}</p>
+      </div>
+    </div>
+
+    <div class="carousel-indicators">
+      <button 
+        *ngFor="let slide of slides; let i = index" 
+        class="carousel-indicators__dot" 
+        [class.carousel-indicators__dot--active]="i === currentSlideIndex"
+        (click)="setSlide(i)"
+        [attr.aria-label]="'Ir para o slide ' + (i + 1)">
+      </button>
+    </div>
+
+  </section>
+
+</main>

@@ -1,22 +1,21 @@
 $accent-color: #3b82f6;
 $accent-hover: #2563eb;
-$bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
+$bg-form-side: #0f172a;
 
 .login-wrapper {
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 450px 1fr; // Fixa o formulário e deixa o carrossel expandir
+  grid-template-columns: 450px 1fr;
   background-color: $bg-form-side;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
 
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr; // O carrossel some em telas pequenas/tablets
+    grid-template-columns: 1fr;
   }
 }
 
-// --- COLUNA 1: ESPAÇO DO FORMULÁRIO ---
 .login-aside-form {
   display: flex;
   flex-direction: column;
@@ -34,7 +33,7 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: space-between; // Alinha cabeçalho, meio e rodapé matematicamente
+  justify-content: space-between;
 
   &__header {
     margin-top: auto;
@@ -79,6 +78,7 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
 
   &__footer {
     margin-top: auto;
+
     p {
       font-size: 0.75rem;
       color: #475569;
@@ -87,7 +87,6 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
   }
 }
 
-// --- INPUTS CUSTOMIZADOS ---
 .input-premium-group {
   display: flex;
   flex-direction: column;
@@ -115,7 +114,7 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
 
   &__input {
     width: 100%;
-    background: #1e293b; 
+    background: #1e293b;
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #ffffff;
     padding: 0.8rem 1rem 0.8rem 2.8rem;
@@ -133,15 +132,10 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
       border-color: $accent-color;
       background: #0f172a;
       box-shadow: 0 0 0 4px rgba($accent-color, 0.15);
-
-      & + .input-premium-group__icon {
-        color: $accent-color;
-      }
     }
   }
 }
 
-// --- BOTÃO DE SUBMIT ---
 .btn-login-premium {
   background: linear-gradient(135deg, $accent-color, #2563eb);
   color: #ffffff;
@@ -159,17 +153,21 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
   box-shadow: 0 4px 12px rgba($accent-color, 0.2);
   transition: all 0.2s ease;
 
-  svg { transition: transform 0.2s ease; }
+  svg {
+    transition: transform 0.2s ease;
+  }
 
   &:hover {
     background: linear-gradient(135deg, $accent-hover, #1d4ed8);
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba($accent-color, 0.35);
-    svg { transform: translateX(2px); }
+
+    svg {
+      transform: translateX(2px);
+    }
   }
 }
 
-// --- COLUNA 2: ESPAÇO DO CARROSSEL ---
 .login-aside-carousel {
   position: relative;
   height: 100%;
@@ -180,7 +178,7 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
   padding: 5rem;
 
   @media (max-width: 1024px) {
-    display: none; // Desliga o carrossel no mobile por UX
+    display: none;
   }
 }
 
@@ -211,9 +209,8 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
     background-size: cover;
     background-position: center;
     transform: scale(1.05);
-    transition: transform 6s ease; // Efeito "Ken Burns" sutil ao trocar de slide
-    
-    // Gradiente de sobreposição cinematográfico (escurece o fundo para destacar a tipografia)
+    transition: transform 6s ease;
+
     &::after {
       content: '';
       position: absolute;
@@ -221,7 +218,7 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(0deg, rgba(#020617, 0.85) 0%, rgba(#020617, 0.3) 50%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(0deg, rgba(#020617, 0.85) 0%, rgba(#020617, 0.3) 50%, rgba(0, 0, 0, 0) 100%);
     }
   }
 
@@ -272,7 +269,6 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
   }
 }
 
-// --- PONTOS INDICADORES (DOTS) ---
 .carousel-indicators {
   position: absolute;
   right: 5rem;
@@ -293,7 +289,7 @@ $bg-form-side: #0f172a; // Slate 900 luxuoso para o lado do form
 
     &--active {
       background: #ffffff;
-      width: 24px; // Transforma o ponto ativo em uma barra horizontal elegante
+      width: 24px;
       border-radius: 4px;
     }
   }

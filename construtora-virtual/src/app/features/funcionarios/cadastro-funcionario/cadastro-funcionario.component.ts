@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { FuncionarioService } from '../../../core/services/funcionario.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-cadastro-funcionario',
@@ -29,7 +30,8 @@ export class CadastroFuncionarioComponent {
 
   constructor(
     private funcionarioService: FuncionarioService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   salvar() {
@@ -39,24 +41,15 @@ export class CadastroFuncionarioComponent {
       .subscribe({
 
         next: () => {
-
-          alert(
-            'Funcionário cadastrado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/funcionarios'
-          ]);
-
+          this.toast.sucesso('Funcionário cadastrado com sucesso!');
+          this.router.navigate(['/funcionarios']);
         },
 
         error: (erro) => {
 
           console.error(erro);
 
-          alert(
-            'Erro ao cadastrar funcionário'
-          );
+          this.toast.erro('Erro ao cadastrar funcionário.');
 
         }
 

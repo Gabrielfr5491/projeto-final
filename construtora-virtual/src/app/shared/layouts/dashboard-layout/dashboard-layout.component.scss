@@ -1,24 +1,21 @@
 .dashboard-structure {
   display: flex;
   min-height: 100vh;
-  background-color: var(--bg-dashboard);
-}
-
-.dashboard-main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.dashboard-structure {
-  display: flex;
-  min-height: 100vh;
   width: 100vw;
   background-color: var(--bg-dashboard);
   overflow-x: hidden;
+  --sidebar-width: 250px;
 
-  // Garante que a Sidebar volte a aparecer ignorando qualquer bloqueio anterior
+  &.sidebar-collapsed {
+    --sidebar-width: 70px;
+  }
+
+  @media (max-width: 768px) {
+    --sidebar-width: 0px;
+  }
+
   app-sidebar {
-    display: block !important;
+    display: block;
     position: relative;
     z-index: 100;
   }
@@ -28,11 +25,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; // Evita que tabelas quebrem o layout para os lados
+  min-width: 0;
+  padding-left: var(--sidebar-width);
+  transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  // Garante que a Navbar apareça no topo do conteúdo
   app-navbar {
-    display: block !important;
+    display: block;
     width: 100%;
     z-index: 90;
   }

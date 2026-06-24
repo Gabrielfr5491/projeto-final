@@ -1,10 +1,9 @@
-// Variáveis do Design System Corporativo
-$nav-bg: rgba(255, 255, 255, 0.8); // Fundo semi-transparente para efeito Glass
-$nav-border: rgba(226, 232, 240, 0.8); // Slate 200 sutil
-$text-main: #0f172a; // Slate 900
-$text-muted: #64748b; // Slate 500
-$accent-color: #3b82f6; // Azul Executivo
-$danger-color: #ef4444; // Vermelho Soft
+$nav-bg: rgba(255, 255, 255, 0.8);
+$nav-border: rgba(226, 232, 240, 0.8);
+$text-main: #0f172a;
+$text-muted: #64748b;
+$accent-color: #3b82f6;
+$danger-color: #ef4444;
 
 $navbar-height: 70px;
 $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -13,25 +12,37 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
   height: $navbar-height;
   padding: 0 2rem;
-  
-  // Efeito Glassmorphism espetacular
   background-color: $nav-bg;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  
   border-bottom: 1px solid $nav-border;
   position: sticky;
   top: 0;
   z-index: 999;
-  
-  // Mantém a sincronia com a largura da Sidebar automática que configuramos antes
-  margin-left: var(--sidebar-width, 250px);
-  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: $transition-premium;
 
-  // --- SEÇÃO ESQUERDA (SAUDAÇÃO) ---
+  &__hamburger {
+    display: none;
+    background: transparent;
+    border: 1px solid $nav-border;
+    color: $text-muted;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: $transition-premium;
+
+    &:hover {
+      color: $accent-color;
+      border-color: $accent-color;
+      background-color: rgba($accent-color, 0.05);
+    }
+  }
+
   &__welcome {
     display: flex;
     flex-direction: column;
@@ -50,7 +61,6 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
   }
 
-  // --- SEÇÃO DIREITA ---
   &__right {
     display: flex;
     align-items: center;
@@ -62,7 +72,6 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     align-items: center;
   }
 
-  // Botão de Tema Clean (Ícone interativo)
   &__btn-action {
     background: transparent;
     border: 1px solid $nav-border;
@@ -90,7 +99,6 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     background-color: $nav-border;
   }
 
-  // --- PERFIL DO USUÁRIO ---
   &__profile {
     display: flex;
     align-items: center;
@@ -129,7 +137,6 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
   }
 
-  // --- BOTÃO LOGOUT PREMIUM ---
   &__btn-logout {
     background: transparent;
     border: 1px solid transparent;
@@ -152,14 +159,16 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-// Otimização para Telas Menores
 @media (max-width: 768px) {
   .navbar-custom {
-    margin-left: 0 !important;
     padding: 0 1rem;
 
+    &__hamburger {
+      display: flex;
+    }
+
     &__welcome, &__user-info, &__divider {
-      display: none; // Esconde detalhes para não espremer no celular
+      display: none;
     }
   }
 }

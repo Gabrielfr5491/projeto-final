@@ -1,4 +1,4 @@
-<div class="dashboard-structure">
+<div class="dashboard-structure" [class.sidebar-collapsed]="layout.sidebarCollapsed$ | async" [class.mobile-sidebar-open]="layout.mobileSidebarOpen$ | async">
   
   <app-sidebar></app-sidebar>
 
@@ -7,5 +7,7 @@
     
     <router-outlet></router-outlet>
   </div>
+
+  <app-toast></app-toast>
 
 </div>

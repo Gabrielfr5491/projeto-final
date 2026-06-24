@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EquipamentoService } from '../../../core/services/equipamento.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-editar-equipamento',
@@ -42,8 +43,8 @@ implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private equipamentoService:
-    EquipamentoService
+    private equipamentoService: EquipamentoService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -88,25 +89,12 @@ implements OnInit {
       .subscribe({
 
         next: () => {
-
-          alert(
-            'Equipamento atualizado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/equipamentos'
-          ]);
-
+          this.toast.sucesso('Equipamento atualizado com sucesso!');
+          this.router.navigate(['/equipamentos']);
         },
-
         error: (erro) => {
-
           console.error(erro);
-
-          alert(
-            'Erro ao atualizar equipamento'
-          );
-
+          this.toast.erro('Erro ao atualizar equipamento.');
         }
 
       });

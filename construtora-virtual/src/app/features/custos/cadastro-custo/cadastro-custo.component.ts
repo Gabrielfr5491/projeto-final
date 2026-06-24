@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 import { CustoService } from '../../../core/services/custo.service';
 import { ObraService } from '../../../core/services/obra.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 import { Obra } from '../../../models/obra';
 
@@ -44,7 +45,8 @@ export class CadastroCustoComponent implements OnInit {
   constructor(
     private custoService: CustoService,
     private obraService: ObraService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -78,27 +80,14 @@ export class CadastroCustoComponent implements OnInit {
       .adicionar(this.custo)
       .subscribe({
 
-        next: () => {
-
-          alert(
-            'Custo cadastrado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/custos'
-          ]);
-
-        },
-
-        error: (erro) => {
-
-          console.error(erro);
-
-          alert(
-            'Erro ao cadastrar custo'
-          );
-
-        }
+      next: () => {
+        this.toast.sucesso('Custo cadastrado com sucesso!');
+        this.router.navigate(['/custos']);
+      },
+      error: (erro) => {
+        console.error(erro);
+        this.toast.erro('Erro ao cadastrar custo.');
+      }
 
       });
 

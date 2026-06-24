@@ -1,0 +1,75 @@
+<div class="container">
+
+  <div class="card-header">
+    <div>
+      <h1>Usuários do Sistema</h1>
+      <p style="margin:0; color: var(--text-sub); font-size: 0.9rem;">Gerencie os acessos e perfis da plataforma</p>
+    </div>
+    <a *ngIf="isAdmin()" routerLink="/cadastro-usuario" class="btn-add">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      Novo Usuário
+    </a>
+  </div>
+
+  <div class="search-bar">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <input
+      type="text"
+      [(ngModel)]="filtro"
+      placeholder="Buscar por nome, e-mail ou perfil..."
+      id="busca-usuario"
+    >
+  </div>
+
+  <div *ngIf="carregando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando usuários...</p>
+  </div>
+
+  <div class="table-card" *ngIf="!carregando">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Usuário</th>
+            <th>E-mail</th>
+            <th>Perfil</th>
+            <th *ngIf="isAdmin()">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuariosFiltrados">
+            <td>
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="avatar-circle">{{ u.nome.charAt(0).toUpperCase() }}</div>
+                <span style="font-weight: 600;">{{ u.nome }}</span>
+              </div>
+            </td>
+            <td style="color: var(--text-sub);">{{ u.email }}</td>
+            <td>
+              <span class="perfil-badge" [ngClass]="perfilClass(u.perfil)">
+                {{ u.perfil }}
+              </span>
+            </td>
+            <td *ngIf="isAdmin()">
+              <div class="actions-cell">
+                <a [routerLink]="['/cadastro-usuario']" class="btn-editar-amber">Editar</a>
+                <button class="btn-excluir" (click)="excluir(u.id)">Excluir</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="usuariosFiltrados.length === 0">
+            <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-sub);">
+              Nenhum usuário encontrado.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

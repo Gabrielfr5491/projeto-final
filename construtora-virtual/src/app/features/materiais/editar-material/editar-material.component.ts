@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 
 import { MaterialService } from '../../../core/services/material.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-editar-material',
@@ -36,7 +37,8 @@ implements OnInit {
   constructor(
     private materialService: MaterialService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -77,25 +79,12 @@ implements OnInit {
       .subscribe({
 
         next: () => {
-
-          alert(
-            'Material atualizado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/materiais'
-          ]);
-
+          this.toast.sucesso('Material atualizado com sucesso!');
+          this.router.navigate(['/materiais']);
         },
-
         error: (erro) => {
-
           console.error(erro);
-
-          alert(
-            'Erro ao atualizar material'
-          );
-
+          this.toast.erro('Erro ao atualizar material.');
         }
 
       });

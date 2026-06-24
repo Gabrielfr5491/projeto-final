@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ObraService } from '../../../core/services/obra.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro-obra',
@@ -29,23 +31,22 @@ export class CadastroObraComponent {
   };
 
   constructor(
-    private obraService: ObraService
+    private obraService: ObraService,
+    private toast: ToastService,
+    private router: Router
   ) {}
 
   salvar() {
-    this.obraService
-      .adicionar(this.obra)
-      .subscribe({
-        next: () => {
-          alert('Obra cadastrada com sucesso!');
-          
-          // Limpa o formulário após salvar com sucesso
-          this.resetForm();
-        },
-        error: (erro) => {
-          console.error('Erro ao cadastrar obra:', erro);
-        }
-      });
+    this.obraService.adicionar(this.obra).subscribe({
+      next: () => {
+        this.toast.sucesso('Obra cadastrada com sucesso!');
+        this.router.navigate(['/obras']);
+      },
+      error: (erro) => {
+        console.error('Erro ao cadastrar obra:', erro);
+        this.toast.erro('Erro ao cadastrar obra.');
+      }
+    });
   }
 
   // Função auxiliar para resetar os campos após o envio com sucesso

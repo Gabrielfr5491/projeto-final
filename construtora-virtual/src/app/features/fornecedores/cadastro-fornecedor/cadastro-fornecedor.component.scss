@@ -1,121 +1,103 @@
-// --- Variáveis do Tema (Vem do seu styles.scss) ---
-$bg: var(--bg-dashboard);
-$surface: var(--surface-card);
-$border: var(--border-color);
-$text: var(--text-main);
-$text-muted: var(--text-sub);
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
 
-$primary: #2563eb;
-$primary-hover: #1d4ed8;
-$danger: #ef4444;
-
-.screen-container {
-  padding: 2rem;
-  min-height: 100vh;
-  background: $bg;
-  transition: background 0.3s ease;
-  font-family: system-ui, -apple-system, sans-serif;
-
-  .header-screen {
-    margin-bottom: 2rem;
-    h1 { font-size: 2rem; font-weight: 700; color: $text; margin: 0 0 0.5rem 0; }
-    p { font-size: 0.95rem; color: $text-muted; margin: 0; }
+.row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+  
+  &.cols-2, &.cols-3 {
+    .form-group {
+      flex: 1;
+    }
   }
-
-  .form-card {
-    background: $surface !important;
-    border-radius: 16px;
-    border: 1px solid $border !important;
-    padding: 2.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: background 0.3s ease, border-color 0.3s ease;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
   }
+}
 
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  
   .section-title {
-    font-size: 1.2rem; font-weight: 600; color: $text;
-    border-bottom: 1px solid $border; padding-bottom: 0.5rem; margin-bottom: 1.5rem;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.btn-add-product {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--text-main);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+
+  &:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-1px);
+  }
+}
+
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--table-th-bg) !important;
+  transition: all 0.3s ease;
+
+  .product-number {
+    font-weight: 700;
+    color: var(--text-sub);
+    padding-bottom: 0.75rem;
+    font-size: 0.9rem;
   }
 
-  .row {
-    display: flex; gap: 1.5rem; margin-bottom: 1.25rem;
-    &.cols-2 { .form-group { flex: 1; } }
-    &.cols-3 { .form-group { flex: 1; } }
-    @media (max-width: 768px) { flex-direction: column; gap: 1rem; }
+  .flex-grow {
+    flex: 2;
   }
 
-  .form-group {
-    display: flex; flex-direction: column; gap: 0.5rem;
-
-    label { font-size: 0.875rem; font-weight: 500; color: $text-muted; }
-
-    input, select {
-      padding: 0.75rem 1rem;
-      border: 1px solid $border !important;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      color: $text !important;
-      background-color: $surface !important;
-      transition: all 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: $primary !important;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-      }
-      &[readonly] {
-        background-color: var(--table-th-bg) !important;
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-    }
+  .price-width {
+    flex: 1;
+    max-width: 200px;
   }
+}
 
-  // --- Grid União de Múltiplos Produtos ---
-  .products-header {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;
-    .section-title { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  }
+.btn-remove-product {
+  background: rgba(239, 68, 68, 0.12);
+  border: none;
+  color: #ef4444;
+  padding: 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-  .btn-add-product {
-    background: transparent; border: 1px solid $primary; color: $text;
-    padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: .25s;
-    &:hover { background: $primary; color: white; transform: translateY(-1px); }
-  }
-
-  .products-list { display: flex; flex-direction: column; gap: 1rem; }
-
-  .product-row {
-    display: flex; align-items: flex-end; gap: 1.25rem;
-    padding: 1.25rem; border-radius: 12px; border: 1px solid $border;
-    background-color: var(--table-th-bg) !important; // Usa o tom sutil do seu styles.scss
-    transition: all 0.3s ease;
-
-    .product-number { font-weight: 700; color: $text-muted; padding-bottom: 0.75rem; font-size: 0.9rem; }
-    .flex-grow { flex: 2; }
-    .price-width { flex: 1; max-width: 200px; }
-  }
-
-  .btn-remove-product {
-    background: rgba(239, 68, 68, 0.12); border: none; color: $danger;
-    padding: 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
-    &.with-label { margin-bottom: 0px; } // Ajuste fino de alinhamento com a primeira linha
-    &:hover { background: $danger; color: white; }
-  }
-
-  // --- Rodapé ---
-  .form-actions {
-    display: flex; justify-content: flex-end; gap: 1rem;
-    border-top: 1px solid $border; padding-top: 1.5rem;
-
-    button { padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: .25s; }
-    .btn-secondary {
-      background: transparent; border: 1px solid $border; color: $text;
-      &:hover { background-color: rgba(255, 255, 255, 0.05); }
-    }
-    .btn-primary {
-      background: $primary; border: none; color: white;
-      &:hover:not(:disabled) { background: $primary-hover; transform: translateY(-2px); }
-      &:disabled { background: var(--table-hover) !important; color: $text-muted !important; cursor: not-allowed; opacity: 0.5; }
-    }
+  &:hover {
+    background: #ef4444;
+    color: white;
   }
 }

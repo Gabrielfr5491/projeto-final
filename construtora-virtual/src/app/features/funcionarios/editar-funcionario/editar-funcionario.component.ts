@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 
 import { FuncionarioService } from '../../../core/services/funcionario.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-editar-funcionario',
@@ -35,7 +36,8 @@ export class EditarFuncionarioComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private funcionarioService: FuncionarioService
+    private funcionarioService: FuncionarioService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -69,27 +71,14 @@ export class EditarFuncionarioComponent implements OnInit {
       )
       .subscribe({
 
-        next: () => {
-
-          alert(
-            'Funcionário atualizado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/funcionarios'
-          ]);
-
-        },
-
-        error: (erro) => {
-
-          console.error(erro);
-
-          alert(
-            'Erro ao atualizar funcionário'
-          );
-
-        }
+      next: () => {
+        this.toast.sucesso('Funcionário atualizado com sucesso!');
+        this.router.navigate(['/funcionarios']);
+      },
+      error: (erro) => {
+        console.error(erro);
+        this.toast.erro('Erro ao atualizar funcionário.');
+      }
 
       });
 

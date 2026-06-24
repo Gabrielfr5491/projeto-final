@@ -1,0 +1,93 @@
+<div class="cadastro-container">
+
+  <div class="page-header">
+    <h1>Cadastrar Novo Usuário</h1>
+    <p>Registre novos usuários e defina seus níveis de restrição no sistema</p>
+  </div>
+
+  <div class="form-card">
+    <form #formUsuario="ngForm" (ngSubmit)="salvar()">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input
+            type="text"
+            [(ngModel)]="usuario.nome"
+            name="nome"
+            placeholder="Digite o nome completo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>E-mail</label>
+          <input
+            type="email"
+            [(ngModel)]="usuario.email"
+            name="email"
+            placeholder="email@empresa.com"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Senha</label>
+          <input
+            type="password"
+            [(ngModel)]="usuario.senha"
+            name="senha"
+            placeholder="Digite a senha"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Confirmar Senha</label>
+          <input
+            type="password"
+            [(ngModel)]="usuario.confirmarSenha"
+            name="confirmarSenha"
+            placeholder="Confirme a senha"
+            required
+          >
+        </div>
+
+        <div class="form-group full-width">
+          <label>Nível de Restrição (Perfil)</label>
+          <select
+            [(ngModel)]="usuario.perfil"
+            name="perfil"
+            required
+          >
+            <option value="">Selecione o perfil</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Gerente">Gerente</option>
+            <option value="Comum">Comum</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cancelar()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-salvar"
+          [disabled]="!formUsuario.valid"
+        >
+          Salvar Usuário
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

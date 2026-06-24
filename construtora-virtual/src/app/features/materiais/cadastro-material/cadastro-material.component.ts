@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { MaterialService } from '../../../core/services/material.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-cadastro-material',
@@ -29,7 +30,8 @@ export class CadastroMaterialComponent {
 
   constructor(
     private materialService: MaterialService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   salvar() {
@@ -39,24 +41,15 @@ export class CadastroMaterialComponent {
       .subscribe({
 
         next: () => {
-
-          alert(
-            'Material cadastrado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/materiais'
-          ]);
-
+          this.toast.sucesso('Material cadastrado com sucesso!');
+          this.router.navigate(['/materiais']);
         },
 
         error: (erro) => {
 
           console.error(erro);
 
-          alert(
-            'Erro ao cadastrar material'
-          );
+          this.toast.erro('Erro ao cadastrar material.');
 
         }
 

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { LoginComponent } from './features/auth/login/login.component';
+import { RegistroComponent } from './features/auth/registro/registro.component';
 import { authGuard } from './core/guards/auth.guard';
 import { HomeComponent } from './features/dashboard/home/home.component';
 import { ListaObrasComponent } from './features/obras/lista-obras/lista-obras.component';
@@ -21,53 +22,44 @@ import { EditarEquipamentoComponent } from './features/equipamentos/editar-equip
 import { ListaCustosComponent } from './features/custos/lista-custos/lista-custos.component';
 import { CadastroCustoComponent } from './features/custos/cadastro-custo/cadastro-custo.component';
 import { EditarCustoComponent } from './features/custos/editar-custo/editar-custo.component';
+import { LandingComponent } from './features/landing/landing.component';
+import { adminGuard } from './core/guards/admin.guard';
+import { CadastroUsuarioComponent } from './features/usuarios/cadastro-usuario/cadastro-usuario.component';
+import { ListaUsuariosComponent } from './features/usuarios/lista-usuarios/lista-usuarios.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const routes: Routes = [
-  // 1. ROTA PÚBLICA (Fora do Painel)
+  { path: '', component: LandingComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent },
 
-  // 2. ROTAS PRIVADAS DO SISTEMA (Todas usam o mesmo Layout e o mesmo Guard)
   {
     path: '',
     component: DashboardLayoutComponent,
     canActivate: [authGuard],
     children: [
-      // Ao acessar '/dashboard', abre a Home
       { path: 'dashboard', component: HomeComponent },
-
-      // Módulo de Obras
       { path: 'obras', component: ListaObrasComponent },
       { path: 'cadastro-obra', component: CadastroObraComponent },
-
-      // Módulo de Funcionários
       { path: 'funcionarios', component: ListaFuncionariosComponent },
       { path: 'cadastro-funcionario', component: CadastroFuncionarioComponent },
       { path: 'editar-funcionario/:id', component: EditarFuncionarioComponent },
-
-      // Módulo de Fornecedores 🏗️
       { path: 'fornecedores', component: ListaFornecedoresComponent },
       { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
       { path: 'editar-fornecedor/:id', component: EditarFornecedorComponent },
-
-      // Módulo de Materiais
       { path: 'materiais', component: ListaMateriaisComponent },
       { path: 'cadastro-material', component: CadastroMaterialComponent },
       { path: 'editar-material/:id', component: EditarMaterialComponent },
-      
-      // Módulo de Equipamentos
-      {path: 'equipamentos',component: ListaEquipamentosComponent},
-      {path: 'cadastro-equipamento',component: CadastroEquipamentoComponent},
-      {path: 'editar-equipamento/:id',component: EditarEquipamentoComponent},
-
-      // Módulo de custos
-
-      {path: 'custos',component: ListaCustosComponent},
-      {path: 'cadastro-custo',component: CadastroCustoComponent},
-      {path: 'editar-custo/:id',component: EditarCustoComponent},
+      { path: 'equipamentos', component: ListaEquipamentosComponent },
+      { path: 'cadastro-equipamento', component: CadastroEquipamentoComponent },
+      { path: 'editar-equipamento/:id', component: EditarEquipamentoComponent },
+      { path: 'custos', component: ListaCustosComponent },
+      { path: 'cadastro-custo', component: CadastroCustoComponent },
+      { path: 'editar-custo/:id', component: EditarCustoComponent },
+      { path: 'usuarios', component: ListaUsuariosComponent },
+      { path: 'cadastro-usuario', component: CadastroUsuarioComponent, canActivate: [adminGuard] },
     ]
   },
 
-  // 3. REDIRECIONAMENTOS DE SEGURANÇA
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', component: NotFoundComponent }
 ];

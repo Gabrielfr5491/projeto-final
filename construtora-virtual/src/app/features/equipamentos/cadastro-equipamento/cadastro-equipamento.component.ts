@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { EquipamentoService } from '../../../core/services/equipamento.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-cadastro-equipamento',
@@ -38,7 +39,8 @@ export class CadastroEquipamentoComponent {
 
   constructor(
     private equipamentoService: EquipamentoService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   salvar() {
@@ -47,27 +49,14 @@ export class CadastroEquipamentoComponent {
       .adicionar(this.equipamento)
       .subscribe({
 
-        next: () => {
-
-          alert(
-            'Equipamento cadastrado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/equipamentos'
-          ]);
-
-        },
-
-        error: (erro) => {
-
-          console.error(erro);
-
-          alert(
-            'Erro ao cadastrar equipamento'
-          );
-
-        }
+      next: () => {
+        this.toast.sucesso('Equipamento cadastrado com sucesso!');
+        this.router.navigate(['/equipamentos']);
+      },
+      error: (erro) => {
+        console.error(erro);
+        this.toast.erro('Erro ao cadastrar equipamento.');
+      }
 
       });
 

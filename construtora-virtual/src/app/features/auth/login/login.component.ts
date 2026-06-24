@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 interface CarouselSlide {
   image: string;
@@ -17,7 +18,8 @@ interface CarouselSlide {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -55,7 +57,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -121,13 +124,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 },
 
       error: (erro) => {
-
         console.error(erro);
-
-        alert(
-          'E-mail ou senha inválidos.'
-        );
-
+        this.toast.erro('E-mail ou senha inválidos.');
       }
 
     });

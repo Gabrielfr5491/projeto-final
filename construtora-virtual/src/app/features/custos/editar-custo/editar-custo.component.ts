@@ -9,6 +9,7 @@ import {
 
 import { CustoService } from '../../../core/services/custo.service';
 import { ObraService } from '../../../core/services/obra.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 import { Obra } from '../../../models/obra';
 
@@ -48,7 +49,8 @@ export class EditarCustoComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private custoService: CustoService,
-    private obraService: ObraService
+    private obraService: ObraService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -136,30 +138,14 @@ export class EditarCustoComponent implements OnInit {
       )
       .subscribe({
 
-        next: () => {
-
-          alert(
-            'Custo atualizado com sucesso!'
-          );
-
-          this.router.navigate([
-            '/custos'
-          ]);
-
-        },
-
-        error: (erro) => {
-
-          console.error(
-            'Erro ao atualizar custo',
-            erro
-          );
-
-          alert(
-            'Erro ao atualizar custo'
-          );
-
-        }
+      next: () => {
+        this.toast.sucesso('Custo atualizado com sucesso!');
+        this.router.navigate(['/custos']);
+      },
+      error: (erro) => {
+        console.error('Erro ao atualizar custo', erro);
+        this.toast.erro('Erro ao atualizar custo.');
+      }
 
       });
 
