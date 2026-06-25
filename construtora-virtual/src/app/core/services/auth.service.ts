@@ -13,7 +13,7 @@ export class AuthService {
   login(email: string, senha: string) {
 
     return this.http.post<any>(
-      'http://localhost:3000/auth/login',
+      'https://projeto-final-3-7epi.onrender.com',
       {
         email,
         senha

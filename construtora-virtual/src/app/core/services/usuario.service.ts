@@ -8,7 +8,7 @@ import { Usuario } from '../../models/usuario';
 })
 export class UsuarioService {
 
-  private api = 'http://localhost:3000/usuarios';
+  private api = 'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

@@ -9,7 +9,7 @@ import { Material } from '../../models/material';
 export class MaterialService {
 
   private api =
-    'http://localhost:3000/materiais';
+    'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class FornecedorService {
 
   private api =
-    'http://localhost:3000/fornecedores';
+    'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

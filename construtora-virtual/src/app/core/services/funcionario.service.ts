@@ -11,7 +11,7 @@ import { Funcionario } from '../../models/funcionario';
 export class FuncionarioService {
 
   private api =
-    'http://localhost:3000/funcionarios';
+    'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

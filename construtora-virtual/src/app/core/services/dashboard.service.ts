@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class DashboardService {
 
   private api =
-    'http://localhost:3000/dashboard';
+    'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

@@ -9,7 +9,7 @@ import { Custo } from '../../models/custo';
 export class CustoService {
 
   private api =
-    'http://localhost:3000/custos';
+    'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

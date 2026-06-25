@@ -11,7 +11,7 @@ import { Equipamento } from '../../models/equipamento';
 export class EquipamentoService {
 
   private api =
-    'http://localhost:3000/equipamentos';
+    'https://projeto-final-3-7epi.onrender.com';
 
   constructor(
     private http: HttpClient

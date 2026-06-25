@@ -13,7 +13,7 @@ export class ObraService {
   private http = inject(HttpClient);
 
   private api =
-    'http://localhost:3000/obras';
+    'https://projeto-final-3-7epi.onrender.com';
 
   listar(): Observable<Obra[]> {
 
