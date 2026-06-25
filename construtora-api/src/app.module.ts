@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { ObrasModule } from './obras/obras.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { AuthModule } from './auth/auth.module';
@@ -15,47 +16,57 @@ import { EquipamentosModule } from './equipamentos/equipamentos.module';
 import { CustosModule } from './custos/custos.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
 
-
-
 @Module({
   imports: [
+    // =========================
+    // CONFIG GLOBAL
+    // =========================
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env', // local dev (Render ignora isso)
     }),
 
+    // =========================
+    // DATABASE (PRODUÇÃO SAFE)
+    // =========================
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        url: config.get<string>('DATABASE_URL'),
+      useFactory: (config: ConfigService) => {
+        const url = config.get<string>('DATABASE_URL');
 
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        if (!url) {
+          throw new Error('❌ DATABASE_URL não definida!');
+        }
 
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+        return {
+          type: 'postgres',
+          url,
+
+          // IMPORTANTE para Render / Supabase
+          ssl: {
+            rejectUnauthorized: false,
+          },
+
+          autoLoadEntities: true,
+
+          // em produção pode trocar para false depois
+          synchronize: true,
+        };
+      },
     }),
 
+    // =========================
+    // MODULES
+    // =========================
     ObrasModule,
-
     DashboardModule,
-
     AuthModule,
-
     UsuariosModule,
-
     FuncionariosModule,
-
     FornecedoresModule,
-
     MateriaisModule,
-
     EquipamentosModule,
-
     CustosModule,
-
     RelatoriosModule,
   ],
 
