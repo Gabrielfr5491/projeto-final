@@ -6,47 +6,34 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  private api = 'https://projeto-final-3-7epi.onrender.com';
+
+  constructor(private http: HttpClient) {}
 
   login(email: string, senha: string) {
-
     return this.http.post<any>(
-      'https://projeto-final-3-7epi.onrender.com',
+      `${this.api}/auth/login`,
       {
         email,
         senha
       }
     );
-
   }
 
   logout() {
-
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-
   }
 
   estaLogado() {
-
     return !!localStorage.getItem('token');
-
   }
 
   getToken() {
-
     return localStorage.getItem('token');
-
   }
 
   getUsuario() {
-
-    return JSON.parse(
-      localStorage.getItem('usuario') || '{}'
-    );
-
+    return JSON.parse(localStorage.getItem('usuario') || '{}');
   }
-
 }
