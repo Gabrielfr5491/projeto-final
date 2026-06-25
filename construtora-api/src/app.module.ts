@@ -18,17 +18,13 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
 
 @Module({
   imports: [
-    // =========================
-    // CONFIG GLOBAL
-    // =========================
+  
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env', // local dev (Render ignora isso)
     }),
 
-    // =========================
-    // DATABASE (PRODUÇÃO SAFE)
-    // =========================
+ 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
@@ -55,9 +51,7 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
       },
     }),
 
-    // =========================
-    // MODULES
-    // =========================
+
     ObrasModule,
     DashboardModule,
     AuthModule,

@@ -6,8 +6,10 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://seu-front.vercel.app'
+      'http://localhost:4200', 
+      'https://zap-construction.netlify.app' // 👈 TROQUE PELO SEU FRONT REAL
     ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   });
 
@@ -15,4 +17,5 @@ async function bootstrap() {
 
   await app.listen(port, '0.0.0.0');
 }
+
 bootstrap();
