@@ -1,3 +1,8 @@
+/* Configurações Globais e Suporte a Animações */
+html {
+  scroll-behavior: smooth;
+}
+
 .landing-page {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-dashboard);
@@ -6,6 +11,39 @@
   overflow-x: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
+
+/* ==========================================
+   CLASSES UTILITÁRIAS PARA EFEITO DE SCROLL
+   ========================================== */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.215, 0.61, 0.355, 1), 
+              transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+  will-change: opacity, transform;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Variação lateral (ex: para textos do Hero) */
+  &--left {
+    transform: translateX(-40px);
+    &.is-visible {
+      transform: translateX(0);
+    }
+  }
+
+  /* Efeito cascata / Delays para Grids */
+  &.delay-1 { transition-delay: 0.1s; }
+  &.delay-2 { transition-delay: 0.2s; }
+  &.delay-3 { transition-delay: 0.3s; }
+}
+
+/* ==========================================
+   COMPONENTES
+   ========================================== */
 
 .header {
   position: sticky;
@@ -31,9 +69,17 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
 
   &__icon {
     font-size: 1.5rem;
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* Animação temática: O guindaste/estrutura se move de leve no hover do logo */
+  &:hover &__icon {
+    transform: rotate(-15deg) scale(1.15);
   }
 
   &__text {
@@ -53,10 +99,29 @@
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
+    position: relative;
     transition: color 0.2s;
+
+    /* Linha decorativa moderna sob os links */
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--primary);
+      transform-origin: bottom right;
+      transition: transform 0.25s ease-out;
+    }
 
     &:hover {
       color: var(--primary);
+      &::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+      }
     }
   }
 
@@ -90,7 +155,7 @@
 
     &:hover {
       background-color: #1d4ed8;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
       color: #ffffff;
     }
@@ -107,7 +172,7 @@
 
     &:hover {
       background-color: var(--table-hover);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
       color: var(--text-main);
     }
 
@@ -189,6 +254,23 @@
       }
     }
   }
+
+  /* Micro-animação: Flutuação suave para simular estabilidade de um "projeto bem estruturado" */
+  &__mockup {
+    perspective: 1000px;
+    animation: floatingPlatform 6s ease-in-out infinite;
+
+    @media (max-width: 992px) {
+      max-width: 600px;
+      margin: 0 auto;
+      animation: none; /* Desativa em telas móveis para poupar performance */
+    }
+  }
+}
+
+@keyframes floatingPlatform {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 .badge {
@@ -202,15 +284,6 @@
   letter-spacing: 0.5px;
 }
 
-.hero__mockup {
-  perspective: 1000px;
-
-  @media (max-width: 992px) {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-}
-
 .mockup-frame {
   background-color: #0b0f19;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -220,11 +293,12 @@
   display: flex;
   flex-direction: column;
   height: 320px;
-  transform: rotateY(-5deg) rotateX(5deg);
-  transition: transform 0.5s;
+  transform: rotateY(-8px) rotateX(6deg);
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.6s;
 
   &:hover {
-    transform: rotateY(0deg) rotateX(0deg);
+    transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
   }
 
   @media (max-width: 992px) {
@@ -307,17 +381,6 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   padding: 0.75rem;
-
-  &-value {
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  &-label {
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.4);
-    margin-top: 0.15rem;
-  }
 }
 
 .mockup-chart-box {
@@ -346,18 +409,31 @@
   height: 100%;
 }
 
+/* Micro-animação temática: O gráfico "ergue-se" igual a um prédio em construção */
 .mockup-chart-bar {
   flex: 1;
   background-color: var(--primary);
   border-radius: 4px 4px 0 0;
   opacity: 0.85;
+  transform-origin: bottom;
+  animation: buildingGrow 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 
   &:nth-child(2) {
     background-color: var(--success);
+    animation-delay: 0.2s;
   }
   &:nth-child(3) {
     background-color: #f59e0b;
+    animation-delay: 0.4s;
   }
+  &:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+}
+
+@keyframes buildingGrow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
 }
 
 .stats {
@@ -449,11 +525,14 @@
   border-radius: 16px;
   padding: 2.25rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), 
+              box-shadow 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 
+  /* Efeito "Surgimento e elevação firme" tipo blocos de fundação */
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.03);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    border-color: rgba(37, 99, 235, 0.2);
   }
 
   &__icon {
@@ -465,6 +544,7 @@
     justify-content: center;
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
 
     &.icon-primary {
       background-color: rgba(37, 99, 235, 0.1);
@@ -482,6 +562,11 @@
       background-color: rgba(6, 182, 212, 0.1);
       color: #0891b2;
     }
+  }
+
+  /* Pequeno pulso no ícone interna ao passar o mouse no card */
+  &:hover &__icon {
+    transform: scale(1.1) rotate(5deg);
   }
 
   h3 {
@@ -534,16 +619,24 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), 
+              box-shadow 0.3s cubic-bezier(0.165, 0.84, 0.44, 1),
+              border-color 0.3s;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.06);
   }
 
   &--featured {
     background-color: var(--surface-card);
     border-color: var(--primary);
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+
+    &:hover {
+      box-shadow: 0 24px 45px rgba(37, 99, 235, 0.18);
+      border-color: #1d4ed8;
+    }
 
     .popular-badge {
       position: absolute;
@@ -611,8 +704,14 @@
       i {
         font-size: 1.1rem;
         flex-shrink: 0;
+        transition: transform 0.2s;
       }
     }
+  }
+
+  /* Micro-interação na lista de recursos do plano */
+  &:hover &__features li i {
+    transform: scale(1.15);
   }
 }
 
@@ -641,6 +740,12 @@
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 2.5rem;
+  transition: border-color 0.3s, transform 0.3s;
+
+  &:hover {
+    border-color: rgba(37, 99, 235, 0.15);
+    transform: translateY(-2px);
+  }
 
   &__quote {
     font-size: 1.05rem;
@@ -666,6 +771,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     h4 {
@@ -681,6 +787,11 @@
       margin: 0;
     }
   }
+
+  &:hover .avatar {
+    background-color: var(--primary);
+    color: #ffffff;
+  }
 }
 
 .bottom-cta {
@@ -688,6 +799,19 @@
   background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
   color: #ffffff;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  /* Detalhe sutil de fundo geométrico que remete à planta baixa/arquitetura */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
 
   &__container {
     max-width: 650px;
@@ -696,6 +820,8 @@
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    position: relative;
+    z-index: 1;
   }
 
   h2 {
