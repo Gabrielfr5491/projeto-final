@@ -17,19 +17,19 @@ export class MaterialService {
 
   listar() {
     return this.http.get<Material[]>(
-      this.api
+      `${this.api}/materiais`
     );
   }
 
   buscarPorId(id: number) {
     return this.http.get<Material>(
-      `${this.api}/${id}`
+      `${this.api}/materiais/${id}`
     );
   }
 
   adicionar(material: Material) {
     return this.http.post(
-      this.api,
+      `${this.api}/materiais`,
       material
     );
   }
@@ -39,14 +39,14 @@ export class MaterialService {
     material: Material
   ) {
     return this.http.patch(
-      `${this.api}/${id}`,
+      `${this.api}/materiais/${id}`,
       material
     );
   }
 
   excluir(id: number) {
     return this.http.delete(
-      `${this.api}/${id}`
+      `${this.api}/materiais/${id}`
     );
   }
 

@@ -18,7 +18,15 @@ export class ObraService {
   listar(): Observable<Obra[]> {
 
     return this.http.get<Obra[]>(
-      this.api
+      `${this.api}/obras`
+    );
+
+  }
+
+  buscarPorId(id: number): Observable<Obra> {
+
+    return this.http.get<Obra>(
+      `${this.api}/obras/${id}`
     );
 
   }
@@ -26,7 +34,7 @@ export class ObraService {
   adicionar(obra: Obra) {
 
     return this.http.post(
-      this.api,
+      `${this.api}/obras`,
       obra
     );
 
@@ -35,7 +43,7 @@ export class ObraService {
   excluir(id: number) {
 
     return this.http.delete(
-      `${this.api}/${id}`
+      `${this.api}/obras/${id}`
     );
 
   }
@@ -43,7 +51,7 @@ export class ObraService {
   atualizar(obra: Obra) {
 
     return this.http.patch(
-      `${this.api}/${obra.id}`,
+      `${this.api}/obras/${obra.id}`,
       obra
     );
 

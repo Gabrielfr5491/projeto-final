@@ -11,12 +11,8 @@ export class ThemeService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     
-    if (this.isBrowser) {
-      // Recupera o tema salvo ou usa o padrão do sistema operacional do usuário
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      this.isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    if (this.isBrowser) {      const savedTheme = localStorage.getItem('theme');
+      this.isDark = savedTheme ? savedTheme === 'dark' : true;
       this.applyTheme();
     }
   }
@@ -32,11 +28,11 @@ export class ThemeService {
   private applyTheme(): void {
     if (!this.isBrowser) return;
 
-    const root = document.documentElement; // Pega a tag <html>
+    const root = document.documentElement;
     if (this.isDark) {
       root.setAttribute('data-theme', 'dark');
     } else {
-      root.removeAttribute('data-theme');
+      root.setAttribute('data-theme', 'light');
     }
   }
 

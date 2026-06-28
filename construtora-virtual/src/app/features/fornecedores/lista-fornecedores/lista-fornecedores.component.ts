@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
-// Interface que define a estrutura com múltiplos produtos por fornecedor
-export interface ProdutoFornecedor {
+import { RouterModule } from '@angular/router';export interface ProdutoFornecedor {
   nome: string;
   precoBase: number;
 }
@@ -25,13 +22,7 @@ export interface Fornecedor {
   templateUrl: './lista-fornecedores.component.html',
   styleUrl: './lista-fornecedores.component.scss'
 })
-export class ListaFornecedoresComponent implements OnInit {
-  
-  // Armazena o ID do fornecedor que está com a gaveta aberta (null se nenhum estiver)
-  fornecedorExpandidoId: number | null = null;
-
-  // Lista de fornecedores populada com variações de quantidade de produtos
-  fornecedores: Fornecedor[] = [
+export class ListaFornecedoresComponent implements OnInit {  fornecedorExpandidoId: number | null = null;  fornecedores: Fornecedor[] = [
     {
       id: 1,
       nome: 'Gerdau Comercial de Aços S.A.',
@@ -63,7 +54,7 @@ export class ListaFornecedoresComponent implements OnInit {
       telefone: '(71) 97777-7777',
       email: 'contato@rioclaromadeiras.com',
       status: 'Inativo',
-      produtos: [] // Testando o cenário de nenhum produto cadastrado
+      produtos: []
     }
   ];
 
@@ -71,17 +62,11 @@ export class ListaFornecedoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarFornecedores();
-  }
-
-  // Alterna o estado de abre/fecha da linha de produtos
-  toggleFornecedor(id: number): void {
+  }  toggleFornecedor(id: number): void {
     this.fornecedorExpandidoId = this.fornecedorExpandidoId === id ? null : id;
   }
 
-  carregarFornecedores(): void {
-    // Quando você integrar com sua API Service, bastará fazer:
-    // this.fornecedorService.listarTodos().subscribe(dados => this.fornecedores = dados);
-    console.log('Fornecedores carregados com portfólio de produtos.');
+  carregarFornecedores(): void {    console.log('Fornecedores carregados com portfólio de produtos.');
   }
 
   excluirFornecedor(id: number): void {

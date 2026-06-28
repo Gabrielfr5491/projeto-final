@@ -38,10 +38,7 @@ export class ListaFuncionariosComponent implements OnInit {
           );
         }
       });
-  }
-
-  // MODIFICADO: Agora aceita 'number | undefined' para bater com o seu Model
- excluir(id: number | string | undefined) {
+  } excluir(id: number | string | undefined) {
   
   if (id === undefined) {
     console.error('Não é possível excluir um funcionário sem ID.');
@@ -55,9 +52,7 @@ export class ListaFuncionariosComponent implements OnInit {
   this.funcionarioService
     .excluir(Number(id))
     .subscribe({
-      next: () => {
-        // Atualiza a lista na tela após excluir
-        this.carregarFuncionarios();
+      next: () => {        this.carregarFuncionarios();
       },
       error: (erro) => {
         console.error('Erro ao excluir funcionário', erro);

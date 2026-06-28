@@ -98,8 +98,6 @@ export class RegistroComponent implements OnInit, OnDestroy {
       this.toast.aviso('As senhas não coincidem.');
       return;
     }
-
-    // Default para Administrador do novo ambiente
     const novoUsuario = {
       nome: this.usuario.nome,
       email: this.usuario.email,

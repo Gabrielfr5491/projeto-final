@@ -4,13 +4,25 @@
     <div class="login-card-clean">
       
       <header class="login-card-clean__header">
-        <div class="login-card-clean__logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path d="M3 21h18M3 10h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14M9 10v11M15 10v11"/>
+        <div class="login-card-clean__logo-icon" style="background: transparent; padding: 0;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 48 48" fill="none">
+            <defs>
+              <linearGradient id="zapGradReg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#60A5FA"/>
+                <stop offset="100%" stop-color="#2563EB"/>
+              </linearGradient>
+            </defs>
+            <rect x="4" y="8" width="24" height="32" rx="3" fill="url(#zapGradReg)" opacity="0.85"/>
+            <rect x="8" y="14" width="6" height="5" rx="1" fill="#0B0F19"/>
+            <rect x="18" y="14" width="6" height="5" rx="1" fill="#0B0F19"/>
+            <rect x="8" y="23" width="6" height="5" rx="1" fill="#0B0F19"/>
+            <rect x="18" y="23" width="6" height="5" rx="1" fill="#0B0F19"/>
+            <rect x="13" y="32" width="6" height="8" rx="1" fill="#0B0F19"/>
+            <path d="M34 6 L28 24 L36 22 L30 42 L44 18 L36 20 Z" fill="#FBBF24" stroke="#F59E0B" stroke-width="1"/>
           </svg>
         </div>
         <h1 class="login-card-clean__title">Criar Conta</h1>
-        <p class="login-card-clean__subtitle">Comece a digitalizar o controle e custos de suas obras hoje mesmo.</p>
+        <p class="login-card-clean__subtitle">Comece a digitalizar o controle e custos de suas obras hoje mesmo com a Zap Engenharia.</p>
       </header>
 
       <form class="login-card-clean__form" (ngSubmit)="registrar()">
@@ -97,7 +109,7 @@
       </form>
 
       <footer class="login-card-clean__footer">
-        <p>&copy; 2026 Construtora Virtual Tech. Todos os direitos reservados.</p>
+        <p>&copy; 2026 Zap Engenharia e Construção. Todos os direitos reservados.</p>
       </footer>
     </div>
   </section>

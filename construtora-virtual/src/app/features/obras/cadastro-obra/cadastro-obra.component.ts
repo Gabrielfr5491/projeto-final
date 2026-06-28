@@ -11,12 +11,9 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './cadastro-obra.component.html',
-  styleUrl: './cadastro-obra.component.scss' // Garante o vínculo com o arquivo de estilo premium
+  styleUrl: './cadastro-obra.component.scss'
 })
-export class CadastroObraComponent {
-
-  // Sincroniza o layout do formulário com a abertura/fechamento da barra lateral
-  collapsed: boolean = false;
+export class CadastroObraComponent {  collapsed: boolean = false;
 
   obra = {
     id: 0,
@@ -26,7 +23,7 @@ export class CadastroObraComponent {
     estado: '',
     dataInicio: '',
     dataPrevista: '',
-    status: 'Planejamento', // Definido um valor padrão inicial válido para o select
+    status: 'Planejamento',
     orcamento: 0
   };
 
@@ -47,10 +44,7 @@ export class CadastroObraComponent {
         this.toast.erro('Erro ao cadastrar obra.');
       }
     });
-  }
-
-  // Função auxiliar para resetar os campos após o envio com sucesso
-  private resetForm() {
+  }  private resetForm() {
     this.obra = {
       id: 0,
       nome: '',

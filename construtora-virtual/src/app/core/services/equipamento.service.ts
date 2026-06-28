@@ -1,4 +1,3 @@
-// src/app/core/services/equipamento.service.ts
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -19,19 +18,19 @@ export class EquipamentoService {
 
   listar() {
     return this.http.get<Equipamento[]>(
-      this.api
+      `${this.api}/equipamentos`
     );
   }
 
   buscarPorId(id: number) {
     return this.http.get<Equipamento>(
-      `${this.api}/${id}`
+      `${this.api}/equipamentos/${id}`
     );
   }
 
   adicionar(equipamento: Equipamento) {
     return this.http.post(
-      this.api,
+      `${this.api}/equipamentos`,
       equipamento
     );
   }
@@ -41,14 +40,14 @@ export class EquipamentoService {
     equipamento: Equipamento
   ) {
     return this.http.patch(
-      `${this.api}/${id}`,
+      `${this.api}/equipamentos/${id}`,
       equipamento
     );
   }
 
   excluir(id: number) {
     return this.http.delete(
-      `${this.api}/${id}`
+      `${this.api}/equipamentos/${id}`
     );
   }
 

@@ -15,19 +15,19 @@ export class FornecedorService {
 
   listar() {
     return this.http.get<any[]>(
-      this.api
+      `${this.api}/fornecedores`
     );
   }
 
   buscarPorId(id: number) {
     return this.http.get<any>(
-      `${this.api}/${id}`
+      `${this.api}/fornecedores/${id}`
     );
   }
 
   adicionar(fornecedor: any) {
     return this.http.post(
-      this.api,
+      `${this.api}/fornecedores`,
       fornecedor
     );
   }
@@ -37,14 +37,14 @@ export class FornecedorService {
     fornecedor: any
   ) {
     return this.http.patch(
-      `${this.api}/${id}`,
+      `${this.api}/fornecedores/${id}`,
       fornecedor
     );
   }
 
   excluir(id: number) {
     return this.http.delete(
-      `${this.api}/${id}`
+      `${this.api}/fornecedores/${id}`
     );
   }
 }

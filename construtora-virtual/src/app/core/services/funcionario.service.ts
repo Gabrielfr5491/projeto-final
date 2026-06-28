@@ -20,7 +20,7 @@ export class FuncionarioService {
   listar(): Observable<Funcionario[]> {
 
     return this.http.get<Funcionario[]>(
-      this.api
+      `${this.api}/funcionarios`
     );
 
   }
@@ -30,7 +30,7 @@ export class FuncionarioService {
   ): Observable<Funcionario> {
 
     return this.http.get<Funcionario>(
-      `${this.api}/${id}`
+      `${this.api}/funcionarios/${id}`
     );
 
   }
@@ -40,7 +40,7 @@ export class FuncionarioService {
   ) {
 
     return this.http.post(
-      this.api,
+      `${this.api}/funcionarios`,
       funcionario
     );
 
@@ -52,7 +52,7 @@ export class FuncionarioService {
   ) {
 
     return this.http.patch(
-      `${this.api}/${id}`,
+      `${this.api}/funcionarios/${id}`,
       funcionario
     );
 
@@ -61,7 +61,7 @@ export class FuncionarioService {
   excluir(id: number) {
 
     return this.http.delete(
-      `${this.api}/${id}`
+      `${this.api}/funcionarios/${id}`
     );
 
   }

@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class EditarFornecedorComponent implements OnInit {
   fornecedorForm!: FormGroup;
   fornecedorId!: number;
-  imagemPreview: string | null = null; // Caso use o painel de foto
+  imagemPreview: string | null = null;
 
   categorias = [
     { value: 'estrutural', label: 'Estrutural (Aço, Cimento)' },
@@ -24,7 +24,7 @@ export class EditarFornecedorComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    public router: Router // Alterado para public para o HTML acessar sem erros (NG1)
+    public router: Router
   ) {
     this.criarFormulario();
   }
@@ -44,17 +44,11 @@ export class EditarFornecedorComponent implements OnInit {
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       categoria: ['', Validators.required],
-      produtos: this.fb.array([]) // Array dinâmico que o HTML estava procurando (NG9)
+      produtos: this.fb.array([])
     });
-  }
-
-  // Getter essencial para o *ngFor do HTML (Resolve o erro do produtosFormArray)
-  get produtosFormArray(): FormArray {
+  }  get produtosFormArray(): FormArray {
     return this.fornecedorForm.get('produtos') as FormArray;
-  }
-
-  // Método auxiliar que resolve o erro do getControl(produto) no HTML
-  getControl(control: AbstractControl): FormGroup {
+  }  getControl(control: AbstractControl): FormGroup {
     return control as FormGroup;
   }
 
@@ -63,15 +57,9 @@ export class EditarFornecedorComponent implements OnInit {
       nome: [nomeProduto, Validators.required],
       precoBase: [precoBase]
     });
-  }
-
-  // Resolve o erro do click adicionarProduto()
-  adicionarProduto(nome = '', preco = '') {
+  }  adicionarProduto(nome = '', preco = '') {
     this.produtosFormArray.push(this.criarGrupoProduto(nome, preco));
-  }
-
-  // Resolve o erro do click removerProduto(i)
-  removerProduto(index: number) {
+  }  removerProduto(index: number) {
     if (this.produtosFormArray.length > 1) {
       this.produtosFormArray.removeAt(index);
     } else {
@@ -79,9 +67,7 @@ export class EditarFornecedorComponent implements OnInit {
     }
   }
 
-  carregarDadosDoFornecedor() {
-    // Exemplo de dados vindos da API/Mock estruturados com múltiplos produtos
-    const fornecedorMock = {
+  carregarDadosDoFornecedor() {    const fornecedorMock = {
       nome: 'Gerdau Comercial de Aços',
       cnpj: '12.345.678/0001-90',
       telefone: '11999999999',
@@ -92,28 +78,19 @@ export class EditarFornecedorComponent implements OnInit {
         { nome: 'Arame Recozido Fio 18', precoBase: '14.50' },
         { nome: 'Malha de Aço Pop EQ092', precoBase: '115.00' }
       ]
-    };
-
-    // Alimenta o FormArray limpando o lixo anterior
-    this.produtosFormArray.clear();
+    };    this.produtosFormArray.clear();
     if (fornecedorMock.produtos && fornecedorMock.produtos.length > 0) {
       fornecedorMock.produtos.forEach(p => this.adicionarProduto(p.nome, p.precoBase));
     } else {
       this.adicionarProduto();
-    }
-
-    // Alimenta os campos normais
-    this.fornecedorForm.patchValue({
+    }    this.fornecedorForm.patchValue({
       nome: fornecedorMock.nome,
       cnpj: fornecedorMock.cnpj,
       telefone: fornecedorMock.telefone,
       email: fornecedorMock.email,
       categoria: fornecedorMock.categoria
     });
-  }
-
-  // Caso use a função de upload de foto anexada no seu HTML
-  aoSelecionarImagem(event: any) {
+  }  aoSelecionarImagem(event: any) {
     const arquivo = event.target.files[0];
     if (arquivo) {
       const reader = new FileReader();
@@ -124,10 +101,7 @@ export class EditarFornecedorComponent implements OnInit {
 
   salvar() {
     if (this.fornecedorForm.valid) {
-      console.log(`Atualizando fornecedor ID ${this.fornecedorId}:`, this.fornecedorForm.value);
-      // Aqui entrará o seu service:
-      // this.fornecedorService.atualizar(this.fornecedorId, this.fornecedorForm.value).subscribe(...)
-      this.router.navigate(['/fornecedores']);
+      console.log(`Atualizando fornecedor ID ${this.fornecedorId}:`, this.fornecedorForm.value);      this.router.navigate(['/fornecedores']);
     } else {
       this.fornecedorForm.markAllAsTouched();
     }

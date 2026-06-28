@@ -1,22 +1,14 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+body { margin: 0; }
 
 :root {
   --primary: #2563eb;
   --success: #16a34a;
   --dark: #111827;
-  --bg-dashboard: #f8fafc;
-  --surface-card: #ffffff;
-  --border-color: #e2e8f0;
-  --text-main: #0f172a;
-  --text-sub: #64748b;
-  --nav-bg: rgba(255, 255, 255, 0.8);
-  --nav-border: rgba(226, 232, 240, 0.8);
-  --table-th-bg: #f8fafc;
-  --table-hover: #f1f5f9;
-}
-
-[data-theme="dark"] {
   --bg-dashboard: #0b0f19;
   --surface-card: #131c2e;
   --border-color: #1e293b;
@@ -26,6 +18,18 @@
   --nav-border: rgba(30, 41, 59, 0.8);
   --table-th-bg: #0f172a;
   --table-hover: #1e293b;
+}
+
+[data-theme="light"] {
+  --bg-dashboard: #f8fafc;
+  --surface-card: #ffffff;
+  --border-color: #e2e8f0;
+  --text-main: #0f172a;
+  --text-sub: #64748b;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-border: rgba(226, 232, 240, 0.8);
+  --table-th-bg: #f8fafc;
+  --table-hover: #f1f5f9;
 }
 
 ::-webkit-scrollbar {

@@ -24,7 +24,7 @@ export class CadastroFornecedorComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    public router: Router // Alterado para public para o HTML conseguir acessar sem erros
+    public router: Router
   ) {
     this.criarFormulario();
   }
@@ -35,9 +35,7 @@ export class CadastroFornecedorComponent implements OnInit {
       this.isEdicao = true;
       this.fornecedorId = Number(idParam);
       this.carregarDadosDoFornecedor();
-    } else {
-      // Se for novo, inicia com uma linha de produto em branco
-      this.adicionarProduto();
+    } else {      this.adicionarProduto();
     }
   }
 
@@ -48,45 +46,29 @@ export class CadastroFornecedorComponent implements OnInit {
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       categoria: ['', Validators.required],
-      produtos: this.fb.array([]) // Array dinâmico para criar quantos produtos quiser
+      produtos: this.fb.array([])
     });
-  }
-
-  // Getter para facilitar o loop no HTML
-  get produtosFormArray(): FormArray {
+  }  get produtosFormArray(): FormArray {
     return this.fornecedorForm.get('produtos') as FormArray;
-  }
-
-  // Método auxiliar para evitar erros de compilação estrita de tipos no HTML (*ngFor)
-  getControl(control: AbstractControl): FormGroup {
+  }  getControl(control: AbstractControl): FormGroup {
     return control as FormGroup;
   }
 
   criarGrupoProduto(nomeProduto = '', precoBase = ''): FormGroup {
     return this.fb.group({
-      nome: [nomeProduto, Validators.required], // Apenas o nome do insumo é estritamente obrigatório
-      precoBase: [precoBase] // Removido o Validator.required para dar mais liberdade no catálogo
+      nome: [nomeProduto, Validators.required],
+      precoBase: [precoBase]
     });
-  }
-
-  // Cria uma nova linha limpa no formulário sempre que for chamado
-  adicionarProduto(nome = '', preco = '') {
+  }  adicionarProduto(nome = '', preco = '') {
     this.produtosFormArray.push(this.criarGrupoProduto(nome, preco));
-  }
-
-  // Remove a linha selecionada de forma inteligente
-  removerProduto(index: number) {
+  }  removerProduto(index: number) {
     if (this.produtosFormArray.length > 1) {
       this.produtosFormArray.removeAt(index);
-    } else {
-      // Se for o último produto restante, apenas limpa os campos em vez de barrar o usuário com alert
-      this.produtosFormArray.at(0).reset({ nome: '', precoBase: '' });
+    } else {      this.produtosFormArray.at(0).reset({ nome: '', precoBase: '' });
     }
   }
 
-  carregarDadosDoFornecedor() {
-    // Exemplo de dados vindos da API/Mock com múltiplos produtos
-    const fornecedorMock = {
+  carregarDadosDoFornecedor() {    const fornecedorMock = {
       nome: 'Gerdau Comercial de Aços',
       cnpj: '12.345.678/0001-90',
       telefone: '11999999999',
@@ -112,9 +94,7 @@ export class CadastroFornecedorComponent implements OnInit {
   }
 
   salvar() {
-    if (this.fornecedorForm.valid) {
-      // Captura todo o objeto estruturado incluindo o array completo de produtos cadastrados
-      console.log('Dados do Fornecedor + Todos os Produtos:', this.fornecedorForm.value);
+    if (this.fornecedorForm.valid) {      console.log('Dados do Fornecedor + Todos os Produtos:', this.fornecedorForm.value);
       this.router.navigate(['/fornecedores']);
     } else {
       this.fornecedorForm.markAllAsTouched();

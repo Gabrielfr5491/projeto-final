@@ -15,23 +15,23 @@ export class UsuarioService {
   ) {}
 
   listar(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.api);
+    return this.http.get<Usuario[]>(`${this.api}/usuarios`);
   }
 
   buscarPorId(id: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.api}/${id}`);
+    return this.http.get<Usuario>(`${this.api}/usuarios/${id}`);
   }
 
   adicionar(usuario: Usuario): Observable<any> {
-    return this.http.post(this.api, usuario);
+    return this.http.post(`${this.api}/usuarios`, usuario);
   }
 
   atualizar(id: number, usuario: Usuario): Observable<any> {
-    return this.http.patch(`${this.api}/${id}`, usuario);
+    return this.http.patch(`${this.api}/usuarios/${id}`, usuario);
   }
 
   excluir(id: number): Observable<any> {
-    return this.http.delete(`${this.api}/${id}`);
+    return this.http.delete(`${this.api}/usuarios/${id}`);
   }
 
 }

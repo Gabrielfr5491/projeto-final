@@ -5,10 +5,7 @@ import localePt from '@angular/common/locales/pt';
 
 import { ObraService } from '../../../core/services/obra.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { Obra } from '../../../models/obra';
-
-// Registra a localização brasileira para que o pipe 'currency' funcione perfeitamente na tabela
-registerLocaleData(localePt);
+import { Obra } from '../../../models/obra';registerLocaleData(localePt);
 
 @Component({
   selector: 'app-lista-obras',
@@ -21,12 +18,9 @@ registerLocaleData(localePt);
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
   templateUrl: './lista-obras.component.html',
-  styleUrl: './lista-obras.component.scss' // Vinculação com o SCSS Premium
+  styleUrl: './lista-obras.component.scss'
 })
-export class ListaObrasComponent implements OnInit {
-
-  // Sincroniza a largura e o recuo da tabela com a abertura/fechamento da barra lateral
-  collapsed: boolean = false;
+export class ListaObrasComponent implements OnInit {  collapsed: boolean = false;
 
   filtro = '';
   obras: Obra[] = [];
@@ -53,9 +47,7 @@ export class ListaObrasComponent implements OnInit {
       });
   }
 
-  excluir(id: number) {
-    // Um leve aviso nativo antes de deletar diretamente para melhorar a experiência do usuário (UX)
-    if (confirm('Tem certeza que deseja remover esta obra permanentemente?')) {
+  excluir(id: number) {    if (confirm('Tem certeza que deseja remover esta obra permanentemente?')) {
       this.obraService.excluir(id).subscribe({
         next: () => {
           this.toast.sucesso('Obra excluída com sucesso.');
@@ -67,10 +59,7 @@ export class ListaObrasComponent implements OnInit {
         }
       });
     }
-  }
-
-  // Seu filtro inteligente por aproximação de string (Case Insensitive)
-  get obrasFiltradas() {
+  }  get obrasFiltradas() {
     return this.obras.filter(
       obra =>
         obra.nome

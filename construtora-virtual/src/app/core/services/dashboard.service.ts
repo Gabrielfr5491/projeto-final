@@ -16,7 +16,7 @@ export class DashboardService {
   resumo() {
 
     return this.http.get(
-      `${this.api}/resumo`
+      `${this.api}/dashboard/resumo`
     );
 
   }
@@ -24,7 +24,7 @@ export class DashboardService {
   financeiro() {
 
     return this.http.get<any>(
-      `${this.api}/financeiro`
+      `${this.api}/dashboard/financeiro`
     );
 
   }

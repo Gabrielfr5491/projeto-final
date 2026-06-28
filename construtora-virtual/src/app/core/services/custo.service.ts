@@ -16,18 +16,20 @@ export class CustoService {
   ) {}
 
   listar() {
-    return this.http.get<Custo[]>(this.api);
+    return this.http.get<Custo[]>(
+      `${this.api}/custos`
+    );
   }
 
   buscarPorId(id: number) {
     return this.http.get<Custo>(
-      `${this.api}/${id}`
+      `${this.api}/custos/${id}`
     );
   }
 
   adicionar(custo: Custo) {
     return this.http.post(
-      this.api,
+      `${this.api}/custos`,
       custo
     );
   }
@@ -37,14 +39,14 @@ export class CustoService {
     custo: Custo
   ) {
     return this.http.patch(
-      `${this.api}/${id}`,
+      `${this.api}/custos/${id}`,
       custo
     );
   }
 
   excluir(id: number) {
     return this.http.delete(
-      `${this.api}/${id}`
+      `${this.api}/custos/${id}`
     );
   }
 

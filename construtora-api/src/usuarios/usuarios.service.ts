@@ -34,7 +34,7 @@ export class UsuariosService {
 
   
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario> {
-    const usuario = await this.findOne(id); // Garante que o usuário existe
+    const usuario = await this.findOne(id);
     const usuarioAtualizado = this.usuarioRepository.merge(usuario, updateUsuarioDto);
     return await this.usuarioRepository.save(usuarioAtualizado);
   }

@@ -21,7 +21,7 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
   
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env', // local dev (Render ignora isso)
+      envFilePath: '.env',
     }),
 
  
@@ -36,17 +36,11 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
 
         return {
           type: 'postgres',
-          url,
-
-          // IMPORTANTE para Render / Supabase
-          ssl: {
+          url,          ssl: {
             rejectUnauthorized: false,
           },
 
-          autoLoadEntities: true,
-
-          // em produção pode trocar para false depois
-          synchronize: true,
+          autoLoadEntities: true,          synchronize: true,
         };
       },
     }),

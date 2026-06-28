@@ -27,14 +27,8 @@ interface CarouselSlide {
 export class LoginComponent implements OnInit, OnDestroy {
 
   email = '';
-  senha = '';
-
-  // Controles do Carrossel Premium
-  currentSlideIndex = 0;
-  private carouselTimer: any;
-
-  // Imagens conceituais de engenharia civil pesada e arquitetura
-  slides: CarouselSlide[] = [
+  senha = '';  currentSlideIndex = 0;
+  private carouselTimer: any;  slides: CarouselSlide[] = [
     {
       image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200',
       tag: 'Infraestrutura',
@@ -67,17 +61,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopCarouselRotation();
-  }
-
-  // Ativa a rotação automática dos slides a cada 5 segundos
-  private startCarouselRotation(): void {
+  }  private startCarouselRotation(): void {
     this.carouselTimer = setInterval(() => {
       this.nextSlide();
     }, 5000);
-  }
-
-  // Limpa o timer para evitar lentidão ou memory leak no Angular
-  private stopCarouselRotation(): void {
+  }  private stopCarouselRotation(): void {
     if (this.carouselTimer) {
       clearInterval(this.carouselTimer);
     }
@@ -85,12 +73,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private nextSlide(): void {
     this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
-  }
-
-  // Permite ao usuário clicar nas barras indicadoras inferiores (Dots)
-  setSlide(index: number): void {
+  }  setSlide(index: number): void {
     this.currentSlideIndex = index;
-    this.stopCarouselRotation(); // Reseta o tempo para o usuário ler sem pressa
+    this.stopCarouselRotation();
     this.startCarouselRotation();
   }
 
