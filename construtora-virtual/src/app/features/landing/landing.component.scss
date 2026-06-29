@@ -26,7 +26,7 @@ $transition-fast:   0.2s ease;
 $transition-base:   0.4s ease;
 $transition-slow:   0.7s cubic-bezier(0.16, 1, 0.3, 1);
 
-$navbar-height: 72px;
+$navbar-height: 112px;
 $bp-sm:  576px;
 $bp-md:  768px;
 $bp-lg:  1024px;
@@ -264,21 +264,14 @@ button {
 .loading-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
   margin-bottom: 8px;
 }
 
-.loading-logo-icon {
-  font-size: 2.25rem;
-  @include gradient-text($color-blue-light, color.adjust($color-blue-light, $lightness: 20%));
-}
-
-.loading-logo-text {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: $color-gray-400;
-
-  strong { color: $color-white; font-weight: 700; }
+.loading-logo-img {
+  display: block;
+  width: 200px;
+  height: auto;
 }
 
 .loading-bar-track {
@@ -344,22 +337,13 @@ button {
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   flex-shrink: 0;
 }
 
-.navbar-logo-icon {
-  font-size: 1.5rem;
-  @include gradient-text($color-blue-light, color.adjust($color-blue-light, $lightness: 15%));
-}
-
-.navbar-logo-text {
-  font-size: 1.0625rem;
-  font-weight: 500;
-  color: $color-gray-400;
-  letter-spacing: -0.01em;
-
-  strong { color: $color-white; font-weight: 700; }
+.navbar-logo-img {
+  display: block;
+  width: 110px;
+  height: auto;
 }
 
 .navbar-menu {
@@ -1465,20 +1449,12 @@ button {
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.footer-logo-icon {
-  font-size: 1.5rem;
-  @include gradient-text($color-blue-light, color.adjust($color-blue-light, $lightness: 15%));
-}
-
-.footer-logo-text {
-  font-size: 1.0625rem;
-  font-weight: 500;
-  color: $color-gray-400;
-
-  strong { color: $color-white; font-weight: 700; }
+.footer-logo-img {
+  display: block;
+  width: 120px;
+  height: auto;
 }
 
 .footer-tagline {

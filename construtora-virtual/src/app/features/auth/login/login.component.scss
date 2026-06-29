@@ -40,6 +40,13 @@ $bg-form-side: #0f172a;
     margin-bottom: 2.5rem;
   }
 
+  &__logo {
+    display: block;
+    width: 140px;
+    height: auto;
+    margin-bottom: 1.25rem;
+  }
+
   &__logo-icon {
     width: 46px;
     height: 46px;
@@ -64,7 +71,7 @@ $bg-form-side: #0f172a;
   &__subtitle {
     font-size: 0.875rem;
     color: #94a3b8;
-    margin-top: 0.5rem;
+    margin-top: 0;
     margin-bottom: 0;
     line-height: 1.5;
   }
