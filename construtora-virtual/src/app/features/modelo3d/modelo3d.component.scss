@@ -1,0 +1,124 @@
+// 1. VARIÁVEIS DO TEMA SEMPRE NO TOPO
+$primary: #007bff;
+$primary-dark: #0056b3;
+$dark: #333333;
+$gray-light: #f9f9f9;
+$border-color: #cccccc;
+
+// 2. ESTILOS DO COMPONENTE
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  h2 {
+    color: $dark;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+
+  .btn-upload {
+    background-color: $primary;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+      background-color: $primary-dark;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .icon {
+      font-size: 18px;
+    }
+  }
+
+  .canvas-container {
+    width: 100%;
+    max-width: 900px;
+    height: 550px;
+    border: 2px dashed $border-color;
+    background-color: $gray-light;
+    border-radius: 12px;
+    margin-top: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+
+    canvas {
+      display: block;
+      outline: none;
+    }
+  }
+}
+
+// Novos elementos adicionados para o formulário de relacionamento
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .select-obra {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid $border-color;
+    font-size: 16px;
+    background-color: white;
+    outline: none;
+    
+    &:focus {
+      border-color: $primary;
+    }
+  }
+}
+
+.btn-salvar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #218838;
+  }
+}

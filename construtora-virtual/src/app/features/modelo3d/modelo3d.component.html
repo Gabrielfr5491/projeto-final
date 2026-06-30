@@ -1,0 +1,26 @@
+<div class="upload-container">
+  <h2>Vincular Modelo 3D à Obra</h2>
+  <p class="subtitle">Selecione a obra cadastrada e importe o projeto 3D correspondente.</p>
+  
+  <div class="form-group">
+    <label for="obraSelect">Selecione a Obra Cadastrada:</label>
+    <select id="obraSelect" [(ngModel)]="obraSelecionadaId" class="select-obra">
+      <option value="" disabled selected>-- Escolha uma Obra --</option>
+      <option *ngFor="let obra of listaObras" [value]="obra.id">
+        {{ obra.nome }} ({{ obra.localizacao }})
+      </option>
+    </select>
+  </div>
+
+  <input type="file" id="fileInput" (change)="onFileSelected($event)" accept=".gltf,.glb" style="display: none;" [disabled]="!obraSelecionadaId">
+  
+  <button class="btn-upload" [disabled]="!obraSelecionadaId" onclick="document.getElementById('fileInput').click()">
+    <span class="icon">📁</span> {{ obraSelecionadaId ? 'Selecionar e Visualizar Modelo' : 'Selecione uma obra primeiro' }}
+  </button>
+  
+  <button *ngIf="currentModel && obraSelecionadaId" class="btn-salvar" (click)="salvarVinculoObra()">
+    💾 Salvar Modelo nesta Obra
+  </button>
+  
+  <div #rendererContainer class="canvas-container"></div>
+</div>

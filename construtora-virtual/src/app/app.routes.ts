@@ -27,6 +27,7 @@ import { adminGuard } from './core/guards/admin.guard';
 import { CadastroUsuarioComponent } from './features/usuarios/cadastro-usuario/cadastro-usuario.component';
 import { ListaUsuariosComponent } from './features/usuarios/lista-usuarios/lista-usuarios.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
+import { Modelo3dComponent } from './features/modelo3d/modelo3d.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent, pathMatch: 'full' },
@@ -58,6 +59,7 @@ export const routes: Routes = [
       { path: 'editar-custo/:id', component: EditarCustoComponent },
       { path: 'usuarios', component: ListaUsuariosComponent },
       { path: 'cadastro-usuario', component: CadastroUsuarioComponent, canActivate: [adminGuard] },
+      { path: 'modelo3d', component: Modelo3dComponent },
     ]
   },
 
