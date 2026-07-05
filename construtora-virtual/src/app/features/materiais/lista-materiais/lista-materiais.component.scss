@@ -1,16 +1,26 @@
+@use '../../../../styles/_variables.scss' as *;
+
 .actions {
   display: flex;
-  gap: 0.5rem;
+  gap: $space-xs;
   align-items: center;
 }
 
 .status {
   &.normal {
-    background-color: rgba(22, 163, 74, 0.1);
-    color: #16a34a;
+    background-color: rgba($success, 0.15);
+    color: $success;
+    border: 1px solid rgba($success, 0.3);
+    border-radius: $radius-sm;
+    padding: 0.25rem 0.5rem;
+    font-weight: $weight-bold;
   }
   &.baixo {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #dc2626;
+    background-color: rgba($danger, 0.15);
+    color: $danger;
+    border: 1px solid rgba($danger, 0.3);
+    border-radius: $radius-sm;
+    padding: 0.25rem 0.5rem;
+    font-weight: $weight-bold;
   }
 }

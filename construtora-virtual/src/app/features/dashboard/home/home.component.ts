@@ -12,6 +12,7 @@ import {
 
 import { ObraService } from '../../../core/services/obra.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 import { Obra } from '../../../models/obra';
 
@@ -48,6 +49,12 @@ export class HomeComponent implements OnInit {
 
   public chartFinanceiro: any;
 
+  public chartSparkline: any;
+
+  public chartSparklineMini: any;
+
+  public chartRing: any;
+
   collapsed = false;
 
   resumo: any = {
@@ -72,7 +79,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private obraService: ObraService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -111,6 +119,8 @@ export class HomeComponent implements OnInit {
         this.carregarGraficoFinanceiro();
 
         this.carregarGraficoKpi();
+
+        this.carregarSparklineMini();
 
       },
 
@@ -154,6 +164,8 @@ export class HomeComponent implements OnInit {
 
 
 carregarGrafico() {
+  const isDark = this.themeService.currentTheme === 'dark';
+  const textColor = isDark ? '#8A8A8A' : '#6B6B6B';
 
   this.chartOptions = {
 
@@ -170,8 +182,13 @@ carregarGrafico() {
     chart: {
 
       type: 'radialBar',
-
-      height: 450
+      height: 450,
+      toolbar: { show: false },
+      animations: {
+        enabled: true,
+        easing: 'easeout',
+        speed: 500
+      }
 
     },
 
@@ -185,13 +202,12 @@ carregarGrafico() {
 
     ],
 
+    // Paleta laranja/preto/cinza
     colors: [
 
-      '#22c55e',
-
-      '#3b82f6',
-
-      '#f59e0b'
+      '#FF6B1A', // laranja principal
+      '#5C5954', // cinza escuro
+      '#A8A59E'  // cinza médio
 
     ],
 
@@ -199,25 +215,23 @@ carregarGrafico() {
 
       radialBar: {
 
-        hollow: {
-
-          size: '30%'
-
-        },
-
+        hollow: { size: '70%' },
+        track: { background: '#1A1A1A', strokeWidth: '100%' },
         dataLabels: {
 
           name: {
-
-            fontSize: '16px'
+            fontSize: '14px',
+            color: textColor,
+            fontWeight: 500
 
           },
 
           value: {
 
             fontSize: '24px',
-
-            fontWeight: 700
+            fontWeight: 700,
+            color: textColor,
+            offsetY: 8
 
           }
 
@@ -225,14 +239,32 @@ carregarGrafico() {
 
       }
 
+    },
+    stroke: { lineCap: 'round' },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        gradientToColors: ['#FFA05C'],
+        stops: [0, 100]
+      }
     }
-
   };
+
+  // Carregar sparkline para orçamento
+  this.carregarSparkline();
+
+  // Carregar ring chart para produtividade
+  this.carregarRingChart();
 
 }
 
 
 carregarGraficoFinanceiro() {
+  const isDark = this.themeService.currentTheme === 'dark';
+  const primaryColor = '#FF6B1A';
+  const textColor = isDark ? '#8A8A8A' : '#6B6B6B';
+  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
   this.chartFinanceiro = {
 
@@ -259,13 +291,12 @@ carregarGraficoFinanceiro() {
     chart: {
 
       type: 'area',
-
       height: 450,
-
-      toolbar: {
-
-        show: false
-
+      toolbar: { show: false },
+      animations: {
+        enabled: true,
+        easing: 'easeout',
+        speed: 500
       }
 
     },
@@ -274,7 +305,7 @@ carregarGraficoFinanceiro() {
 
       curve: 'smooth',
 
-      width: 5
+      width: 2
 
     },
 
@@ -285,26 +316,25 @@ carregarGraficoFinanceiro() {
       gradient: {
 
         shadeIntensity: 1,
+        opacityFrom: 0.35,
+        opacityTo: 0,
+        stops: [0, 100]
 
-        opacityFrom: .7,
-
-        opacityTo: .1
-
-      }
+      },
+      colors: [primaryColor]
 
     },
 
     markers: {
 
-      size: 8
+      size: 0,
+      hover: {
+        size: 4
+      }
 
     },
 
-    colors: [
-
-      '#2563eb'
-
-    ],
+    colors: ['#FF6B1A'],
 
     xaxis: {
 
@@ -316,10 +346,50 @@ carregarGraficoFinanceiro() {
 
         'Lucro'
 
-      ]
-
+      ],
+      labels: {
+        style: {
+          colors: textColor,
+          fontSize: '11px'
+        }
+      },
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: textColor,
+          fontSize: '11px'
+        }
+      }
+    },
+    grid: {
+      borderColor: gridColor,
+      strokeDashArray: 3
+    },
+    tooltip: {
+      theme: isDark ? 'dark' : 'light',
+      style: {
+        fontSize: '12px'
+      },
+      x: {
+        show: false
+      },
+      marker: {
+        show: false
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    legend: {
+      show: false
     }
-
   };
 
 }
@@ -328,6 +398,10 @@ carregarGraficoFinanceiro() {
 public chartKpi: any;
 
 carregarGraficoKpi() {
+  const isDark = this.themeService.currentTheme === 'dark';
+  const primaryColor = '#FF6B1A';
+  const textColor = isDark ? '#8A8A8A' : '#6B6B6B';
+  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
   this.chartKpi = {
 
@@ -354,17 +428,14 @@ carregarGraficoKpi() {
     ],
 
     chart: {
-
       type: 'bar',
-
       height: 450,
-
-      toolbar: {
-
-        show: false
-
+      toolbar: { show: false },
+      animations: {
+        enabled: true,
+        easing: 'easeout',
+        speed: 500
       }
-
     },
 
     plotOptions: {
@@ -372,18 +443,15 @@ carregarGraficoKpi() {
       bar: {
 
         horizontal: true,
-
-        borderRadius: 10
+        borderRadius: 4,
+        borderRadiusApplication: 'end',
+        columnWidth: '45%'
 
       }
 
     },
 
-    colors: [
-
-      '#6366f1'
-
-    ],
+    colors: ['#FF6B1A'],
 
     xaxis: {
 
@@ -397,10 +465,44 @@ carregarGraficoKpi() {
 
         'Equipamentos'
 
-      ]
-
+      ],
+      labels: {
+        style: {
+          colors: textColor,
+          fontSize: '11px'
+        }
+      },
+      axisBorder: {
+        show: false
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: textColor,
+          fontSize: '11px'
+        }
+      }
+    },
+    grid: {
+      borderColor: gridColor,
+      strokeDashArray: 3
+    },
+    tooltip: {
+      theme: isDark ? 'dark' : 'light',
+      style: {
+        fontSize: '12px'
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    legend: {
+      show: false
     }
-
   };
 
 }
@@ -410,6 +512,8 @@ carregarGraficoKpi() {
   carregarGraficoCustosCategoria(
   dados: any
 ) {
+  const isDark = this.themeService.currentTheme === 'dark';
+  const textColor = isDark ? '#8A8A8A' : '#6B6B6B';
 
   const categorias =
     Object.keys(
@@ -421,6 +525,16 @@ carregarGraficoKpi() {
       dados.custosPorCategoria
     );
 
+  // Paleta laranja/cinza para donut
+  const donutColors = [
+    '#FF6B1A', // laranja principal
+    '#E55A0F', // laranja escuro
+    '#FFA36D', // laranja claro
+    '#5C5954', // cinza escuro
+    '#A8A59E', // cinza médio
+    '#7A7770'  // cinza mais claro
+  ];
+
   this.chartCustosCategoria = {
 
     series: valores,
@@ -428,41 +542,45 @@ carregarGraficoKpi() {
     chart: {
 
       type: 'donut',
-
-      height: 500
+      height: 500,
+      toolbar: { show: false },
+      animations: {
+        enabled: true,
+        easing: 'easeout',
+        speed: 500
+      }
 
     },
 
     labels: categorias,
 
-    colors: [
-
-      '#2563eb',
-      '#22c55e',
-      '#f59e0b',
-      '#ef4444',
-      '#8b5cf6',
-      '#06b6d4'
-
-    ],
+    colors: donutColors,
 
     legend: {
 
       position: 'bottom',
-
-      fontSize: '16px'
+      fontSize: '12px',
+      labels: {
+        colors: '#8A8A8A'
+      },
+      markers: {
+        width: 8,
+        height: 8
+      }
 
     },
 
     stroke: {
 
-      width: 3
+      width: 2,
+      colors: ['#0D0D0D'],
+      lineCap: 'round'
 
     },
 
     dataLabels: {
 
-      enabled: true
+      enabled: false
 
     },
 
@@ -483,7 +601,9 @@ carregarGraficoKpi() {
               show: true,
 
               label: 'Total',
-
+              color: textColor,
+              fontSize: '14px',
+              fontWeight: 500,
               formatter: () =>
 
                 'R$ ' +
@@ -494,6 +614,11 @@ carregarGraficoKpi() {
                   'pt-BR'
                 )
 
+            },
+            value: {
+              color: textColor,
+              fontSize: '24px',
+              fontWeight: 700
             }
 
           }
@@ -502,8 +627,13 @@ carregarGraficoKpi() {
 
       }
 
+    },
+    tooltip: {
+      theme: isDark ? 'dark' : 'light',
+      style: {
+        fontSize: '12px'
+      }
     }
-
   };
 
 }
@@ -565,6 +695,155 @@ carregarGraficoKpi() {
 
     );
 
+  }
+
+  get produtividadeGeral(): number {
+    return this.totalObras > 0 
+      ? Math.round((this.obrasConcluidas / this.totalObras) * 100) 
+      : 0;
+  }
+
+  // Sparkline para orçamento consolidado
+  carregarSparkline() {
+    const isDark = this.themeService.currentTheme === 'dark';
+    const primaryColor = '#FF6B1A';
+    const gradientColor = '#FFA05C';
+    
+    // Dados simulados de tendência (6 meses)
+    const tendencia = [
+      this.orcamentoTotal * 0.85,
+      this.orcamentoTotal * 0.88,
+      this.orcamentoTotal * 0.90,
+      this.orcamentoTotal * 0.92,
+      this.orcamentoTotal * 0.95,
+      this.orcamentoTotal
+    ];
+
+    this.chartSparkline = {
+      series: [{
+        name: 'Orçamento',
+        data: tendencia
+      }],
+      chart: {
+        type: 'area',
+        height: 60,
+        sparkline: { enabled: true },
+        toolbar: { show: false },
+        animations: {
+          enabled: true,
+          easing: 'easeout',
+          speed: 500
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.35,
+          opacityTo: 0,
+          stops: [0, 100]
+        },
+        colors: [primaryColor]
+      },
+      colors: [primaryColor],
+      tooltip: {
+        theme: isDark ? 'dark' : 'light',
+        x: { show: false },
+        marker: { show: false }
+      },
+      grid: { show: false }
+    };
+  }
+
+  // Mini sparkline para cards numéricos
+  carregarSparklineMini() {
+    const isDark = this.themeService.currentTheme === 'dark';
+    const primaryColor = '#FF6B1A';
+    
+    // Dados simulados de tendência (5 pontos)
+    const tendencia = [12, 15, 13, 18, this.resumo.receitas || 0];
+
+    this.chartSparklineMini = {
+      series: [{
+        name: 'Tendência',
+        data: tendencia
+      }],
+      chart: {
+        type: 'line',
+        height: 30,
+        sparkline: { enabled: true },
+        toolbar: { show: false },
+        animations: {
+          enabled: true,
+          easing: 'easeout',
+          speed: 500
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 1.5
+      },
+      colors: [primaryColor],
+      tooltip: {
+        theme: isDark ? 'dark' : 'light',
+        x: { show: false },
+        marker: { show: false }
+      },
+      grid: { show: false }
+    };
+  }
+
+  // Ring chart para produtividade geral
+  carregarRingChart() {
+    const isDark = this.themeService.currentTheme === 'dark';
+    const trackColor = isDark ? '#1A1A1A' : '#E8E6E1';
+    const textColor = isDark ? '#FAFAF7' : '#121212';
+    const primaryColor = '#FF6B1A';
+    const gradientColor = '#FFA05C';
+
+    this.chartRing = {
+      series: [this.produtividadeGeral],
+      chart: {
+        type: 'radialBar',
+        height: 180,
+        toolbar: { show: false },
+        animations: {
+          enabled: true,
+          easing: 'easeout',
+          speed: 500
+        }
+      },
+      plotOptions: {
+        radialBar: {
+          hollow: { size: '70%' },
+          track: { background: trackColor, strokeWidth: '100%' },
+          dataLabels: {
+            name: { show: false },
+            value: {
+              color: textColor,
+              fontSize: '28px',
+              fontWeight: 700,
+              offsetY: 8,
+              formatter: (val: number) => `${val}%`
+            }
+          }
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'dark',
+          gradientToColors: [gradientColor],
+          stops: [0, 100]
+        }
+      },
+      stroke: { lineCap: 'round' },
+      colors: [primaryColor]
+    };
   }
 
 }

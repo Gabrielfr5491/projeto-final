@@ -1,30 +1,32 @@
 @use 'sass:color';
-$color-bg:          #0B0F19;
-$color-bg-2:        #0E1420;
-$color-bg-card:     #111827;
-$color-surface:     rgba(255,255,255,0.06);
-$color-border:      rgba(255,255,255,0.12);
-$color-blue:        #2563EB;
-$color-blue-light:  #60A5FA;
-$color-blue-glow:   rgba(37,99,235,0.35);
-$color-white:       #FFFFFF;
-$color-gray-100:    #F9FAFB;
-$color-gray-400:    #E5E7EB;
-$color-gray-600:    #9CA3AF;
-$color-graphite:    #1F2937;
+@use '../../../styles/_variables.scss' as *;
+
+$color-bg:          $black-900;
+$color-bg-2:        $black-800;
+$color-bg-card:     $black-800;
+$color-surface:     rgba($black-400,0.06);
+$color-border:      rgba($black-400,0.12);
+$color-blue:        $orange-500;
+$color-blue-light:  $orange-300;
+$color-blue-glow:   rgba($orange-500,0.35);
+$color-white:       $black-50;
+$color-gray-100:    $black-100;
+$color-gray-400:    $black-400;
+$color-gray-600:    $black-500;
+$color-graphite:    $black-700;
 
 $font-display:      'Inter', system-ui, -apple-system, sans-serif;
 $font-body:         'Inter', system-ui, -apple-system, sans-serif;
 
-$radius-sm:   8px;
-$radius-md:   16px;
-$radius-lg:   24px;
-$radius-xl:   32px;
-$radius-full: 9999px;
+$radius-sm:   $radius-sm;
+$radius-md:   $radius-md;
+$radius-lg:   $radius-lg;
+$radius-xl:   $radius-xl;
+$radius-full: $radius-full;
 
-$transition-fast:   0.2s ease;
-$transition-base:   0.4s ease;
-$transition-slow:   0.7s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-fast:   $transition-fast $ease-out-expo;
+$transition-base:   $transition-base $ease-out-expo;
+$transition-slow:   $transition-slow $ease-out-expo;
 
 $navbar-height: 112px;
 $bp-sm:  576px;
@@ -192,39 +194,42 @@ button {
 .btn-primary {
   background: $color-blue;
   color: $color-white;
-  box-shadow: 0 4px 24px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  @include hard-shadow(4px, 4px, rgba(0,0,0,0.4));
+  border-radius: $radius-sm;
 
   &:hover {
-    background: color.adjust($color-blue, $lightness: 6%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(37,99,235,0.55);
+    background: $orange-600;
+    transform: translateY(-2px) skewX(-2deg);
+    @include hard-shadow(6px, 6px, rgba(0,0,0,0.5));
   }
 
-  &:active { transform: translateY(0); }
+  &:active { transform: translateY(0) skewX(0deg); }
 }
 
 .btn-ghost {
   background: transparent;
   color: $color-gray-400;
-  border: 1px solid $color-border;
+  border: 2px solid $color-border;
+  border-radius: $radius-sm;
 
   &:hover {
     color: $color-white;
-    border-color: rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.05);
-    transform: translateY(-2px);
+    border-color: $color-blue;
+    background: rgba($color-blue, 0.1);
+    transform: translateY(-2px) rotate(1deg);
   }
 }
 
 .btn-glass {
-  @include glass(12px, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+  @include glass(12px, rgba($color-blue,0.15), rgba($color-blue,0.3));
   color: $color-white;
-  font-weight: 600;
+  font-weight: $weight-bold;
   font-size: 0.875rem;
+  border-radius: $radius-sm;
 
   &:hover {
-    background: rgba(255,255,255,0.18);
-    transform: translateY(-2px);
+    background: rgba($color-blue, 0.25);
+    transform: translateY(-2px) skewX(-1deg);
   }
 }
 
@@ -572,14 +577,15 @@ button {
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  border-radius: $radius-full;
-  @include glass(12px, rgba(37,99,235,0.1), rgba(37,99,235,0.25));
+  border-radius: $radius-sm;
+  @include glass(12px, rgba($color-blue,0.15), rgba($color-blue,0.3));
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: $weight-bold;
   color: $color-blue-light;
   letter-spacing: 0.02em;
   width: fit-content;
   margin-bottom: 24px;
+  border: 1px solid rgba($color-blue, 0.3);
 
   .badge-dot {
     width: 6px; height: 6px;
@@ -609,8 +615,8 @@ button {
   }
 
   .title-line--accent {
-    @include gradient-text($color-blue-light, color.adjust($color-blue-light, $lightness: 20%));
-    filter: drop-shadow(0 4px 12px rgba(37, 99, 235, 0.4));
+    @include gradient-text($color-blue-light, $orange-200);
+    filter: drop-shadow(0 4px 12px rgba($color-blue, 0.4));
   }
 }
 
@@ -821,8 +827,8 @@ button {
 
 .service-card {
   position: relative;
-  @include glass(16px, rgba(255,255,255,0.03), $color-border);
-  border-radius: $radius-lg;
+  @include glass(16px, rgba($color-blue,0.05), $color-border);
+  border-radius: $radius-md $radius-lg $radius-sm $radius-md;
   padding: 36px 32px;
   display: flex;
   flex-direction: column;
@@ -830,26 +836,27 @@ button {
   overflow: hidden;
   transition: all $transition-slow;
   cursor: default;
+  border: 2px solid $color-border;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(135deg, rgba(37,99,235,0.06) 0%, transparent 60%);
+    background: linear-gradient(135deg, rgba($color-blue,0.1) 0%, transparent 60%);
     opacity: 0;
     transition: opacity $transition-base;
   }
 
   &:hover {
-    border-color: rgba(37,99,235,0.3);
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 24px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(37,99,235,0.15);
+    border-color: rgba($color-blue,0.4);
+    transform: translateY(-6px) rotate(1deg) scale(1.01);
+    @include hard-shadow(6px, 8px, rgba(0,0,0,0.5));
 
     &::before { opacity: 1; }
 
     .card-glow { opacity: 1; }
-    .card-icon { background: rgba(37,99,235,0.2); color: $color-blue-light; }
+    .card-icon { background: rgba($color-blue,0.25); color: $color-blue-light; transform: rotate(5deg); }
     .card-arrow { opacity: 1; transform: translate(0,0); }
   }
 }
@@ -870,9 +877,9 @@ button {
 .card-icon {
   width: 52px;
   height: 52px;
-  border-radius: $radius-md;
+  border-radius: $radius-sm;
   background: rgba(255,255,255,0.05);
-  border: 1px solid $color-border;
+  border: 2px solid $color-border;
   @include flex-center;
   font-size: 1.375rem;
   color: $color-gray-400;
@@ -882,7 +889,7 @@ button {
 
 .card-title {
   font-size: 1.125rem;
-  font-weight: 700;
+  font-weight: $weight-extrabold;
   color: $color-white;
   letter-spacing: -0.02em;
 }
@@ -941,14 +948,15 @@ button {
   gap: 16px;
   align-items: flex-start;
   padding: 24px;
-  border-radius: $radius-lg;
-  @include glass(12px, rgba(255,255,255,0.02), $color-border);
+  border-radius: $radius-sm $radius-md $radius-sm $radius-lg;
+  @include glass(12px, rgba($color-blue,0.03), $color-border);
   transition: all $transition-base;
+  border: 2px solid $color-border;
 
   &:hover {
-    border-color: rgba(37,99,235,0.2);
-    background: rgba(37,99,235,0.04);
-    transform: translateY(-3px);
+    border-color: rgba($color-blue,0.3);
+    background: rgba($color-blue,0.08);
+    transform: translateY(-3px) skewX(-1deg);
   }
 }
 
@@ -956,8 +964,8 @@ button {
   width: 44px;
   height: 44px;
   border-radius: $radius-sm;
-  background: rgba(37,99,235,0.12);
-  border: 1px solid rgba(37,99,235,0.2);
+  background: rgba($color-blue,0.15);
+  border: 2px solid rgba($color-blue,0.3);
   @include flex-center;
   font-size: 1.25rem;
   color: $color-blue-light;
@@ -967,7 +975,7 @@ button {
 .diff-text {
   h3 {
     font-size: 0.9375rem;
-    font-weight: 700;
+    font-weight: $weight-extrabold;
     color: $color-white;
     margin-bottom: 6px;
     letter-spacing: -0.01em;
@@ -1043,14 +1051,15 @@ button {
 }
 
 .step-card {
-  @include glass(12px, rgba(255,255,255,0.025), $color-border);
-  border-radius: $radius-lg;
+  @include glass(12px, rgba($color-blue,0.04), $color-border);
+  border-radius: $radius-md $radius-sm $radius-lg $radius-sm;
   padding: 28px 24px;
   transition: all $transition-base;
+  border: 2px solid $color-border;
 
   &:hover {
-    border-color: rgba(37,99,235,0.2);
-    transform: translateY(-4px);
+    border-color: rgba($color-blue,0.3);
+    transform: translateY(-4px) rotate(-1deg);
   }
 }
 
@@ -1111,23 +1120,25 @@ button {
 
 .stat-number {
   font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
+  font-weight: $weight-black;
   letter-spacing: -0.04em;
-  @include gradient-text($color-blue-light, color.adjust($color-blue-light, $lightness: 20%));
+  @include gradient-text($color-blue-light, $orange-200);
   line-height: 1;
 }
 
 .stat-label {
   font-size: 0.9rem;
   color: $color-gray-400;
-  font-weight: 500;
+  font-weight: $weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .stat-bar {
   width: 48px;
-  height: 2px;
-  background: rgba(255,255,255,0.08);
-  border-radius: $radius-full;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: $radius-sm;
   overflow: hidden;
 }
 
@@ -1135,8 +1146,8 @@ button {
   height: 100%;
   width: 0;
   background: linear-gradient(90deg, $color-blue, $color-blue-light);
-  border-radius: $radius-full;
-  transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+  border-radius: $radius-sm;
+  transition: width 1.4s $ease-out-expo;
 }
 .testimonials {
   @include section-padding;
@@ -1152,24 +1163,25 @@ button {
 }
 
 .testimonial-card {
-  @include glass(16px, rgba(255,255,255,0.03), $color-border);
-  border-radius: $radius-lg;
+  @include glass(16px, rgba($color-blue,0.04), $color-border);
+  border-radius: $radius-sm $radius-lg $radius-md $radius-sm;
   padding: 36px 32px;
   position: relative;
   transition: all $transition-base;
+  border: 2px solid $color-border;
 
   &:hover {
-    border-color: rgba(37,99,235,0.2);
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    border-color: rgba($color-blue,0.3);
+    transform: translateY(-4px) rotate(1deg);
+    @include hard-shadow(4px, 6px, rgba(0,0,0,0.4));
   }
 
   &--featured {
-    border-color: rgba(37,99,235,0.25);
-    background: rgba(37,99,235,0.06);
+    border-color: rgba($color-blue,0.4);
+    background: rgba($color-blue,0.08);
     transform: scale(1.02);
 
-    &:hover { transform: scale(1.02) translateY(-4px); }
+    &:hover { transform: scale(1.02) translateY(-4px) rotate(-1deg); }
   }
 }
 
@@ -1178,7 +1190,7 @@ button {
   font-family: Georgia, serif;
   line-height: 1;
   color: $color-blue;
-  opacity: 0.3;
+  opacity: 0.4;
   position: absolute;
   top: 20px;
   right: 28px;
@@ -1261,13 +1273,14 @@ button {
 }
 
 .faq-item {
-  @include glass(12px, rgba(255,255,255,0.025), $color-border);
-  border-radius: $radius-md;
+  @include glass(12px, rgba($color-blue,0.03), $color-border);
+  border-radius: $radius-sm $radius-md $radius-sm $radius-lg;
   overflow: hidden;
   transition: border-color $transition-fast;
+  border: 2px solid $color-border;
 
   &.open {
-    border-color: rgba(37,99,235,0.25);
+    border-color: rgba($color-blue,0.4);
 
     .faq-question { color: $color-white; }
     .faq-icon { transform: rotate(45deg); color: $color-blue-light; }
@@ -1328,10 +1341,10 @@ button {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(37,99,235,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba($color-blue,0.15) 0%, transparent 70%),
     $color-bg-2;
-  border-top: 1px solid rgba(37,99,235,0.1);
-  border-bottom: 1px solid rgba(37,99,235,0.1);
+  border-top: 2px solid rgba($color-blue,0.15);
+  border-bottom: 2px solid rgba($color-blue,0.15);
 }
 
 .cta-canvas {
@@ -1350,12 +1363,12 @@ button {
 
   &--1 {
     width: 500px; height: 500px;
-    background: rgba(37,99,235,0.1);
+    background: rgba($color-blue,0.12);
     top: -100px; left: -100px;
   }
   &--2 {
     width: 400px; height: 400px;
-    background: rgba(96,165,250,0.07);
+    background: rgba($color-blue-light,0.08);
     bottom: -80px; right: -80px;
   }
 }
@@ -1373,17 +1386,18 @@ button {
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  border-radius: $radius-full;
-  @include glass(12px, rgba(37,99,235,0.12), rgba(37,99,235,0.3));
+  border-radius: $radius-sm;
+  @include glass(12px, rgba($color-blue,0.15), rgba($color-blue,0.35));
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: $weight-bold;
   color: $color-blue-light;
   margin-bottom: 28px;
+  border: 1px solid rgba($color-blue, 0.3);
 }
 
 .cta-title {
   font-size: clamp(2.25rem, 5vw, 3.75rem);
-  font-weight: 800;
+  font-weight: $weight-black;
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin-bottom: 20px;
@@ -1474,16 +1488,17 @@ button {
   height: 38px;
   border-radius: $radius-sm;
   @include flex-center;
-  @include glass(8px, rgba(255,255,255,0.04), $color-border);
+  @include glass(8px, rgba($color-blue,0.05), $color-border);
   font-size: 1rem;
   color: $color-gray-400;
   transition: all $transition-fast;
+  border: 2px solid $color-border;
 
   &:hover {
     color: $color-white;
-    border-color: rgba(37,99,235,0.3);
-    background: rgba(37,99,235,0.1);
-    transform: translateY(-2px);
+    border-color: $color-blue;
+    background: rgba($color-blue,0.15);
+    transform: translateY(-2px) rotate(10deg);
   }
 
   &:focus-visible { outline: 2px solid $color-blue-light; outline-offset: 3px; }
@@ -1500,7 +1515,7 @@ button {
 
 .footer-col-title {
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: $weight-extrabold;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: $color-white;

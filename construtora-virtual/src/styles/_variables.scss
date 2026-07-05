@@ -1,0 +1,282 @@
+// ============================================
+// SISTEMA DE TEMA - CSS Custom Properties
+// ============================================
+
+:root {
+  // Dark theme (padrão)
+  --bg-main: #0D0D0D;
+  --bg-card: #161616;
+  --bg-elevated: #1A1A1A;
+  --text-primary: #FAFAF7;
+  --text-secondary: #8A8A8A;
+  --text-muted: #5C5954;
+  --accent: #FF6B1A;
+  --accent-light: rgba(255, 107, 26, 0.25);
+  --accent-hover: #FF7B3A;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --success: #2D7A3E;
+  --warning: #D97A0A;
+  --danger: #C73E3A;
+  --info: #0D7A7A;
+  
+  // Transição suave para troca de tema
+  transition: background-color 200ms ease-out, color 200ms ease-out;
+}
+
+[data-theme="light"] {
+  --bg-main: #F5F3EF;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --text-primary: #121212;
+  --text-secondary: #6B6B6B;
+  --text-muted: #7A7770;
+  --accent: #FF6B1A;
+  --accent-light: rgba(255, 107, 26, 0.15);
+  --accent-hover: #E55A0F;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.12);
+  --success: #2D7A3E;
+  --warning: #D97A0A;
+  --danger: #C73E3A;
+  --info: #0D7A7A;
+}
+
+// ============================================
+// PALETA DE CORES - Identidade Visual Autoral
+// ============================================
+
+// Preto - Quase-preto para profundidade (definir primeiro)
+$black-50:  #F5F3EF;  // Branco quebrado
+$black-100: #E8E6E1;
+$black-200: #D1CFC7;
+$black-300: #A8A59E;
+$black-400: #7A7770;
+$black-500: #5C5954;
+$black-600: #3E3B37;
+$black-700: #252220;
+$black-800: #121212;  // Quase-preto
+$black-900: #0D0D0D;  // Preto profundo
+
+// Variáveis específicas para o dashboard (definir após as cores base)
+$black: $black-900;
+$black-light: #161616;
+$white: $black-50;
+$gray-light: #8A8A8A;
+
+// Laranja Principal - Vibrante e Quente
+$orange-50:  #FFF5ED;
+$orange-100: #FFE5D1;
+$orange-200: #FFC9A3;
+$orange-300: #FFA36D;
+$orange-400: #FF7B3A;
+$orange-500: #FF6B1A;  // Cor principal
+$orange-600: #E55A0F;
+$orange-700: #C44908;
+$orange-800: #A03B09;
+$orange-900: #82310B;
+
+// Variáveis específicas para o dashboard
+$orange: $orange-500;
+$orange-light: rgba(255, 107, 26, 0.25);
+$orange-glow: $orange-300;
+
+// Cores de Estado (com toque de laranja)
+$success: #2D7A3E;
+$warning: #D97A0A;
+$danger: #C73E3A;
+$info: #0D7A7A;
+
+// ============================================
+// TIPOGRAFIA - Hierarquia Forte
+// ============================================
+
+$font-display: 'Inter', system-ui, -apple-system, sans-serif;
+$font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+$weight-thin: 200;
+$weight-light: 300;
+$weight-regular: 400;
+$weight-medium: 500;
+$weight-semibold: 600;
+$weight-bold: 700;
+$weight-extrabold: 800;
+$weight-black: 900;
+
+// ============================================
+// ESPAÇAMENTO - Ritmo Variado
+// ============================================
+
+$space-xs: 0.5rem;    // 8px
+$space-sm: 0.75rem;   // 12px
+$space-md: 1rem;      // 16px
+$space-lg: 1.5rem;    // 24px
+$space-xl: 2rem;      // 32px
+$space-2xl: 2.5rem;   // 40px
+$space-3xl: 3.5rem;   // 56px
+$space-4xl: 4.5rem;   // 72px
+
+// ============================================
+// BORDAS - Mistura de retas e leves arredondamentos
+// ============================================
+
+$radius-none: 0;
+$radius-sm: 2px;      // Leve arredondamento
+$radius-md: 4px;      // Moderado
+$radius-lg: 8px;      // Mais arredondado
+$radius-xl: 12px;     // Arredondado
+$radius-2xl: 16px;    // Muito arredondado
+$radius-full: 9999px;
+
+// ============================================
+// TRANSIÇÕES - Easing customizado
+// ============================================
+
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+$ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+$ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+$ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+$transition-fast: 150ms;
+$transition-base: 250ms;
+$transition-slow: 400ms;
+$transition-slower: 600ms;
+
+// ============================================
+// MIXINS CRIATIVOS
+// ============================================
+
+// Hover assimétrico com transform não uniforme
+@mixin hover-asymmetric($rotate: 2deg, $scale-x: 1.02, $scale-y: 1.01) {
+  transition: transform $transition-base $ease-out-back, 
+              box-shadow $transition-base $ease-out-expo;
+  
+  &:hover {
+    transform: rotate($rotate) scale($scale-x, $scale-y);
+  }
+}
+
+// Borda com detalhe diagonal no canto
+@mixin diagonal-border($color: $orange-500, $size: 8px) {
+  position: relative;
+  border: 2px solid $black-700;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: $size;
+    height: $size;
+    background: linear-gradient(135deg, transparent 50%, $color 50%);
+    transition: width $transition-base $ease-out-expo, 
+                height $transition-base $ease-out-expo;
+  }
+  
+  &:hover::after {
+    width: $size * 1.5;
+    height: $size * 1.5;
+  }
+}
+
+// Textura de ruído sutil
+@mixin noise-texture($opacity: 0.03) {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: $opacity;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+}
+
+// Sombra dura (não suave/flutuante)
+@mixin hard-shadow($offset-x: 4px, $offset-y: 4px, $color: $black-900) {
+  box-shadow: $offset-x $offset-y 0 $color;
+  transition: box-shadow $transition-fast ease;
+  
+  &:hover {
+    box-shadow: $offset-x + 2px $offset-y + 2px 0 $color;
+  }
+}
+
+// Gradiente diagonal com ângulo agressivo
+@mixin aggressive-gradient($from: $orange-500, $to: $orange-700, $angle: 135deg) {
+  background: linear-gradient($angle, $from, $to);
+}
+
+// Botão com micro-interação personalizada
+@mixin button-creative($bg: $orange-500, $text: $black-50) {
+  background: $bg;
+  color: $text;
+  border: none;
+  padding: $space-sm $space-xl;
+  font-weight: $weight-bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: $radius-sm;
+  transition: all $transition-base $ease-out-expo;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left $transition-slow $ease-out-expo;
+  }
+  
+  &:hover {
+    transform: translateY(-2px) skewX(-2deg);
+    box-shadow: 4px 6px 0 rgba(0,0,0,0.3);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0) skewX(0deg);
+    box-shadow: 2px 3px 0 rgba(0,0,0,0.3);
+  }
+}
+
+// Card com assimetria intencional
+@mixin card-asymmetric() {
+  background: $black-800;
+  border: 2px solid $black-700;
+  border-radius: $radius-md $radius-lg $radius-sm $radius-md;
+  padding: $space-xl;
+  position: relative;
+  transition: all $transition-base $ease-out-expo;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 20%;
+    width: 60%;
+    height: 2px;
+    background: $orange-500;
+    opacity: 0;
+    transition: opacity $transition-base $ease-out-expo;
+  }
+  
+  &:hover {
+    transform: translateY(-4px) rotate(0.5deg);
+    border-color: $black-600;
+    box-shadow: 6px 8px 0 $black-900;
+    
+    &::before {
+      opacity: 1;
+    }
+  }
+}

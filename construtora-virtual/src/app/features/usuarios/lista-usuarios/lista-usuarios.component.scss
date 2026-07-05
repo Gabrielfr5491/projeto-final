@@ -1,13 +1,15 @@
+@use '../../../../styles/_variables.scss' as *;
+
 .search-bar {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: $space-sm;
   background: var(--surface-card);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 0.7rem 1rem;
-  margin-bottom: 1.5rem;
-  transition: border-color 0.2s;
+  border: 2px solid var(--border-color);
+  border-radius: $radius-sm;
+  padding: $space-sm $space-md;
+  margin-bottom: $space-xl;
+  transition: border-color $transition-fast $ease-out-expo;
 
   svg { color: var(--text-sub); flex-shrink: 0; }
 
@@ -21,63 +23,67 @@
     &::placeholder { color: var(--text-sub); opacity: 0.7; }
   }
 
-  &:focus-within { border-color: var(--primary); }
+  &:focus-within { border-color: var(--primary); transform: skewX(-1deg); }
 }
 
 .avatar-circle {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  color: #fff;
+  border-radius: $radius-sm;
+  background: linear-gradient(135deg, $orange-500, $orange-700);
+  color: $black-50;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: $weight-extrabold;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border: 2px solid rgba($orange-500, 0.3);
 }
 
 .perfil-badge {
   display: inline-flex;
   align-items: center;
   padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+  border-radius: $radius-sm;
   font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  font-weight: $weight-bold;
+  letter-spacing: 0.02em;
 
   &--admin {
-    background: rgba(37, 99, 235, 0.12);
-    color: #2563eb;
+    background: rgba($orange-500, 0.15);
+    color: $orange-500;
+    border: 1px solid rgba($orange-500, 0.3);
   }
   &--gerente {
-    background: rgba(124, 58, 237, 0.12);
-    color: #7c3aed;
+    background: rgba($warning, 0.15);
+    color: $warning;
+    border: 1px solid rgba($warning, 0.3);
   }
   &--comum {
-    background: rgba(100, 116, 139, 0.12);
-    color: #64748b;
+    background: rgba($black-400, 0.15);
+    color: $black-400;
+    border: 1px solid rgba($black-400, 0.3);
   }
 }
 
 .actions-cell {
   display: flex;
-  gap: 0.5rem;
+  gap: $space-xs;
   align-items: center;
 }
 
 .btn-excluir {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: none;
+  background: rgba($danger, 0.15);
+  color: $danger;
+  border: 2px solid rgba($danger, 0.3);
   padding: 0.45rem 0.9rem;
-  border-radius: 8px;
+  border-radius: $radius-sm;
   font-size: 0.83rem;
-  font-weight: 600;
+  font-weight: $weight-bold;
   cursor: pointer;
-  transition: all 0.2s;
-  &:hover { background: #ef4444; color: #fff; }
+  transition: all $transition-fast $ease-out-expo;
+  &:hover { background: $danger; color: $black-50; transform: skewX(-2deg); }
 }
 
 .loading-state {
@@ -86,7 +92,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rem;
-  gap: 1rem;
+  gap: $space-md;
   color: var(--text-sub);
 
   .spinner {
@@ -94,7 +100,7 @@
     height: 36px;
     border: 3px solid var(--border-color);
     border-top-color: var(--primary);
-    border-radius: 50%;
+    border-radius: $radius-sm;
     animation: spin 0.7s linear infinite;
   }
 
@@ -104,22 +110,22 @@
 .btn-add {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $space-sm;
   background: var(--primary);
-  color: #fff !important;
+  color: $black-50 !important;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 10px;
+  padding: $space-sm $space-xl;
+  border-radius: $radius-sm;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: $weight-bold;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-  transition: all 0.2s;
+  @include hard-shadow(3px, 3px, rgba(0,0,0,0.3));
+  transition: all $transition-base $ease-out-expo;
 
   &:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    background: $orange-600;
+    transform: translateY(-2px) skewX(-2deg);
+    @include hard-shadow(5px, 5px, rgba(0,0,0,0.4));
   }
 }

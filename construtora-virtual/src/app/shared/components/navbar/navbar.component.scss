@@ -1,23 +1,20 @@
-$nav-bg: rgba(255, 255, 255, 0.8);
-$nav-border: rgba(226, 232, 240, 0.8);
-$text-main: #0f172a;
-$text-muted: #64748b;
-$accent-color: #3b82f6;
-$danger-color: #ef4444;
+@use '../../../../styles/_variables.scss' as *;
+
+// Cores agora usando CSS custom properties para suporte a tema
 
 $navbar-height: 70px;
-$transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-premium: all $transition-base $ease-out-expo;
 
 .navbar-custom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: $navbar-height;
-  padding: 0 2rem;
-  background-color: $nav-bg;
+  padding: 0 $space-2xl;
+  background-color: var(--bg-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid $nav-border;
+  border-bottom: 2px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 999;
@@ -26,20 +23,21 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   &__hamburger {
     display: none;
     background: transparent;
-    border: 1px solid $nav-border;
-    color: $text-muted;
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
     width: 38px;
     height: 38px;
-    border-radius: 10px;
+    border-radius: $radius-sm;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: $transition-premium;
 
     &:hover {
-      color: $accent-color;
-      border-color: $accent-color;
-      background-color: rgba($accent-color, 0.05);
+      color: var(--accent);
+      border-color: var(--accent);
+      background-color: var(--accent-light);
+      transform: rotate(90deg);
     }
   }
 
@@ -50,21 +48,21 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   &__greeting {
     font-size: 0.95rem;
-    font-weight: 600;
-    color: $text-main;
-    letter-spacing: -0.2px;
+    font-weight: $weight-bold;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
   }
 
   &__date {
     font-size: 0.75rem;
-    color: $text-muted;
-    font-weight: 500;
+    color: var(--text-secondary);
+    font-weight: $weight-medium;
   }
 
   &__right {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: $space-xl;
   }
 
   &__actions {
@@ -74,11 +72,11 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   &__btn-action {
     background: transparent;
-    border: 1px solid $nav-border;
-    color: $text-muted;
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
     width: 38px;
     height: 38px;
-    border-radius: 10px;
+    border-radius: $radius-sm;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,17 +84,17 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     transition: $transition-premium;
 
     &:hover {
-      color: $accent-color;
-      border-color: $accent-color;
-      background-color: rgba($accent-color, 0.05);
-      transform: translateY(-1px);
+      color: var(--accent);
+      border-color: var(--accent);
+      background-color: var(--accent-light);
+      transform: translateY(-2px) rotate(5deg);
     }
   }
 
   &__divider {
     width: 1px;
     height: 24px;
-    background-color: $nav-border;
+    background-color: var(--border);
   }
 
   &__profile {
@@ -108,15 +106,15 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   &__avatar {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, $accent-color, #1d4ed8);
-    color: #ffffff;
-    font-weight: 700;
+    border-radius: $radius-md;
+    background: linear-gradient(135deg, var(--accent), #C44908);
+    color: var(--bg-main);
+    font-weight: $weight-extrabold;
     font-size: 1.05rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 10px rgba($accent-color, 0.2);
+    @include hard-shadow(3px, 3px, rgba(0,0,0,0.3));
   }
 
   &__user-info {
@@ -126,42 +124,43 @@ $transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   &__user-name {
     font-size: 0.875rem;
-    font-weight: 600;
-    color: $text-main;
+    font-weight: $weight-bold;
+    color: var(--text-primary);
     line-height: 1.2;
   }
 
   &__user-role {
     font-size: 0.75rem;
     color: $text-muted;
-    font-weight: 500;
+    font-weight: $weight-medium;
   }
 
   &__btn-logout {
     background: transparent;
-    border: 1px solid transparent;
-    color: $text-muted;
-    padding: 0.5rem 0.85rem;
-    border-radius: 10px;
+    border: 2px solid transparent;
+    color: var(--text-secondary);
+    padding: $space-xs $space-sm;
+    border-radius: $radius-sm;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: $weight-bold;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: $space-xs;
     cursor: pointer;
     transition: $transition-premium;
 
     &:hover {
-      color: $danger-color;
-      background-color: rgba($danger-color, 0.08);
-      border-color: rgba($danger-color, 0.15);
+      color: var(--danger);
+      background-color: rgba(199, 62, 58, 0.1);
+      border-color: rgba(199, 62, 58, 0.3);
+      transform: skewX(-2deg);
     }
   }
 }
 
 @media (max-width: 768px) {
   .navbar-custom {
-    padding: 0 1rem;
+    padding: 0 $space-md;
 
     &__hamburger {
       display: flex;

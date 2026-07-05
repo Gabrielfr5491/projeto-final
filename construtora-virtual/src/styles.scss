@@ -1,39 +1,43 @@
+@use 'sass:color';
+@use './styles/_variables.scss' as *;
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap');
 
 * { box-sizing: border-box; }
 body { margin: 0; }
 
 :root {
-  --primary: #2563eb;
-  --success: #16a34a;
-  --dark: #111827;
-  --bg-dashboard: #0b0f19;
-  --surface-card: #131c2e;
-  --border-color: #1e293b;
-  --text-main: #f8fafc;
-  --text-sub: #94a3b8;
-  --nav-bg: rgba(19, 28, 46, 0.8);
-  --nav-border: rgba(30, 41, 59, 0.8);
-  --table-th-bg: #0f172a;
-  --table-hover: #1e293b;
+  --primary: #{$orange-500};
+  --success: #{$success};
+  --warning: #{$warning};
+  --danger: #{$danger};
+  --info: #{$info};
+  --bg-dashboard: #{$black-900};
+  --surface-card: #{$black-800};
+  --border-color: #{$black-700};
+  --text-main: #{$black-50};
+  --text-sub: #{$black-400};
+  --nav-bg: rgba(#{$black-800}, 0.95);
+  --nav-border: rgba(#{$black-700}, 0.8);
+  --table-th-bg: #{$black-800};
+  --table-hover: #{$black-700};
 }
 
 [data-theme="light"] {
-  --bg-dashboard: #f8fafc;
-  --surface-card: #ffffff;
-  --border-color: #e2e8f0;
-  --text-main: #0f172a;
-  --text-sub: #64748b;
-  --nav-bg: rgba(255, 255, 255, 0.8);
-  --nav-border: rgba(226, 232, 240, 0.8);
-  --table-th-bg: #f8fafc;
-  --table-hover: #f1f5f9;
+  --bg-dashboard: #{$black-50};
+  --surface-card: #{$black-100};
+  --border-color: #{$black-200};
+  --text-main: #{$black-900};
+  --text-sub: #{$black-500};
+  --nav-bg: rgba(#{$black-50}, 0.95);
+  --nav-border: rgba(#{$black-200}, 0.8);
+  --table-th-bg: #{$black-100};
+  --table-hover: #{$black-200};
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -42,13 +46,24 @@ body { margin: 0; }
 
 ::-webkit-scrollbar-thumb {
   background: var(--border-color);
-  border-radius: 4px;
+  border-radius: $radius-sm;
+  
+  &:hover {
+    background: var(--primary);
+  }
 }
 
 body {
   background-color: var(--bg-dashboard);
   color: var(--text-main);
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  font-family: $font-body;
+  transition: background-color $transition-base $ease-out-expo, color $transition-base $ease-out-expo, border-color $transition-base $ease-out-expo;
+  
+  // Textura sutil de fundo para dar profundidade
+  background-image: 
+    radial-gradient(ellipse at top left, rgba(255, 107, 26, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(255, 107, 26, 0.02) 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
 .listagem-container, .cadastro-container, .dashboard, .screen-container, .container {
@@ -68,38 +83,39 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  gap: 1.5rem;
+  margin-bottom: $space-2xl;
+  gap: $space-xl;
 
   h1 {
     font-size: 1.75rem;
-    font-weight: 700;
+    font-weight: $weight-extrabold;
     color: var(--text-main);
-    letter-spacing: -0.5px;
+    letter-spacing: -0.03em;
     margin: 0;
   }
 
   p, .cadastro-header__subtitle {
     font-size: 0.925rem;
     color: var(--text-sub);
-    margin-top: 0.25rem;
+    margin-top: $space-xs;
     margin-bottom: 0;
+    font-weight: $weight-regular;
   }
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: $space-md;
   }
 }
 
 .table-card {
   background: var(--surface-card);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  border: 2px solid var(--border-color);
+  border-radius: $radius-md $radius-lg $radius-sm $radius-md;
+  @include hard-shadow(4px, 4px, rgba(0,0,0,0.4));
   overflow: hidden;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color $transition-base $ease-out-expo, border-color $transition-base $ease-out-expo;
 }
 
 .table-responsive, .responsive-wrapper {
@@ -124,23 +140,23 @@ body {
   th {
     background-color: var(--table-th-bg) !important;
     color: var(--text-sub) !important;
-    font-weight: 600;
-    padding: 1rem 1.5rem;
+    font-weight: $weight-bold;
+    padding: $space-md $space-xl;
     font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border-color) !important;
+    letter-spacing: 0.08em;
+    border-bottom: 2px solid var(--border-color) !important;
   }
 
   td {
-    padding: 1rem 1.5rem;
+    padding: $space-md $space-xl;
     color: var(--text-main) !important;
     border-bottom: 1px solid var(--border-color) !important;
     vertical-align: middle !important;
   }
 
   tbody tr {
-    transition: background-color 0.15s ease;
+    transition: background-color $transition-fast $ease-out-expo;
     
     &:hover {
       background-color: var(--table-hover) !important;
@@ -153,67 +169,65 @@ body {
 }
 
 .form-card, .cadastro-card, .card {
-  background: var(--surface-card);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 2.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  @include card-asymmetric();
   max-width: 850px;
 
   h1 {
     color: var(--text-main);
-    margin-bottom: 1.5rem;
+    margin-bottom: $space-xl;
+    font-weight: $weight-extrabold;
+    letter-spacing: -0.02em;
   }
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: $space-xl;
   }
 }
 
 .form-grid, .cadastro-form, .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: $space-xl;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: $space-lg;
   }
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $space-sm;
 
   label, .form-group__label {
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: $weight-bold;
     color: var(--text-main);
-    letter-spacing: -0.1px;
+    letter-spacing: -0.01em;
   }
 
   input, select, .form-group__input {
     background-color: var(--bg-dashboard) !important;
-    border: 1px solid var(--border-color) !important;
+    border: 2px solid var(--border-color) !important;
     color: var(--text-main) !important;
-    padding: 0.75rem 1rem !important;
-    border-radius: 10px !important;
+    padding: $space-sm $space-md !important;
+    border-radius: $radius-sm !important;
     font-size: 0.95rem !important;
-    font-weight: 500 !important;
+    font-weight: $weight-medium !important;
     outline: none !important;
-    transition: all 0.2s ease !important;
+    transition: all $transition-fast $ease-out-expo !important;
 
     &::placeholder {
       color: var(--text-sub);
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     &:focus {
       border-color: var(--primary) !important;
       background-color: var(--surface-card) !important;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+      box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.15) !important;
+      transform: skewX(-1deg);
     }
 
     &[readonly] {
@@ -227,12 +241,12 @@ body {
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: $space-md;
+  margin-top: $space-xl;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    margin-top: 0.5rem;
+    margin-top: $space-md;
     
     button, a {
       width: 100%;
@@ -242,136 +256,112 @@ body {
 }
 
 .btn-primary, .btn-submit, .btn-create, .btn-add, .btn-salvar {
-  background-color: var(--primary);
-  color: #ffffff !important;
-  border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  @include button-creative($orange-500, $black-50);
   text-decoration: none;
+  gap: $space-sm;
 
   &:hover {
-    background-color: #1d4ed8;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-    color: #ffffff !important;
+    background-color: $orange-600;
+    color: $black-50 !important;
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: translateY(0) skewX(0deg);
   }
 }
 
 .btn-secondary, .btn-editar, .btn-edit, .btn-cancelar {
   background-color: transparent;
   color: var(--text-main) !important;
-  border: 1px solid var(--border-color);
-  padding: 0.85rem 1.75rem;
-  border-radius: 10px;
+  border: 2px solid var(--border-color);
+  padding: $space-sm $space-xl;
+  border-radius: $radius-sm;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: $weight-bold;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: $space-sm;
+  transition: all $transition-base $ease-out-expo;
   text-decoration: none;
 
   &:hover {
     background-color: var(--table-hover);
-    transform: translateY(-1px);
+    transform: translateY(-2px) skewX(-1deg);
+    border-color: var(--primary);
     color: var(--text-main) !important;
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: translateY(0) skewX(0deg);
   }
 }
 
 .btn-danger, .btn-delete, .btn-excluir {
-  background-color: #ef4444;
-  color: #ffffff !important;
-  border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  @include button-creative($danger, $black-50);
   text-decoration: none;
+  gap: $space-sm;
 
   &:hover {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-    color: #ffffff !important;
+    background-color: color.adjust($danger, $lightness: -10%);
+    color: $black-50 !important;
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: translateY(0) skewX(0deg);
   }
 }
 
 .status-badge, .status {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  border-radius: $radius-sm;
   font-size: 0.775rem;
-  font-weight: 600;
+  font-weight: $weight-bold;
+  letter-spacing: 0.02em;
   
   &.ativo, &--success, &.active, &.normal {
-    background-color: rgba(22, 163, 74, 0.1) !important;
-    color: #16a34a !important;
+    background-color: rgba($success, 0.15) !important;
+    color: $success !important;
+    border: 1px solid rgba($success, 0.3);
   }
   &.inativo, &--danger, &.inactive, &.baixo, &.saida {
-    background-color: rgba(220, 38, 38, 0.1) !important;
-    color: #dc2626 !important;
+    background-color: rgba($danger, 0.15) !important;
+    color: $danger !important;
+    border: 1px solid rgba($danger, 0.3);
   }
   &.ferias, &--warning, &.entrada {
-    background-color: rgba(245, 158, 11, 0.1) !important;
-    color: #d97706 !important;
+    background-color: rgba($warning, 0.15) !important;
+    color: $warning !important;
+    border: 1px solid rgba($warning, 0.3);
   }
   &--info {
-    background-color: rgba(6, 182, 212, 0.1) !important;
-    color: #0891b2 !important;
+    background-color: rgba($info, 0.15) !important;
+    color: $info !important;
+    border: 1px solid rgba($info, 0.3);
   }
   &--secondary {
-    background-color: rgba(148, 163, 184, 0.15) !important;
+    background-color: rgba($black-400, 0.15) !important;
     color: var(--text-sub) !important;
+    border: 1px solid rgba($black-400, 0.3);
   }
 }
 
 .btn-editar-amber {
-  background-color: #f59e0b;
-  color: #ffffff !important;
-  border: none;
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
+  @include button-creative($warning, $black-50);
+  padding: $space-xs $space-md;
   font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.2s ease;
   text-decoration: none;
+  gap: $space-xs;
 
   &:hover {
-    background-color: #d97706;
-    transform: translateY(-1px);
-    color: #ffffff !important;
+    background-color: color.adjust($warning, $lightness: -10%);
+    color: $black-50 !important;
+  }
+
+  &:active {
+    transform: translateY(0) skewX(0deg);
   }
 }

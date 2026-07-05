@@ -16,22 +16,30 @@
 
     <div class="productivity-widget">
 
-      <span class="productivity-widget__value">
+      <div class="productivity-widget__ring">
+        <apx-chart
+          *ngIf="chartRing"
+          [series]="chartRing.series"
+          [chart]="chartRing.chart"
+          [plotOptions]="chartRing.plotOptions"
+          [stroke]="chartRing.stroke"
+          [colors]="chartRing.colors">
+        </apx-chart>
+      </div>
 
-        {{
-          totalObras > 0
-            ? (obrasConcluidas / totalObras)
-            : 0
-          | percent:'1.0-0'
-        }}
+      <div class="productivity-widget__content">
+        <span class="productivity-widget__value">
 
-      </span>
+          {{ produtividadeGeral }}%
 
-      <span class="productivity-widget__label">
+        </span>
 
-        Produtividade Geral
+        <span class="productivity-widget__label">
 
-      </span>
+          Produtividade Geral
+
+        </span>
+      </div>
 
     </div>
 
@@ -135,13 +143,22 @@
 
       <h2 class="budget-card__value">
 
-        {{
-          orcamentoTotal
-          | currency:'BRL':'symbol':'1.0-0':'pt-BR'
-        }}
+        {{ orcamentoTotal }}
 
       </h2>
 
+    </div>
+
+    <div class="budget-card__sparkline">
+      <apx-chart
+        *ngIf="chartSparkline"
+        [series]="chartSparkline.series"
+        [chart]="chartSparkline.chart"
+        [stroke]="chartSparkline.stroke"
+        [fill]="chartSparkline.fill"
+        [colors]="chartSparkline.colors"
+        [tooltip]="chartSparkline.tooltip">
+      </apx-chart>
     </div>
 
   </section>
@@ -154,10 +171,7 @@
 
       <span class="metric-card__value text-success">
 
-        {{
-          resumo.receitas
-          | currency:'BRL'
-        }}
+        {{ resumo.receitas }}
 
       </span>
 
@@ -165,16 +179,24 @@
         Receitas
       </p>
 
+      <div class="metric-card__sparkline-mini">
+        <apx-chart
+          *ngIf="chartSparklineMini"
+          [series]="chartSparklineMini.series"
+          [chart]="chartSparklineMini.chart"
+          [stroke]="chartSparklineMini.stroke"
+          [colors]="chartSparklineMini.colors"
+          [tooltip]="chartSparklineMini.tooltip">
+        </apx-chart>
+      </div>
+
     </div>
 
     <div class="metric-card">
 
       <span class="metric-card__value text-danger">
 
-        {{
-          resumo.despesas
-          | currency:'BRL'
-        }}
+        {{ resumo.despesas }}
 
       </span>
 
@@ -188,10 +210,7 @@
 
       <span class="metric-card__value text-primary">
 
-        {{
-          resumo.lucro
-          | currency:'BRL'
-        }}
+        {{ resumo.lucro }}
 
       </span>
 
@@ -396,32 +415,18 @@
               <span
                 class="status-badge"
                 [ngClass]="{
-
-                  'status-badge--success':
-                  obra.status === 'Concluído' ||
-                  obra.status === 'Concluída',
-
-                  'status-badge--info':
-                  obra.status === 'Em andamento' ||
-                  obra.status === 'Em Andamento',
-
-                  'status-badge--warning':
-                  obra.status === 'Planejamento'
-
+                  'success': obra.status === 'Concluída',
+                  'warning': obra.status === 'Em Andamento',
+                  'info': obra.status === 'Planejamento'
                 }">
-
                 {{ obra.status }}
-
               </span>
 
             </td>
 
             <td>
 
-              {{
-                obra.orcamento
-                | currency:'BRL'
-              }}
+              {{ obra.orcamento }}
 
             </td>
 
@@ -436,4 +441,5 @@
   </section>
 
 </main>
+
 
