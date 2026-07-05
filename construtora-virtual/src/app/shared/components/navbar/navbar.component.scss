@@ -131,7 +131,7 @@ $transition-premium: all $transition-base $ease-out-expo;
 
   &__user-role {
     font-size: 0.75rem;
-    color: $text-muted;
+    color: var(--text-muted);
     font-weight: $weight-medium;
   }
 
