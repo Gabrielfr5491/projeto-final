@@ -69,6 +69,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initThreeJS();
         this.initMouseParallax();
         this.initGSAPAnimations();
+        this.initProjectVideosScroll();
         this.initServiceTilt();
         this.initFAQ();
         this.initHamburger();
@@ -541,6 +542,66 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollReveal('[data-gsap="cta"]', {
       from: { opacity: 0, y: 60, scale: 0.97 },
       to: { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power4.out' },
+    });
+  }
+
+  private initProjectVideosScroll(): void {
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach(card => {
+      const video = card.querySelector('.project-hover-video') as HTMLVideoElement;
+      if (!video) return;
+
+      video.pause();
+      video.currentTime = 0;
+
+      let activeWheelHandler: ((e: WheelEvent) => void) | null = null;
+
+      const onMouseEnter = () => {
+        const startHijack = () => {
+          const duration = video.duration;
+          if (!duration || isNaN(duration)) return;
+
+          activeWheelHandler = (e: WheelEvent) => {
+            const delta = e.deltaY;
+            const current = video.currentTime;
+            
+            // Adjust speedFactor so it takes about 8 scroll ticks to play the video
+            const speedFactor = duration / 800; 
+            let target = current + delta * speedFactor;
+            
+            const isAtUpperLimit = current >= duration && delta > 0;
+            const isAtLowerLimit = current <= 0 && delta < 0;
+
+            if (isAtUpperLimit || isAtLowerLimit) {
+              // Let page scroll normally
+              return;
+            }
+
+            // Hijack scroll input to update video current time
+            e.preventDefault();
+            target = Math.max(0, Math.min(duration, target));
+            video.currentTime = target;
+          };
+
+          window.addEventListener('wheel', activeWheelHandler, { passive: false });
+        };
+
+        if (video.readyState >= 1) {
+          startHijack();
+        } else {
+          video.addEventListener('loadedmetadata', startHijack, { once: true });
+        }
+      };
+
+      const onMouseLeave = () => {
+        if (activeWheelHandler) {
+          window.removeEventListener('wheel', activeWheelHandler);
+          activeWheelHandler = null;
+        }
+      };
+
+      card.addEventListener('mouseenter', onMouseEnter);
+      card.addEventListener('mouseleave', onMouseLeave);
     });
   }
 

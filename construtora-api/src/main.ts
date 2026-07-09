@@ -6,7 +6,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'http://localhost:4200', 
+      'http://localhost:4200',
       'https://zap-construction.netlify.app'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

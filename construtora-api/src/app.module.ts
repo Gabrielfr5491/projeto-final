@@ -15,16 +15,16 @@ import { MateriaisModule } from './materiais/materiais.module';
 import { EquipamentosModule } from './equipamentos/equipamentos.module';
 import { CustosModule } from './custos/custos.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
+import { Modelo3dModule } from './modelo3d/modelo3d.module';
 
 @Module({
   imports: [
-  
+
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
- 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
@@ -36,15 +36,15 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
 
         return {
           type: 'postgres',
-          url,          ssl: {
+          url,
+          ssl: {
             rejectUnauthorized: false,
           },
-
-          autoLoadEntities: true,          synchronize: true,
+          autoLoadEntities: true,
+          synchronize: true,
         };
       },
     }),
-
 
     ObrasModule,
     DashboardModule,
@@ -56,6 +56,7 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
     EquipamentosModule,
     CustosModule,
     RelatoriosModule,
+    Modelo3dModule,
   ],
 
   controllers: [AppController],

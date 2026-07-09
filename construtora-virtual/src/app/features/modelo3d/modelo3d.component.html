@@ -1,26 +1,357 @@
-<div class="upload-container">
-  <h2>Vincular Modelo 3D à Obra</h2>
-  <p class="subtitle">Selecione a obra cadastrada e importe o projeto 3D correspondente.</p>
-  
-  <div class="form-group">
-    <label for="obraSelect">Selecione a Obra Cadastrada:</label>
-    <select id="obraSelect" [(ngModel)]="obraSelecionadaId" class="select-obra">
-      <option value="" disabled selected>-- Escolha uma Obra --</option>
-      <option *ngFor="let obra of listaObras" [value]="obra.id">
-        {{ obra.nome }} ({{ obra.localizacao }})
-      </option>
-    </select>
-  </div>
+<div class="viewer-root">
 
-  <input type="file" id="fileInput" (change)="onFileSelected($event)" accept=".gltf,.glb" style="display: none;" [disabled]="!obraSelecionadaId">
-  
-  <button class="btn-upload" [disabled]="!obraSelecionadaId" onclick="document.getElementById('fileInput').click()">
-    <span class="icon">📁</span> {{ obraSelecionadaId ? 'Selecionar e Visualizar Modelo' : 'Selecione uma obra primeiro' }}
-  </button>
-  
-  <button *ngIf="currentModel && obraSelecionadaId" class="btn-salvar" (click)="salvarVinculoObra()">
-    💾 Salvar Modelo nesta Obra
-  </button>
-  
-  <div #rendererContainer class="canvas-container"></div>
+  <!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
+  <aside class="sidebar" [class.sidebar--collapsed]="sidebarCollapsed">
+
+    <!-- Header -->
+    <div class="sidebar__header">
+      <div class="sidebar__logo">
+        <span class="sidebar__logo-icon">⬡</span>
+        <span class="sidebar__logo-text">Visualizador 3D</span>
+      </div>
+      <button class="sidebar__collapse-btn" (click)="sidebarCollapsed = !sidebarCollapsed" title="Recolher painel">
+        {{ sidebarCollapsed ? '▶' : '◀' }}
+      </button>
+    </div>
+
+    <ng-container *ngIf="!sidebarCollapsed">
+
+      <!-- Tabs -->
+      <nav class="sidebar__tabs">
+        <button [class.active]="currentTab === 'tools'"       (click)="currentTab = 'tools'">Ferramentas</button>
+        <button [class.active]="currentTab === 'lighting'"    (click)="currentTab = 'lighting'">Luz</button>
+        <button [class.active]="currentTab === 'annotations'" (click)="currentTab = 'annotations'">Notas</button>
+        <button [class.active]="currentTab === 'projects'"    (click)="currentTab = 'projects'">Projetos</button>
+      </nav>
+
+      <!-- ── TAB: TOOLS ──────────────────────────────────────────────── -->
+      <div class="tab-content" *ngIf="currentTab === 'tools'">
+
+        <!-- Upload -->
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Carregar Modelo</h3>
+          <label class="upload-zone" [class.upload-zone--drag]="isDragOver"
+                 (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+            <input type="file" accept=".obj,.stl,.fbx,.gltf,.glb" (change)="onFileSelected($event)" hidden #fileInput>
+            <span class="upload-zone__icon">📁</span>
+            <span class="upload-zone__text">Arraste ou clique<br><small>OBJ · STL · FBX · GLTF</small></span>
+            <button class="btn btn--accent btn--sm" type="button" (click)="fileInput.click()">Escolher arquivo</button>
+          </label>
+          <p class="model-name" *ngIf="modelName">📄 {{ modelName }}</p>
+        </section>
+
+        <!-- Samples -->
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Modelos de Amostra</h3>
+          <button class="sample-btn" *ngFor="let s of sampleModels" (click)="loadSampleModel(s)">
+            <span class="sample-btn__icon">⬡</span>
+            <span>{{ s.name }}</span>
+            <span class="sample-btn__format">{{ s.format.toUpperCase() }}</span>
+          </button>
+        </section>
+
+        <!-- Render Mode -->
+        <section class="sidebar__section" *ngIf="modelFile">
+          <h3 class="sidebar__section-title">Modo de Renderização</h3>
+          <div class="render-modes">
+            <button *ngFor="let rm of renderModes"
+                    class="render-btn"
+                    [class.active]="renderMode === rm.key"
+                    (click)="setRenderMode(rm.key)">
+              <span>{{ rm.icon }}</span>
+              <span>{{ rm.label }}</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Interaction Mode -->
+        <section class="sidebar__section" *ngIf="modelFile">
+          <h3 class="sidebar__section-title">Modo de Interação</h3>
+          <div class="interact-modes">
+            <button class="interact-btn" [class.active]="viewerMode === 'view'"     (click)="viewerMode = 'view'">
+              👁 Visualizar
+            </button>
+            <button class="interact-btn" [class.active]="viewerMode === 'annotate'" (click)="viewerMode = 'annotate'">
+              📌 Anotar
+            </button>
+            <button class="interact-btn" [class.active]="viewerMode === 'measure'"  (click)="viewerMode = 'measure'; measureStartPoint = null">
+              📐 Medir
+            </button>
+          </div>
+        </section>
+
+        <!-- Metadata -->
+        <section class="sidebar__section metadata-panel" *ngIf="metadata">
+          <h3 class="sidebar__section-title">Metadados do Modelo</h3>
+          <dl class="meta-list">
+            <dt>Formato</dt><dd>{{ metadata.format.toUpperCase() }}</dd>
+            <dt>Vértices</dt><dd>{{ metadata.verticesCount | number }}</dd>
+            <dt>Triângulos</dt><dd>{{ metadata.trianglesCount | number }}</dd>
+            <dt>Largura</dt><dd>{{ metadata.boundingBox.width }} u</dd>
+            <dt>Altura</dt><dd>{{ metadata.boundingBox.height }} u</dd>
+            <dt>Profund.</dt><dd>{{ metadata.boundingBox.depth }} u</dd>
+          </dl>
+        </section>
+
+        <!-- Camera reset -->
+        <section class="sidebar__section" *ngIf="modelFile">
+          <button class="btn btn--ghost btn--full" (click)="resetCamera()">🔄 Resetar Câmera</button>
+        </section>
+
+      </div><!-- /tools -->
+
+      <!-- ── TAB: LIGHTING ───────────────────────────────────────────── -->
+      <div class="tab-content" *ngIf="currentTab === 'lighting'">
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Luz Ambiente</h3>
+          <label class="ctrl-label">Cor</label>
+          <input type="color" [(ngModel)]="lighting.ambientColor" (ngModelChange)="updateLighting()" class="color-input">
+          <label class="ctrl-label">Intensidade: {{ lighting.ambientIntensity | number:'1.1-1' }}</label>
+          <input type="range" min="0" max="3" step="0.05" [(ngModel)]="lighting.ambientIntensity" (ngModelChange)="updateLighting()" class="slider">
+        </section>
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Luz Direcional</h3>
+          <label class="ctrl-label">Cor</label>
+          <input type="color" [(ngModel)]="lighting.dirColor" (ngModelChange)="updateLighting()" class="color-input">
+          <label class="ctrl-label">Intensidade: {{ lighting.dirIntensity | number:'1.1-1' }}</label>
+          <input type="range" min="0" max="3" step="0.05" [(ngModel)]="lighting.dirIntensity" (ngModelChange)="updateLighting()" class="slider">
+        </section>
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Luz Pontual</h3>
+          <label class="ctrl-label">Cor</label>
+          <input type="color" [(ngModel)]="lighting.pointColor" (ngModelChange)="updateLighting()" class="color-input">
+          <label class="ctrl-label">Intensidade: {{ lighting.pointIntensity | number:'1.1-1' }}</label>
+          <input type="range" min="0" max="3" step="0.05" [(ngModel)]="lighting.pointIntensity" (ngModelChange)="updateLighting()" class="slider">
+        </section>
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Fundo do Canvas</h3>
+          <input type="color" [(ngModel)]="lighting.bgColor" (ngModelChange)="updateLighting()" class="color-input">
+        </section>
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Auxiliares</h3>
+          <label class="toggle-label">
+            <input type="checkbox" [(ngModel)]="lighting.showGrid" (ngModelChange)="updateLighting()">
+            <span>Mostrar Grid</span>
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" [(ngModel)]="lighting.showAxes" (ngModelChange)="updateLighting()">
+            <span>Mostrar Eixos</span>
+          </label>
+        </section>
+
+      </div><!-- /lighting -->
+
+      <!-- ── TAB: ANNOTATIONS ─────────────────────────────────────────── -->
+      <div class="tab-content" *ngIf="currentTab === 'annotations'">
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Anotações ({{ annotations.length }})</h3>
+          <p class="hint-text" *ngIf="!modelFile">Carregue um modelo para anotar.</p>
+          <button *ngIf="modelFile" class="btn btn--accent btn--sm btn--full"
+                  (click)="viewerMode = 'annotate'">
+            + Adicionar Anotação
+          </button>
+        </section>
+
+        <div class="annotation-list">
+          <div *ngFor="let ann of annotations; trackBy: trackById"
+               class="annotation-card"
+               [class.active]="activeAnnotationId === ann.id"
+               [style.border-left-color]="ann.color"
+               (click)="selectAnnotation(ann.id)">
+            <div class="annotation-card__header">
+              <input class="ann-title-input" [(ngModel)]="ann.title"
+                     (ngModelChange)="updateAnnotation(ann.id, {title: $event})"
+                     (click)="$event.stopPropagation()">
+              <button class="ann-delete-btn" (click)="deleteAnnotation(ann.id); $event.stopPropagation()">✕</button>
+            </div>
+            <textarea *ngIf="activeAnnotationId === ann.id"
+                      class="ann-desc-input"
+                      [(ngModel)]="ann.description"
+                      (ngModelChange)="updateAnnotation(ann.id, {description: $event})"
+                      placeholder="Descrição da anotação..."
+                      rows="3"
+                      (click)="$event.stopPropagation()"></textarea>
+            <div class="ann-meta">
+              <input type="color" class="ann-color-input" [value]="ann.color"
+                     (input)="updateAnnotation(ann.id, {color: $any($event.target).value})"
+                     (click)="$event.stopPropagation()">
+              <span class="ann-time">{{ ann.createdAt }}</span>
+            </div>
+          </div>
+          <p class="hint-text" *ngIf="annotations.length === 0 && modelFile">
+            Clique em "+ Adicionar Anotação" e depois toque no modelo 3D.
+          </p>
+        </div>
+
+        <!-- Measurements -->
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Medições ({{ measurements.length }})</h3>
+          <div class="measurement-list">
+            <div *ngFor="let m of measurements; trackBy: trackById" class="measurement-card">
+              <span class="measurement-card__label">{{ m.label }}</span>
+              <span class="measurement-card__dist">{{ m.distance.toFixed(3) }} u</span>
+              <button class="ann-delete-btn" (click)="deleteMeasurement(m.id)">✕</button>
+            </div>
+            <p class="hint-text" *ngIf="measurements.length === 0 && modelFile">
+              Use o modo "Medir" para criar medições ponto a ponto.
+            </p>
+          </div>
+        </section>
+
+      </div><!-- /annotations -->
+
+      <!-- ── TAB: PROJECTS ────────────────────────────────────────────── -->
+      <div class="tab-content" *ngIf="currentTab === 'projects'">
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Salvar Projeto</h3>
+          
+          <label class="ctrl-label">Nome do Projeto</label>
+          <input class="text-input" [(ngModel)]="newProjectName" placeholder="Ex: Planta Ville de France" [disabled]="!modelFile">
+          
+          <label class="ctrl-label">Vincular a uma Obra</label>
+          <select class="text-input" [(ngModel)]="obraSelecionadaId" [disabled]="!modelFile" style="margin-bottom: 12px; background-color: #1a1a1a;">
+            <option [ngValue]="null">-- Nenhuma Obra --</option>
+            <option *ngFor="let obra of listaObras" [value]="obra.id">{{ obra.nome }}</option>
+          </select>
+
+          <button class="btn btn--accent btn--full" [disabled]="!modelFile || !newProjectName.trim() || isSaving" (click)="saveProject()">
+            {{ isSaving ? 'Salvando...' : '💾 Salvar no Banco' }}
+          </button>
+        </section>
+
+        <section class="sidebar__section">
+          <h3 class="sidebar__section-title">Projetos Salvos ({{ savedProjects.length }})</h3>
+          <div class="project-list">
+            <div *ngFor="let p of savedProjects" class="project-card-item" [class.active]="activeProjectId === p.id">
+              <div class="project-card-item__info">
+                <span class="project-card-item__name">{{ p.nome }}</span>
+                <span class="project-card-item__format">{{ p.formato.toUpperCase() }}</span>
+              </div>
+              <div class="project-card-item__actions">
+                <button class="btn btn--ghost btn--xs" (click)="loadProject(p)">Abrir</button>
+                <button class="btn btn--danger btn--xs" (click)="deleteProject(p.id)">✕</button>
+              </div>
+            </div>
+            <p class="hint-text" *ngIf="savedProjects.length === 0">Nenhum projeto salvo ainda.</p>
+          </div>
+        </section>
+
+      </div><!-- /projects -->
+
+    </ng-container>
+  </aside>
+
+  <!-- ══ CANVAS AREA ═══════════════════════════════════════════════════════ -->
+  <main class="canvas-area">
+
+    <!-- Top toolbar -->
+    <div class="canvas-toolbar" *ngIf="modelFile">
+      <span class="canvas-toolbar__model">⬡ {{ modelName }}</span>
+      <div class="canvas-toolbar__modes">
+        <button *ngFor="let rm of renderModes"
+                class="toolbar-btn"
+                [class.active]="renderMode === rm.key"
+                (click)="setRenderMode(rm.key)"
+                [title]="rm.label">
+          {{ rm.icon }}
+        </button>
+      </div>
+      <div class="canvas-toolbar__interact">
+        <button class="toolbar-btn" [class.active]="viewerMode === 'view'"     (click)="viewerMode = 'view'" title="Visualizar">👁</button>
+        <button class="toolbar-btn" [class.active]="viewerMode === 'annotate'" (click)="viewerMode = 'annotate'" title="Anotar">📌</button>
+        <button class="toolbar-btn" [class.active]="viewerMode === 'measure'"  (click)="viewerMode = 'measure'; measureStartPoint = null" title="Medir">📐</button>
+      </div>
+    </div>
+
+    <!-- Three.js viewport -->
+    <div #canvasContainer class="canvas-container"
+         [class.drag-over]="isDragOver"
+         (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+
+      <canvas #canvasEl class="threejs-canvas"
+              [class.cursor-cell]="viewerMode === 'annotate'"
+              [class.cursor-crosshair]="viewerMode === 'measure'"
+              [class.cursor-grab]="viewerMode === 'view'"
+              (pointerdown)="onPointerDown($event)"
+              (pointerup)="onPointerUp($event)"
+              (mousemove)="onMouseMove($event)"
+              (mouseleave)="onMouseLeave()">
+      </canvas>
+
+      <!-- Annotation pin overlays -->
+      <div class="canvas-overlay">
+        <ng-container *ngFor="let pin of projectedPins; trackBy: trackById">
+          <div *ngIf="pin.visible && getAnnotation(pin.id)"
+               class="pin-marker"
+               [class.pin-marker--active]="activeAnnotationId === pin.id"
+               [style.left.px]="pin.x"
+               [style.top.px]="pin.y"
+               [style.background-color]="getAnnotation(pin.id)?.color"
+               (click)="selectAnnotation(pin.id)">
+            📍
+            <div class="pin-marker__label">{{ getAnnotation(pin.id)?.title }}</div>
+          </div>
+        </ng-container>
+
+        <!-- Measurement badges -->
+        <ng-container *ngFor="let m of projectedMeasurements; trackBy: trackById">
+          <div *ngIf="m.visible"
+               class="measurement-badge"
+               [style.left.px]="m.x"
+               [style.top.px]="m.y">
+            📏 {{ m.distance.toFixed(2) }} u
+          </div>
+        </ng-container>
+
+        <!-- Live measurement preview -->
+        <div *ngIf="projectedTempMeasure && viewerMode === 'measure' && measureStartPoint"
+             class="measurement-badge measurement-badge--live"
+             [style.left.px]="projectedTempMeasure.x"
+             [style.top.px]="projectedTempMeasure.y">
+          ↔ {{ projectedTempMeasure.distance.toFixed(2) }} u
+        </div>
+      </div>
+
+      <!-- Mode tooltip banner -->
+      <div *ngIf="modelFile && viewerMode !== 'view'" class="mode-banner">
+        <span class="mode-banner__dot" [class.mode-banner__dot--orange]="viewerMode === 'annotate'" [class.mode-banner__dot--green]="viewerMode === 'measure'"></span>
+        <span *ngIf="viewerMode === 'annotate'">Modo Anotação — Clique no modelo para fixar um pino</span>
+        <span *ngIf="viewerMode === 'measure' && !measureStartPoint">Modo Medição — Clique no 1º ponto</span>
+        <span *ngIf="viewerMode === 'measure' && measureStartPoint">Medição — Clique no 2º ponto para concluir</span>
+      </div>
+
+      <!-- Loading overlay -->
+      <div *ngIf="isLoading" class="overlay overlay--loading">
+        <div class="spinner"></div>
+        <p>Carregando Modelo 3D…</p>
+        <small>Calculando geometria e buffers</small>
+      </div>
+
+      <!-- Error overlay -->
+      <div *ngIf="errorMessage" class="overlay overlay--error">
+        <span class="overlay--error__icon">⚠</span>
+        <div>
+          <strong>Falha ao abrir modelo</strong>
+          <p>{{ errorMessage }}</p>
+          <button (click)="errorMessage = null" class="btn btn--ghost btn--sm">Fechar</button>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!modelFile && !isLoading" class="overlay overlay--empty">
+        <div class="empty-icon">⬡</div>
+        <h3>Nenhum modelo carregado</h3>
+        <p>Selecione uma amostra no painel ou arraste um arquivo <strong>.OBJ</strong>, <strong>.STL</strong>, <strong>.FBX</strong> ou <strong>.GLTF</strong> aqui</p>
+      </div>
+
+    </div><!-- /canvas-container -->
+  </main>
+
 </div>
