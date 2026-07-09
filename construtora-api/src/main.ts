@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Aumenta o limite de payload para arquivos grandes em Base64 (modelos 3D, PDFs, mapas)
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ limit: '50mb', extended: true }));
+
   app.enableCors({
     origin: [
       'http://localhost:4200',
+      'http://localhost:52562',
+      'http://localhost:3000',
+      /^http:\/\/localhost(:\d+)?$/,
       'https://zap-construction.netlify.app'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
