@@ -29,4 +29,25 @@ export class Obra {
 
   @Column('decimal')
   orcamento!: number;
+
+  @Column({ type: 'text', nullable: true })
+  modelo3dBase64!: string;
+
+  @Column({ nullable: true })
+  modelo3dNome!: string;
+
+  @Column({ nullable: true })
+  modelo3dFormato!: string;
+
+  @Column({ type: 'text', nullable: true })
+  mapaEletricistaBase64!: string;
+
+  @Column({ nullable: true })
+  mapaEletricistaNome!: string;
+
+  @Column({ type: 'text', nullable: true })
+  pdfClausulasBase64!: string;
+
+  @Column({ nullable: true })
+  pdfClausulasNome!: string;
 }

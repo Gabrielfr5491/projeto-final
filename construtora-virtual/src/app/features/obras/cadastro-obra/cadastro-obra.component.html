@@ -98,6 +98,51 @@
           name="orcamento">
       </div>
 
+      <!-- ── NOVOS UPLOADS INTEGRADOS ── -->
+      <div class="form-group full-width upload-section-card" style="margin-top: 15px;">
+        <h3 style="font-size: 0.85rem; color: #ff6b1a; margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Anexos Técnicos do Projeto</h3>
+        
+        <div class="upload-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+          
+          <!-- Modelo 3D -->
+          <div class="file-box">
+            <span class="file-box__title">📦 Modelo 3D da Obra</span>
+            <input type="file" id="up-3d" (change)="onFileSelected($event, 'modelo3d')" accept=".obj,.stl,.fbx,.gltf,.glb" style="display: none;">
+            <div class="file-box__dropzone" onclick="document.getElementById('up-3d').click()">
+              <span class="file-box__icon">🧊</span>
+              <span class="file-box__label" *ngIf="!obra.modelo3dNome">Selecionar Modelo<br><small>gltf, glb, obj, stl</small></span>
+              <span class="file-box__filename" *ngIf="obra.modelo3dNome">{{ obra.modelo3dNome }}</span>
+            </div>
+            <button type="button" class="file-box__clear" *ngIf="obra.modelo3dNome" (click)="clearFile('modelo3d')">Remover</button>
+          </div>
+
+          <!-- Mapa do Eletricista -->
+          <div class="file-box">
+            <span class="file-box__title">⚡ Mapa do Eletricista</span>
+            <input type="file" id="up-mapa" (change)="onFileSelected($event, 'mapa')" accept="image/*,.pdf" style="display: none;">
+            <div class="file-box__dropzone" onclick="document.getElementById('up-mapa').click()">
+              <span class="file-box__icon">🔌</span>
+              <span class="file-box__label" *ngIf="!obra.mapaEletricistaNome">Selecionar Mapa<br><small>Imagens ou PDF</small></span>
+              <span class="file-box__filename" *ngIf="obra.mapaEletricistaNome">{{ obra.mapaEletricistaNome }}</span>
+            </div>
+            <button type="button" class="file-box__clear" *ngIf="obra.mapaEletricistaNome" (click)="clearFile('mapa')">Remover</button>
+          </div>
+
+          <!-- PDF Clausulas -->
+          <div class="file-box">
+            <span class="file-box__title">📄 PDF de Cláusulas</span>
+            <input type="file" id="up-pdf" (change)="onFileSelected($event, 'pdf')" accept=".pdf" style="display: none;">
+            <div class="file-box__dropzone" onclick="document.getElementById('up-pdf').click()">
+              <span class="file-box__icon">📜</span>
+              <span class="file-box__label" *ngIf="!obra.pdfClausulasNome">Selecionar Contrato<br><small>Apenas PDF</small></span>
+              <span class="file-box__filename" *ngIf="obra.pdfClausulasNome">{{ obra.pdfClausulasNome }}</span>
+            </div>
+            <button type="button" class="file-box__clear" *ngIf="obra.pdfClausulasNome" (click)="clearFile('pdf')">Remover</button>
+          </div>
+
+        </div>
+      </div>
+
       <div class="form-actions full-width">
         <button type="submit" class="btn-submit">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">

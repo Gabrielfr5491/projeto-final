@@ -27,9 +27,22 @@
       <!-- ── TAB: TOOLS ──────────────────────────────────────────────── -->
       <div class="tab-content" *ngIf="currentTab === 'tools'">
 
-        <!-- Upload -->
+        <!-- Source Toggle -->
         <section class="sidebar__section">
-          <h3 class="sidebar__section-title">Carregar Modelo</h3>
+          <h3 class="sidebar__section-title">Origem do Modelo</h3>
+          <div class="source-toggle" style="display: flex; gap: 4px; background: #0d0d0d; padding: 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 8px;">
+            <button type="button" class="btn btn--sm" [class.btn--accent]="viewModeSource === 'local'" [class.btn--ghost]="viewModeSource !== 'local'" (click)="setSourceMode('local')" style="flex: 1; padding: 6px 2px; font-size: 0.65rem;">
+              ⚡ Local (Na Hora)
+            </button>
+            <button type="button" class="btn btn--sm" [class.btn--accent]="viewModeSource === 'obra'" [class.btn--ghost]="viewModeSource !== 'obra'" (click)="setSourceMode('obra')" style="flex: 1; padding: 6px 2px; font-size: 0.65rem;">
+              📂 Obra Cadastrada
+            </button>
+          </div>
+        </section>
+
+        <!-- Upload (Local) -->
+        <section class="sidebar__section" *ngIf="viewModeSource === 'local'">
+          <h3 class="sidebar__section-title">Importar Arquivo Local</h3>
           <label class="upload-zone" [class.upload-zone--drag]="isDragOver"
                  (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
             <input type="file" accept=".obj,.stl,.fbx,.gltf,.glb" (change)="onFileSelected($event)" hidden #fileInput>
@@ -38,6 +51,24 @@
             <button class="btn btn--accent btn--sm" type="button" (click)="fileInput.click()">Escolher arquivo</button>
           </label>
           <p class="model-name" *ngIf="modelName">📄 {{ modelName }}</p>
+        </section>
+
+        <!-- Obra Selection (Database) -->
+        <section class="sidebar__section" *ngIf="viewModeSource === 'obra'">
+          <h3 class="sidebar__section-title">Selecionar Obra Cadastrada</h3>
+          <label class="ctrl-label" style="margin-top: 0;">Escolha a Obra</label>
+          <select class="text-input" [(ngModel)]="obraVisualizarId" (ngModelChange)="onObraVisualizarChange($event)" style="background-color: #1a1a1a; margin-bottom: 12px;">
+            <option [ngValue]="null">-- Selecione uma Obra --</option>
+            <option *ngFor="let o of listaObras" [value]="o.id">{{ o.nome }}</option>
+          </select>
+
+          <!-- Status indicator if the selected work doesn't have a 3D model -->
+          <div *ngIf="obraVisualizarId && !selectedObraHasModel" style="padding: 12px; background: rgba(255, 107, 26, 0.05); border: 1px dashed rgba(255, 107, 26, 0.3); border-radius: 6px; text-align: center;">
+            <p class="hint-text" style="color: #ff6b1a; line-height: 1.4; margin: 0;">
+              Esta obra não possui um modelo 3D cadastrado.<br>
+              <small style="color: #8a8a8a; font-size: 0.65rem;">Cadastre no menu lateral Obras ou use Visualização Local.</small>
+            </p>
+          </div>
         </section>
 
         <!-- Samples -->

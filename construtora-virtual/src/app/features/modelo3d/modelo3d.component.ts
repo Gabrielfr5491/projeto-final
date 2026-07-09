@@ -98,6 +98,9 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
   isSaving = false;
   listaObras: any[] = [];
   obraSelecionadaId: number | null = null;
+  viewModeSource: 'obra' | 'local' = 'local';
+  obraVisualizarId: number | null = null;
+  selectedObraHasModel = false;
 
   // ─── Sample models ────────────────────────────────────────────────────────
   sampleModels: SampleModel[] = [];
@@ -126,6 +129,56 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
     this.sampleModels = sampleModelsService.SAMPLE_MODELS;
     this.carregarProjetos();
     this.carregarObras();
+  }
+
+  setSourceMode(mode: 'obra' | 'local'): void {
+    this.viewModeSource = mode;
+    this.modelFile = null;
+    this.modelName = '';
+    this.modelFormat = null;
+    this.metadata = null;
+    this.annotations = [];
+    this.measurements = [];
+    this.activeAnnotationId = null;
+    this.obraVisualizarId = null;
+    this.selectedObraHasModel = false;
+    this.clearModelGroup();
+    this.clearMeasurementLines();
+    this.rebuildAnnotationPins();
+  }
+
+  onObraVisualizarChange(obraId: number | null): void {
+    if (!obraId) {
+      this.selectedObraHasModel = false;
+      return;
+    }
+    const obra = this.listaObras.find(o => o.id === obraId);
+    if (obra && obra.modelo3dBase64 && obra.modelo3dFormato) {
+      this.selectedObraHasModel = true;
+      this.modelName = obra.modelo3dNome || `Modelo Obra #${obra.id}`;
+      this.modelFormat = obra.modelo3dFormato.toLowerCase() as any;
+      this.isLoading = true;
+
+      fetch(obra.modelo3dBase64)
+        .then(res => res.blob())
+        .then(blob => {
+          this.modelFile = blob;
+          this.loadBlob(blob, this.modelFormat!);
+        })
+        .catch(err => {
+          console.error(err);
+          this.errorMessage = 'Erro ao ler arquivo 3D da obra.';
+          this.isLoading = false;
+        });
+    } else {
+      this.selectedObraHasModel = false;
+      this.modelFile = null;
+      this.modelName = '';
+      this.modelFormat = null;
+      this.metadata = null;
+      this.clearModelGroup();
+      this.clearMeasurementLines();
+    }
   }
 
   ngAfterViewInit(): void {
