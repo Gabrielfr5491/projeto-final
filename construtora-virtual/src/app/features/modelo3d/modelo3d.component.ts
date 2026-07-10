@@ -148,37 +148,52 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
   }
 
   onObraVisualizarChange(obraId: number | null): void {
-    if (!obraId) {
+    // Força conversão para number (select pode retornar string)
+    const id = obraId != null ? +obraId : null;
+
+    if (!id) {
       this.selectedObraHasModel = false;
       return;
     }
-    const obra = this.listaObras.find(o => o.id === obraId);
-    if (obra && obra.modelo3dBase64 && obra.modelo3dFormato) {
-      this.selectedObraHasModel = true;
-      this.modelName = obra.modelo3dNome || `Modelo Obra #${obra.id}`;
-      this.modelFormat = obra.modelo3dFormato.toLowerCase() as any;
-      this.isLoading = true;
 
-      fetch(obra.modelo3dBase64)
-        .then(res => res.blob())
-        .then(blob => {
-          this.modelFile = blob;
-          this.loadBlob(blob, this.modelFormat!);
-        })
-        .catch(err => {
-          console.error(err);
-          this.errorMessage = 'Erro ao ler arquivo 3D da obra.';
-          this.isLoading = false;
-        });
-    } else {
-      this.selectedObraHasModel = false;
-      this.modelFile = null;
-      this.modelName = '';
-      this.modelFormat = null;
-      this.metadata = null;
-      this.clearModelGroup();
-      this.clearMeasurementLines();
-    }
+    // Busca a obra diretamente pelo ID para garantir todos os dados Base64
+    this.obraService.buscarPorId(id).subscribe({
+      next: (obra: any) => {
+        console.log('Obra carregada do banco:', obra?.nome, '| tem modelo3d:', !!obra?.modelo3dBase64);
+
+        if (obra && obra.modelo3dBase64 && obra.modelo3dFormato) {
+          this.selectedObraHasModel = true;
+          this.modelName = obra.modelo3dNome || `Modelo Obra #${obra.id}`;
+          this.modelFormat = obra.modelo3dFormato.toLowerCase() as any;
+          this.isLoading = true;
+
+          fetch(obra.modelo3dBase64)
+            .then(res => res.blob())
+            .then(blob => {
+              this.modelFile = blob;
+              this.loadBlob(blob, this.modelFormat!);
+            })
+            .catch(err => {
+              console.error('Erro ao converter Base64 para Blob:', err);
+              this.errorMessage = 'Erro ao ler arquivo 3D da obra.';
+              this.isLoading = false;
+            });
+        } else {
+          this.selectedObraHasModel = false;
+          this.modelFile = null;
+          this.modelName = '';
+          this.modelFormat = null;
+          this.metadata = null;
+          this.clearModelGroup();
+          this.clearMeasurementLines();
+          console.warn('Obra selecionada não possui modelo3dBase64 ou modelo3dFormato.');
+        }
+      },
+      error: (err: any) => {
+        console.error('Erro ao buscar obra por ID:', err);
+        this.selectedObraHasModel = false;
+      }
+    });
   }
 
   ngAfterViewInit(): void {
