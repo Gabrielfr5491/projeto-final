@@ -459,6 +459,16 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
     this.scaleFactor = targetDim / maxDim;
     loaded.scale.setScalar(this.scaleFactor);
 
+    // Heurística de auto-calibração para metros (m):
+    // Detecta se a escala do arquivo 3D original está em milímetros (ex: maxDim > 500) ou centímetros (ex: maxDim > 50)
+    if (maxDim > 500) {
+      this.scaleProportion = 0.001; // Milímetros -> Metros
+    } else if (maxDim > 50) {
+      this.scaleProportion = 0.01;  // Centímetros -> Metros
+    } else {
+      this.scaleProportion = 1.0;   // Já em Metros
+    }
+
     this.modelGroup.add(loaded);
     this.applyRenderMode(this.renderMode);
 
