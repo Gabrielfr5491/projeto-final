@@ -69,6 +69,7 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
   // ─── UI tab ──────────────────────────────────────────────────────────────
   currentTab: 'tools' | 'lighting' | 'annotations' | 'projects' = 'tools';
   sidebarCollapsed = false;
+  scaleProportion = 1.0; // Fator de escala/proporção para calibrar para metros reais
 
   // ─── Projected overlays ──────────────────────────────────────────────────
   projectedPins: ProjectedPin[] = [];
@@ -294,7 +295,7 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
       const mz = (m.startPoint[2] + m.endPoint[2]) / 2;
       this.tempV.set(mx, my, mz).project(this.camera);
       const visible = this.tempV.z <= 1.0 && Math.abs(this.tempV.x) <= 1 && Math.abs(this.tempV.y) <= 1;
-      return { id: m.id, x: (this.tempV.x * 0.5 + 0.5) * cw, y: (-this.tempV.y * 0.5 + 0.5) * ch, distance: m.distance, visible };
+      return { id: m.id, x: (this.tempV.x * 0.5 + 0.5) * cw, y: (-this.tempV.y * 0.5 + 0.5) * ch, distance: m.distance * this.scaleProportion, visible };
     });
 
     let tempMeasure: { x: number; y: number; distance: number } | null = null;
@@ -303,7 +304,7 @@ export class Modelo3dComponent implements AfterViewInit, OnDestroy {
       const midY = (this.measureStartPoint.y + this.hoverPoint.y) / 2;
       const midZ = (this.measureStartPoint.z + this.hoverPoint.z) / 2;
       this.tempV.set(midX, midY, midZ).project(this.camera);
-      const dist = this.measureStartPoint.distanceTo(this.hoverPoint) / this.scaleFactor;
+      const dist = (this.measureStartPoint.distanceTo(this.hoverPoint) / this.scaleFactor) * this.scaleProportion;
       tempMeasure = { x: (this.tempV.x * 0.5 + 0.5) * cw, y: (-this.tempV.y * 0.5 + 0.5) * ch, distance: dist };
     }
 
