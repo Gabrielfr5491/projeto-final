@@ -1,0 +1,213 @@
+<div class="container">
+
+  <div class="card-header">
+    <div class="card-header__left">
+      <button *ngIf="obraSelecionada" class="btn-voltar" (click)="voltarParaObras()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+      </button>
+      <div>
+        <h1>
+          <span *ngIf="!obraSelecionada">Diário de Obra</span>
+          <span *ngIf="obraSelecionada">{{ obraSelecionada.nome }}</span>
+        </h1>
+        <p class="header-sub" *ngIf="!obraSelecionada">
+          Selecione uma obra para ver ou adicionar registros
+        </p>
+        <p class="header-sub" *ngIf="obraSelecionada">
+          {{ entradas.length }} registro{{ entradas.length !== 1 ? 's' : '' }} no diário
+          &nbsp;·&nbsp; {{ obraSelecionada.cidade }}, {{ obraSelecionada.estado }}
+        </p>
+      </div>
+    </div>
+
+    <button
+      *ngIf="obraSelecionada && !mostrarForm"
+      class="btn-add"
+      (click)="abrirForm()"
+    >
+      + Nova Entrada
+    </button>
+  </div>
+
+  <!-- Seleção de obra antes de acessar o diário -->
+  <ng-container *ngIf="!obraSelecionada">
+
+    <div *ngIf="carregandoObras" class="loading-state">
+      <div class="loading-spinner"></div>
+      <span>Carregando obras...</span>
+    </div>
+
+    <div *ngIf="!carregandoObras && obras.length === 0" class="empty-state-full">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M3 21h18M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M5 21V7m14 14V7"/>
+      </svg>
+      <p>Nenhuma obra cadastrada ainda.</p>
+      <span>Cadastre uma obra primeiro para usar o diário.</span>
+    </div>
+
+    <div class="obras-grid" *ngIf="!carregandoObras && obras.length > 0">
+      <button
+        class="obra-card"
+        *ngFor="let obra of obras"
+        (click)="selecionarObra(obra.id)"
+      >
+        <div class="obra-card__status" [attr.data-status]="obra.status"></div>
+        <div class="obra-card__body">
+          <span class="obra-card__nome">{{ obra.nome }}</span>
+          <span class="obra-card__local">{{ obra.cidade }}, {{ obra.estado }}</span>
+          <span class="obra-card__status-text" [attr.data-status]="obra.status">{{ obra.status }}</span>
+        </div>
+        <svg class="obra-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+  </ng-container>
+
+  <!-- Diário renderizado com ng-container para o bloco principal -->
+  <ng-container *ngIf="obraSelecionada">
+
+    <div class="form-entrada" *ngIf="mostrarForm">
+      <h3 class="form-titulo">Nova Entrada</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Título <span class="obrigatorio">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="formEntrada.titulo"
+            placeholder="Ex: Concretagem do pilar P7"
+            class="form-control"
+            maxlength="120"
+          />
+        </div>
+        <div class="form-group form-group--sm">
+          <label>Data <span class="obrigatorio">*</span></label>
+          <input
+            type="date"
+            [(ngModel)]="formEntrada.data"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Responsável</label>
+        <input
+          type="text"
+          [(ngModel)]="formEntrada.autor"
+          placeholder="Nome do engenheiro ou responsável"
+          class="form-control"
+          maxlength="80"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Descrição <span class="obrigatorio">*</span></label>
+        <textarea
+          [(ngModel)]="formEntrada.descricao"
+          placeholder="Descreva o que foi realizado, observações, ocorrências..."
+          class="form-control form-textarea"
+          rows="5"
+        ></textarea>
+      </div>
+
+      <p class="form-erro" *ngIf="formErro">{{ formErro }}</p>
+
+      <div class="form-acoes">
+        <button class="btn-secundario" (click)="cancelarForm()" [disabled]="salvando">Cancelar</button>
+        <button class="btn-primario" (click)="salvar()" [disabled]="salvando">
+          <span *ngIf="!salvando">Salvar entrada</span>
+          <span *ngIf="salvando">Salvando...</span>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="carregandoEntradas" class="loading-state">
+      <div class="loading-spinner"></div>
+      <span>Carregando diário...</span>
+    </div>
+
+    <div *ngIf="!carregandoEntradas && entradas.length === 0 && !mostrarForm" class="empty-state-full">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/>
+      </svg>
+      <p>Nenhuma entrada ainda.</p>
+      <span>Clique em "Nova Entrada" para começar o diário desta obra.</span>
+    </div>
+
+    <div class="timeline" *ngIf="!carregandoEntradas && entradas.length > 0">
+
+      <div
+        class="timeline__item"
+        *ngFor="let entrada of entradas"
+        [class.timeline__item--editando]="entradaEditandoId === entrada.id"
+      >
+        <div class="timeline__ponto"></div>
+
+        <div class="timeline__card" *ngIf="entradaEditandoId !== entrada.id">
+          <div class="timeline__card-header">
+            <div class="timeline__card-meta">
+              <span class="timeline__data">{{ formatarData(entrada.data) }}</span>
+              <span class="timeline__autor" *ngIf="entrada.autor">{{ entrada.autor }}</span>
+            </div>
+            <div class="timeline__acoes">
+              <button class="btn-icon" title="Editar" (click)="iniciarEdicao(entrada)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button class="btn-icon btn-icon--danger" title="Excluir" (click)="excluir(entrada.id)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6l-1 14H6L5 6"/>
+                  <path d="M10 11v6M14 11v6"/>
+                  <path d="M9 6V4h6v2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <h4 class="timeline__titulo">{{ entrada.titulo }}</h4>
+          <p class="timeline__descricao">{{ entrada.descricao }}</p>
+        </div>
+
+        <div class="timeline__card timeline__card--edit" *ngIf="entradaEditandoId === entrada.id">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Título</label>
+              <input type="text" [(ngModel)]="formEdicao.titulo" class="form-control" maxlength="120" />
+            </div>
+            <div class="form-group form-group--sm">
+              <label>Data</label>
+              <input type="date" [(ngModel)]="formEdicao.data" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Responsável</label>
+            <input type="text" [(ngModel)]="formEdicao.autor" class="form-control" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea [(ngModel)]="formEdicao.descricao" class="form-control form-textarea" rows="4"></textarea>
+          </div>
+          <div class="form-acoes">
+            <button class="btn-secundario" (click)="cancelarEdicao()" [disabled]="salvando">Cancelar</button>
+            <button class="btn-primario" (click)="salvarEdicao()" [disabled]="salvando">
+              <span *ngIf="!salvando">Salvar</span>
+              <span *ngIf="salvando">Salvando...</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

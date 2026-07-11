@@ -2,7 +2,7 @@
 
 .actions-bar {
   margin-bottom: $space-xl;
-  max-width: 500px;
+  max-width: 480px;
 }
 
 .search-wrapper {
@@ -12,61 +12,77 @@
 
   .search-icon {
     position: absolute;
-    left: 1rem;
+    left: 0.9rem;
     color: var(--text-sub);
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.65;
   }
 
   .search-input {
     width: 100%;
-    background-color: var(--surface-card);
-    border: 2px solid var(--border-color);
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
     color: var(--text-main);
-    padding: $space-sm $space-md $space-sm 2.75rem;
-    border-radius: $radius-sm;
-    font-size: 0.925rem;
-    font-weight: $weight-medium;
+    padding: $space-xs $space-md $space-xs 2.5rem;
+    border-radius: $radius-md;
+    font-size: 0.875rem;
     outline: none;
-    transition: all $transition-fast $ease-out-expo;
+    transition: border-color $transition-fast ease;
 
-    &::placeholder {
-      color: var(--text-sub);
-      opacity: 0.7;
-    }
-
-    &:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.15);
-      transform: skewX(-1deg);
-    }
+    &::placeholder { color: var(--text-sub); opacity: 0.65; }
+    &:focus { border-color: var(--primary); }
   }
 }
 
-.actions-cell {
-  display: flex;
-  justify-content: center;
+.actions-cell { 
+  display: flex; 
+  justify-content: center; 
+  gap: 0.5rem;
 }
 
+.btn-action-view,
+.btn-action-edit,
 .btn-action-delete {
   background: transparent;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   color: var(--text-sub);
-  padding: 0.45rem 0.75rem;
-  border-radius: $radius-sm;
-  font-size: 0.825rem;
-  font-weight: $weight-bold;
+  padding: 0.35rem 0.7rem;
+  border-radius: $radius-md;
+  font-size: 0.8rem;
+  font-weight: $weight-medium;
   display: inline-flex;
   align-items: center;
   gap: $space-xs;
   cursor: pointer;
-  transition: all $transition-fast $ease-out-expo;
+  transition: color $transition-fast ease, background $transition-fast ease, border-color $transition-fast ease;
+  text-decoration: none;
 
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.btn-action-view {
+  &:hover {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.18);
+  }
+}
+
+.btn-action-edit {
+  &:hover {
+    color: var(--primary);
+    background: rgba(var(--primary-rgb), 0.08);
+    border-color: rgba(var(--primary-rgb), 0.18);
+  }
+}
+
+.btn-action-delete {
   &:hover {
     color: $danger;
-    background-color: rgba($danger, 0.1);
-    border-color: rgba($danger, 0.2);
-    transform: skewX(-2deg);
+    background: rgba($danger, 0.08);
+    border-color: rgba($danger, 0.18);
   }
 }
 
@@ -74,6 +90,5 @@
   text-align: center;
   padding: 3rem !important;
   color: var(--text-sub);
-  font-weight: $weight-medium;
-  font-style: italic;
+  font-weight: $weight-regular;
 }

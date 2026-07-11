@@ -1,18 +1,21 @@
 import { Component, OnInit, LOCALE_ID } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import localePt from '@angular/common/locales/pt';
 
 import { ObraService } from '../../../core/services/obra.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { Obra } from '../../../models/obra';registerLocaleData(localePt);
+import { Obra } from '../../../models/obra';
+registerLocaleData(localePt);
 
 @Component({
   selector: 'app-lista-obras',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterLink,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
@@ -20,7 +23,8 @@ import { Obra } from '../../../models/obra';registerLocaleData(localePt);
   templateUrl: './lista-obras.component.html',
   styleUrl: './lista-obras.component.scss'
 })
-export class ListaObrasComponent implements OnInit {  collapsed: boolean = false;
+export class ListaObrasComponent implements OnInit {
+  collapsed: boolean = false;
 
   filtro = '';
   obras: Obra[] = [];
@@ -47,7 +51,8 @@ export class ListaObrasComponent implements OnInit {  collapsed: boolean = fals
       });
   }
 
-  excluir(id: number) {    if (confirm('Tem certeza que deseja remover esta obra permanentemente?')) {
+  excluir(id: number) {
+    if (confirm('Tem certeza que deseja remover esta obra permanentemente?')) {
       this.obraService.excluir(id).subscribe({
         next: () => {
           this.toast.sucesso('Obra excluída com sucesso.');
@@ -59,7 +64,8 @@ export class ListaObrasComponent implements OnInit {  collapsed: boolean = fals
         }
       });
     }
-  }  get obrasFiltradas() {
+  }
+  get obrasFiltradas() {
     return this.obras.filter(
       obra =>
         obra.nome

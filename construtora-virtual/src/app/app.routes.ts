@@ -28,6 +28,11 @@ import { CadastroUsuarioComponent } from './features/usuarios/cadastro-usuario/c
 import { ListaUsuariosComponent } from './features/usuarios/lista-usuarios/lista-usuarios.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import { Modelo3dComponent } from './features/modelo3d/modelo3d.component';
+import { DiarioObraComponent } from './features/diario-obra/diario-obra.component';
+import { EditarObraComponent } from './features/obras/editar-obra/editar-obra.component';
+import { DetalheObraComponent } from './features/obras/detalhe-obra/detalhe-obra.component';
+import { RelatoriosComponent } from './features/relatorios/relatorios.component';
+import { AlertasComponent } from './features/alertas/alertas.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent, pathMatch: 'full' },
@@ -42,6 +47,8 @@ export const routes: Routes = [
       { path: 'dashboard', component: HomeComponent },
       { path: 'obras', component: ListaObrasComponent },
       { path: 'cadastro-obra', component: CadastroObraComponent },
+      { path: 'editar-obra/:id', component: EditarObraComponent },
+      { path: 'detalhe-obra/:id', component: DetalheObraComponent },
       { path: 'funcionarios', component: ListaFuncionariosComponent },
       { path: 'cadastro-funcionario', component: CadastroFuncionarioComponent },
       { path: 'editar-funcionario/:id', component: EditarFuncionarioComponent },
@@ -60,6 +67,9 @@ export const routes: Routes = [
       { path: 'usuarios', component: ListaUsuariosComponent },
       { path: 'cadastro-usuario', component: CadastroUsuarioComponent, canActivate: [adminGuard] },
       { path: 'modelo3d', component: Modelo3dComponent },
+      { path: 'diario-obra', component: DiarioObraComponent },
+      { path: 'relatorios', component: RelatoriosComponent },
+      { path: 'alertas', component: AlertasComponent },
     ]
   },
 

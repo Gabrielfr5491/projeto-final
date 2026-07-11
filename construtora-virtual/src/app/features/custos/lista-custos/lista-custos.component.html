@@ -1,97 +1,163 @@
 <div class="container">
 
   <div class="card-header">
+    <div>
+      <h1>Custos</h1>
+      <p class="header-sub">{{ custos.length }} lançamento{{ custos.length !== 1 ? 's' : '' }} registrado{{ custos.length !== 1 ? 's' : '' }}</p>
+    </div>
+    <a routerLink="/cadastro-custo" class="btn-add">+ Novo Custo</a>
+  </div>
 
-    <h1>Custos</h1>
+  <div class="resumo-grid">
 
-    <a
-      routerLink="/cadastro-custo"
-      class="btn-add"
-    >
-      + Novo Custo
-    </a>
+    <div class="resumo-card resumo-card--total">
+      <div class="resumo-card__icon">
+        <i class="bi bi-receipt"></i>
+      </div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Total Geral</span>
+        <span class="resumo-card__value">R$ {{ formatarValor(totalGeral) }}</span>
+      </div>
+    </div>
+
+    <div class="resumo-card resumo-card--entrada">
+      <div class="resumo-card__icon">
+        <i class="bi bi-arrow-down-circle"></i>
+      </div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Entradas</span>
+        <span class="resumo-card__value text-entrada">R$ {{ formatarValor(totalEntradas) }}</span>
+      </div>
+    </div>
+
+    <div class="resumo-card resumo-card--saida">
+      <div class="resumo-card__icon">
+        <i class="bi bi-arrow-up-circle"></i>
+      </div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Saídas</span>
+        <span class="resumo-card__value text-saida">R$ {{ formatarValor(totalSaidas) }}</span>
+      </div>
+    </div>
+
+    <div class="resumo-card" [class.resumo-card--positivo]="saldo >= 0" [class.resumo-card--negativo]="saldo < 0">
+      <div class="resumo-card__icon">
+        <i class="bi" [class.bi-graph-up-arrow]="saldo >= 0" [class.bi-graph-down-arrow]="saldo < 0"></i>
+      </div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Saldo</span>
+        <span class="resumo-card__value" [class.text-entrada]="saldo >= 0" [class.text-saida]="saldo < 0">
+          {{ saldo < 0 ? '-' : '' }}R$ {{ formatarValor(saldo < 0 ? saldo * -1 : saldo) }}
+        </span>
+      </div>
+    </div>
 
   </div>
 
-  <table class="table">
+  <div class="filtros-bar">
 
-    <thead>
+    <div class="filtro-busca">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="busca"
+        placeholder="Buscar por descrição ou obra..."
+        class="filtro-input"
+      />
+    </div>
 
-      <tr>
+    <select [(ngModel)]="filtroTipo" class="filtro-select">
+      <option value="">Todos os tipos</option>
+      <option value="Entrada">Entrada</option>
+      <option value="Saida">Saída</option>
+    </select>
 
-        <th>Descrição</th>
+    <select [(ngModel)]="filtroCategoria" class="filtro-select">
+      <option value="">Todas as categorias</option>
+      <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+    </select>
 
-        <th>Categoria</th>
+    <button
+      *ngIf="busca || filtroTipo || filtroCategoria"
+      class="filtro-limpar"
+      (click)="limparFiltros()"
+    >
+      <i class="bi bi-x"></i> Limpar
+    </button>
 
-        <th>Obra</th>
+  </div>
 
-        <th>Valor</th>
+  <div class="filtro-info" *ngIf="busca || filtroTipo || filtroCategoria">
+    <span>{{ custosFiltrados.length }} resultado{{ custosFiltrados.length !== 1 ? 's' : '' }} encontrado{{ custosFiltrados.length !== 1 ? 's' : '' }}</span>
+  </div>
 
-        <th>Data</th>
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Categoria</th>
+          <th>Obra</th>
+          <th>Data</th>
+          <th class="col-valor">Valor</th>
+          <th class="col-tipo">Tipo</th>
+          <th class="col-acoes">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
 
-        <th>Tipo</th>
+        <tr *ngIf="custosFiltrados.length === 0">
+          <td colspan="7" class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <span>Nenhum custo encontrado</span>
+          </td>
+        </tr>
 
-        <th>Ações</th>
+        <tr *ngFor="let custo of custosFiltrados">
 
-      </tr>
+          <td>
+            <span class="descricao-text">{{ custo.descricao }}</span>
+          </td>
 
-    </thead>
+          <td>
+            <span class="categoria-pill">{{ custo.categoria }}</span>
+          </td>
 
-    <tbody>
+          <td>
+            <span class="obra-text">{{ custo.obra?.nome ?? '—' }}</span>
+          </td>
 
-      <tr *ngFor="let custo of custos">
+          <td class="data-text">{{ formatarData(custo.data) }}</td>
 
-        <td>{{ custo.descricao }}</td>
+          <td class="col-valor">
+            <span class="valor-text" [class.valor-entrada]="custo.tipo === 'Entrada'" [class.valor-saida]="custo.tipo === 'Saida'">
+              R$ {{ formatarValor(custo.valor) }}
+            </span>
+          </td>
 
-        <td>{{ custo.categoria }}</td>
+          <td class="col-tipo">
+            <span
+              class="status"
+              [class.entrada]="custo.tipo === 'Entrada'"
+              [class.saida]="custo.tipo === 'Saida'"
+            >
+              <i class="bi" [class.bi-arrow-down]="custo.tipo === 'Entrada'" [class.bi-arrow-up]="custo.tipo === 'Saida'"></i>
+              {{ custo.tipo === 'Saida' ? 'Saída' : custo.tipo }}
+            </span>
+          </td>
 
-        <td>{{ custo.obra?.nome }}</td>
+          <td class="col-acoes actions">
+            <a [routerLink]="['/editar-custo', custo.id]" class="btn-editar">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <button class="btn-danger" (click)="excluir(custo.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
 
-        <td>
-          R$ {{ custo.valor }}
-        </td>
-
-        <td>{{ custo.data }}</td>
-
-        <td>
-
-          <span
-            class="status"
-            [class.entrada]="custo.tipo === 'Entrada'"
-            [class.saida]="custo.tipo === 'Saida'"
-          >
-
-            {{ custo.tipo }}
-
-          </span>
-
-        </td>
-
-        <td class="actions">
-
-          <a
-            [routerLink]="[
-              '/editar-custo',
-              custo.id
-            ]"
-            class="btn-editar"
-          >
-            Editar
-          </a>
-
-          <button
-            class="btn-danger"
-            (click)="excluir(custo.id)"
-          >
-            Excluir
-          </button>
-
-        </td>
-
-      </tr>
-
-    </tbody>
-
-  </table>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 </div>

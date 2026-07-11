@@ -1,7 +1,122 @@
-.full-width {
-  grid-column: 1 / -1;
+@use '../../../../styles/_variables.scss' as *;
 
-  @media (max-width: 768px) {
-    grid-column: span 1;
+.header-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  font-weight: $weight-regular;
+}
+
+.card { max-width: 760px; }
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: $weight-semibold;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+
+  i { color: var(--primary); font-size: 0.9rem; }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.span-2 {
+  grid-column: span 2;
+  @media (max-width: 600px) { grid-column: span 1; }
+}
+
+.obrigatorio {
+  color: $danger;
+  margin-left: 2px;
+}
+
+// ── INPUT COM PREFIXO ─────────────────────────────────────────────────────────
+.input-prefix {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .prefix {
+    position: absolute;
+    left: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: $weight-semibold;
+    color: var(--text-sub);
+    pointer-events: none;
   }
+
+  input { padding-left: 2.2rem !important; }
+}
+
+// ── TIPO TOGGLE ───────────────────────────────────────────────────────────────
+.tipo-toggle { display: flex; gap: 0.5rem; }
+
+.tipo-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: $radius-md;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-sub);
+  font-size: 0.875rem;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  transition: border-color $transition-fast ease, color $transition-fast ease, background $transition-fast ease;
+
+  &:hover {
+    border-color: var(--primary);
+    color: var(--text-main);
+  }
+
+  &--entrada {
+    border-color: $warning;
+    background: rgba($warning, 0.08);
+    color: $warning;
+  }
+
+  &--saida {
+    border-color: $danger;
+    background: rgba($danger, 0.08);
+    color: $danger;
+  }
+}
+
+// ── FORM ACTIONS ──────────────────────────────────────────────────────────────
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.75rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border-color);
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}
+
+button[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }

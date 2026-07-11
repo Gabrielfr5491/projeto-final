@@ -16,9 +16,11 @@ export class CustoService {
   ) {}
 
   listar() {
-    return this.http.get<Custo[]>(
-      `${this.api}/custos`
-    );
+    return this.http.get<Custo[]>(`${this.api}/custos`);
+  }
+
+  buscarPorObra(obraId: number) {
+    return this.http.get<Custo[]>(`${this.api}/custos/por-obra/${obraId}`);
   }
 
   buscarPorId(id: number) {

@@ -81,7 +81,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // Obras — independente, nunca bloqueia os outros
     this.obraService.listar().subscribe({
       next: (dados) => {
         this.obras = dados;
@@ -92,7 +91,6 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    // Resumo — independente
     this.dashboardService.resumo().subscribe({
       next: (dados) => {
         this.resumo = dados;
@@ -103,7 +101,6 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    // Financeiro (donut) — independente
     this.dashboardService.financeiro().subscribe({
       next: (dados) => {
         this.carregarGraficoCustosCategoria(dados);
@@ -113,7 +110,6 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    // EVM — dados reais do banco (PV, AC, EV por mês)
     this.dashboardService.evm().subscribe({
       next: (dados) => {
         this.evmSeries = { pv: dados.pv, ev: dados.ev, ac: dados.ac };
@@ -124,7 +120,6 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    // Custos por obra — ainda usado para outros fins futuros
     this.dashboardService.custosPorObra().subscribe({
       next: (dados) => {
         this.custosObraData = dados;
@@ -227,16 +222,15 @@ export class HomeComponent implements OnInit {
     return this.custosObraData.totais.reduce((a, b) => a + b, 0);
   }
 
-  // SPI: Schedule Performance Index = EV / PV (>1 adiantado, <1 atrasado)
-  get spi(): number {
-    if (!this.evmSeries) return 0;
+  // SPI: Schedule Performance Index = EV / PV
+  get spi(): number {    if (!this.evmSeries) return 0;
     const ev = this.evmSeries.ev;
     const pv = this.evmSeries.pv;
     const last = ev.length - 1;
     return pv[last] > 0 ? +(ev[last] / pv[last]).toFixed(2) : 0;
   }
 
-  // CPI: Cost Performance Index = EV / AC (>1 abaixo do custo, <1 estourado)
+  // CPI: Cost Performance Index = EV / AC
   get cpi(): number {
     if (!this.evmSeries) return 0;
     const ev = this.evmSeries.ev;
@@ -255,16 +249,13 @@ export class HomeComponent implements OnInit {
     const textColor = isDark ? '#C8C5BE' : '#4A4845';
     const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
 
-    // Sem dados: não renderizar
     if (!dados.meses.length) {
       this.chartEVM = null;
       return;
     }
 
-    // Atualizar evmSeries com dados reais para SPI/CPI
     this.evmSeries = { pv: dados.pv, ev: dados.ev, ac: dados.ac };
 
-    // Índice do mês "atual" = último mês com AC > 0 (mês com custo real)
     let idxAtual = dados.ac.length - 1;
     for (let i = dados.ac.length - 1; i >= 0; i--) {
       if (dados.ac[i] > 0) { idxAtual = i; break; }
@@ -298,7 +289,6 @@ export class HomeComponent implements OnInit {
         }
       },
 
-      // AC = laranja (cor primária do site), PV = cinza, EV = âmbar tracejado
       colors: ['#FF6B1A', '#94A3B8', '#F59E0B'],
 
       stroke: {

@@ -1,0 +1,459 @@
+@use '../../../styles/_variables.scss' as *;
+
+.header-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: $weight-medium;
+}
+
+.card-header {
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+  }
+}
+
+// ── BOTÃO VOLTAR ──────────────────────────────────────────────────────────────
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  flex-shrink: 0;
+
+  svg { width: 16px; height: 16px; }
+
+  &:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+}
+
+// ── ESTADOS ───────────────────────────────────────────────────────────────────
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-3xl $space-md;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state-full {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-3xl $space-md;
+  color: var(--text-secondary);
+  text-align: center;
+
+  svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.25;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    opacity: 0.5;
+  }
+
+  span {
+    font-size: 0.85rem;
+    opacity: 0.45;
+  }
+}
+
+// ── GRID DE OBRAS ─────────────────────────────────────────────────────────────
+.obras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $space-md;
+  margin-top: $space-md;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.obra-card {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: $space-md $space-lg;
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms ease, border-color 160ms ease;
+  position: relative;
+
+  &:hover {
+    background: var(--bg-elevated);
+    border-color: var(--border-strong);
+
+    .obra-card__arrow { opacity: 0.6; }
+  }
+
+  &__status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--text-muted);
+
+    &[data-status="Em andamento"] { background: $warning; }
+    &[data-status="Concluída"]    { background: $success; }
+    &[data-status="Pausada"]      { background: $danger; }
+    &[data-status="Planejada"]    { background: var(--info); }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__nome {
+    font-size: 0.9rem;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__local {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+
+  &__status-text {
+    font-size: 0.72rem;
+    font-weight: $weight-bold;
+    color: var(--text-muted);
+    margin-top: 2px;
+
+    &[data-status="Em andamento"] { color: $warning; }
+    &[data-status="Concluída"]    { color: $success; }
+    &[data-status="Pausada"]      { color: $danger; }
+    &[data-status="Planejada"]    { color: var(--info); }
+  }
+
+  &__arrow {
+    width: 16px;
+    height: 16px;
+    opacity: 0.25;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    transition: opacity 160ms ease;
+  }
+}
+
+// ── FORMULÁRIO ────────────────────────────────────────────────────────────────
+.form-entrada {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: $space-xl;
+  margin-bottom: $space-xl;
+}
+
+.form-titulo {
+  margin: 0 0 $space-lg;
+  font-size: 1rem;
+  font-weight: $weight-semibold;
+  color: var(--text-primary);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: $space-md;
+  margin-bottom: $space-md;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: $space-md;
+
+  &:last-child { margin-bottom: 0; }
+
+  &--sm { }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: $weight-semibold;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }
+}
+
+.obrigatorio {
+  color: $danger;
+}
+
+.form-control {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  padding: 0.55rem 0.75rem !important;
+  border-radius: 5px !important;
+  font-size: 0.875rem !important;
+  outline: none !important;
+  font-family: inherit;
+  transition: border-color 160ms ease;
+  width: 100%;
+
+  &::placeholder { color: var(--text-muted); }
+
+  &:focus {
+    border-color: var(--accent) !important;
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.55;
+}
+
+.form-erro {
+  margin: $space-sm 0 0;
+  font-size: 0.82rem;
+  color: $danger;
+  font-weight: $weight-medium;
+}
+
+.form-acoes {
+  display: flex;
+  gap: $space-sm;
+  justify-content: flex-end;
+  margin-top: $space-lg;
+}
+
+// ── BOTÕES ────────────────────────────────────────────────────────────────────
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.1rem;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: $weight-semibold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 160ms ease;
+  white-space: nowrap;
+
+  &:hover { background: var(--accent-hover); }
+}
+
+.btn-primario {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.2rem;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: $weight-semibold;
+  cursor: pointer;
+  transition: background 160ms ease;
+
+  &:hover:not(:disabled) { background: var(--accent-hover); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.btn-secundario {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 0.55rem 1.1rem;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+
+  &:hover:not(:disabled) {
+    background: var(--bg-elevated);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+
+  svg { width: 13px; height: 13px; }
+
+  &:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+
+  &--danger:hover {
+    background: rgba($danger, 0.08);
+    color: $danger;
+    border-color: rgba($danger, 0.3);
+  }
+}
+
+// ── TIMELINE ──────────────────────────────────────────────────────────────────
+.timeline {
+  position: relative;
+  padding-left: 28px;
+  margin-top: $space-md;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  &__item {
+    position: relative;
+    margin-bottom: $space-lg;
+
+    &:last-child { margin-bottom: 0; }
+
+    &--editando .timeline__ponto {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+
+  &__ponto {
+    position: absolute;
+    left: -24px;
+    top: 14px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-main);
+    border: 2px solid var(--border-strong);
+    transition: background 160ms ease, border-color 160ms ease;
+  }
+
+  &__card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: $space-md $space-lg;
+    transition: border-color 160ms ease;
+
+    &:hover { border-color: var(--border-strong); }
+    &--edit { border-color: var(--accent); }
+  }
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: $space-sm;
+  }
+
+  &__card-meta {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    flex-wrap: wrap;
+  }
+
+  &__data {
+    font-size: 0.78rem;
+    font-weight: $weight-semibold;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__autor {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    background: var(--bg-elevated);
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  &__acoes {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  &__titulo {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  &__descricao {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}

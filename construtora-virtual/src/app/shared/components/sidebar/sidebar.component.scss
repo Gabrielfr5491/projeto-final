@@ -1,12 +1,13 @@
 @use '../../../../styles/_variables.scss' as *;
 
 $sidebar-full: 250px;
-$sidebar-collapsed: 80px;
+$sidebar-collapsed: 72px;
 
 .sidebar {
   width: $sidebar-full;
   height: 100vh;
   background-color: var(--bg-main);
+  border-right: 1px solid var(--border);
   position: fixed;
   top: 0;
   left: 0;
@@ -14,53 +15,71 @@ $sidebar-collapsed: 80px;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  transition: width $transition-base $ease-out-expo, transform $transition-base $ease-out-expo;
+  overflow-y: auto;
+  transition: width 240ms ease, transform 240ms ease;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 2px;
+  }
 
   &.collapsed {
     width: $sidebar-collapsed;
 
     .sidebar__brand-text,
     .sidebar__text {
-      visibility: hidden;
-      opacity: 0;
-      display: none; 
+      display: none;
     }
 
     .sidebar__brand {
       justify-content: center;
-      padding: 1.25rem 0;
+      padding: 1.1rem 0;
 
       &-logo {
-        width: 64px;
+        width: 36px;
       }
     }
 
     .sidebar__link {
       justify-content: center;
-      padding: 0.75rem 0;
+      padding: 0.7rem 0;
 
       .sidebar__icon {
-        margin: 0; 
+        margin: 0;
       }
+    }
+
+    .sidebar__separator {
+      margin: 0.4rem auto;
+      width: 40%;
     }
   }
 
   &__toggle {
     width: 100%;
     border: none;
-    background: var(--bg-main);
-    color: var(--text-secondary);
-    padding: $space-md;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.85rem $space-md;
     cursor: pointer;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    transition: background $transition-fast $ease-out-expo, color $transition-fast $ease-out-expo;
+    transition: color 180ms ease, background 180ms ease;
+
+    svg {
+      display: block;
+    }
 
     &:hover {
+      color: var(--text-primary);
       background-color: var(--bg-elevated);
-      color: var(--accent);
-      transform: rotate(180deg);
     }
 
     @media (max-width: 768px) {
@@ -72,32 +91,20 @@ $sidebar-collapsed: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: $space-xl $space-xl;
-    gap: $space-sm;
-    border-bottom: 2px solid var(--border-strong);
+    padding: 1.4rem 1.5rem 1.2rem;
+    border-bottom: 1px solid var(--border);
 
     &-logo {
       display: block;
-      width: 104px;
+      width: 96px;
       height: auto;
       object-fit: contain;
-    }
-
-    &-icon {
-      font-size: 1.3rem;
-    }
-
-    &-text {
-      color: var(--text-primary);
-      font-weight: $weight-bold;
-      font-size: 1.05rem;
-      white-space: nowrap;
     }
   }
 
   &__nav {
     flex: 1;
-    padding: $space-md 0;
+    padding: 0.6rem 0 1rem;
   }
 
   &__list {
@@ -106,43 +113,67 @@ $sidebar-collapsed: 80px;
     margin: 0;
   }
 
+  &__separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.4rem $space-sm;
+  }
+
   &__item {
-    padding: $space-xs $space-sm;
+    padding: 2px $space-sm;
+  }
+
+  &__separator-item {
+    padding: 0.3rem $space-sm;
   }
 
   &__link {
     display: flex;
     align-items: center;
+    gap: 10px;
     color: var(--text-secondary);
     text-decoration: none;
-    padding: $space-sm $space-md;
-    border-radius: $radius-sm;
-    font-size: 0.925rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
     font-weight: $weight-medium;
     white-space: nowrap;
-    transition: background $transition-fast $ease-out-expo, color $transition-fast $ease-out-expo;
-    position: relative;
+    transition: background 160ms ease, color 160ms ease;
 
     .sidebar__icon {
-      width: 18px;
-      height: 18px;
-      margin-right: $space-sm;
+      width: 17px;
+      height: 17px;
       flex-shrink: 0;
+      opacity: 0.75;
+      transition: opacity 160ms ease;
     }
 
     &:hover {
       background-color: var(--bg-elevated);
-      color: var(--accent);
-      transform: translateX(4px);
+      color: var(--text-primary);
+
+      .sidebar__icon {
+        opacity: 1;
+      }
     }
 
     &.active {
       background-color: var(--accent-light);
       color: var(--accent);
-      font-weight: $weight-bold;
-      border-left: 3px solid var(--accent);
+      font-weight: $weight-semibold;
 
       .sidebar__icon {
+        opacity: 1;
+        color: var(--accent);
+      }
+    }
+
+    &--sub {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      padding-left: 1.05rem;
+
+      &.active {
         color: var(--accent);
       }
     }
@@ -151,6 +182,7 @@ $sidebar-collapsed: 80px;
   @media (max-width: 768px) {
     transform: translateX(-100%);
     width: 250px !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
 
     &.mobile-open {
       transform: translateX(0);
@@ -158,23 +190,55 @@ $sidebar-collapsed: 80px;
 
     .sidebar__brand-text,
     .sidebar__text {
-      visibility: visible !important;
-      opacity: 1 !important;
       display: inline-block !important;
     }
 
     .sidebar__brand {
       justify-content: center !important;
-      padding: $space-xl $space-xl !important;
     }
 
     .sidebar__link {
       justify-content: flex-start !important;
-      padding: $space-sm $space-md !important;
+      padding: 0.55rem 0.85rem !important;
 
       .sidebar__icon {
-        margin-right: $space-sm !important;
+        margin: 0 !important;
       }
     }
   }
+}
+
+.sidebar__icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sidebar__badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: $warning;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: $weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+  border: 1.5px solid var(--bg-main);
+
+  &--danger {
+    background: $danger;
+  }
+}
+
+.sidebar.collapsed .sidebar__icon-wrap {
+  margin: 0;
 }

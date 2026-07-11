@@ -1,0 +1,125 @@
+<div class="container">
+
+  <div class="card-header">
+    <div>
+      <h1>Alertas e Notificações</h1>
+      <p class="header-sub">Monitoramento automático do sistema</p>
+    </div>
+    <button class="btn-refresh" (click)="carregar()" title="Atualizar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10"/>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      Atualizar
+    </button>
+  </div>
+
+  <div class="resumo-grid">
+    <div class="resumo-card resumo-card--total">
+      <div class="resumo-card__icon">◈</div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Total de Alertas</span>
+        <span class="resumo-card__value">{{ alertas.length }}</span>
+      </div>
+    </div>
+    <div class="resumo-card resumo-card--danger" (click)="filtroTipo = filtroTipo === 'danger' ? '' : 'danger'" [class.resumo-card--active]="filtroTipo === 'danger'">
+      <div class="resumo-card__icon">!</div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Críticos</span>
+        <span class="resumo-card__value">{{ totalDanger }}</span>
+      </div>
+    </div>
+    <div class="resumo-card resumo-card--warning" (click)="filtroTipo = filtroTipo === 'warning' ? '' : 'warning'" [class.resumo-card--active]="filtroTipo === 'warning'">
+      <div class="resumo-card__icon">⚠</div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Atenção</span>
+        <span class="resumo-card__value">{{ totalWarning }}</span>
+      </div>
+    </div>
+    <div class="resumo-card resumo-card--info" (click)="filtroTipo = filtroTipo === 'info' ? '' : 'info'" [class.resumo-card--active]="filtroTipo === 'info'">
+      <div class="resumo-card__icon">ℹ</div>
+      <div class="resumo-card__content">
+        <span class="resumo-card__label">Informações</span>
+        <span class="resumo-card__value">{{ totalInfo }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="filtros-bar">
+    <select [(ngModel)]="filtroCategoria" class="filtro-select">
+      <option value="">Todas as categorias</option>
+      <option value="obra">Obras</option>
+      <option value="financeiro">Financeiro</option>
+      <option value="material">Materiais</option>
+      <option value="equipamento">Equipamentos</option>
+    </select>
+
+    <button *ngIf="filtroTipo || filtroCategoria" class="filtro-limpar" (click)="limparFiltros()">
+      × Limpar filtros
+    </button>
+
+    <span class="filtro-count">
+      {{ alertasFiltrados.length }} alerta(s) exibido(s)
+    </span>
+  </div>
+
+  <div *ngIf="carregando" class="loading-state">
+    <div class="loading-spinner"></div>
+    <span>Carregando alertas...</span>
+  </div>
+
+  <div *ngIf="!carregando && alertasFiltrados.length === 0" class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <p>Nenhum alerta encontrado</p>
+    <span>O sistema está operando normalmente.</span>
+  </div>
+
+  <div *ngIf="!carregando" class="alertas-lista">
+
+    <div
+      *ngFor="let alerta of alertasFiltrados"
+      class="alerta-card"
+      [class.alerta-card--danger]="alerta.tipo === 'danger'"
+      [class.alerta-card--warning]="alerta.tipo === 'warning'"
+      [class.alerta-card--info]="alerta.tipo === 'info'">
+
+      <div class="alerta-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path [attr.d]="iconeTipo(alerta.tipo)"/>
+        </svg>
+      </div>
+
+      <div class="alerta-card__body">
+        <div class="alerta-card__header">
+          <div class="alerta-card__meta">
+            <span class="alerta-badge" [class.alerta-badge--danger]="alerta.tipo === 'danger'" [class.alerta-badge--warning]="alerta.tipo === 'warning'" [class.alerta-badge--info]="alerta.tipo === 'info'">
+              {{ alerta.tipo === 'danger' ? 'Crítico' : alerta.tipo === 'warning' ? 'Atenção' : 'Info' }}
+            </span>
+            <span class="alerta-categoria">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path [attr.d]="iconeCategoria(alerta.categoria)"/>
+              </svg>
+              {{ alerta.categoria | titlecase }}
+            </span>
+          </div>
+          <a *ngIf="alerta.link" [routerLink]="alerta.link" class="alerta-link">
+            Ver detalhes
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+
+        <h3 class="alerta-card__titulo">{{ alerta.titulo }}</h3>
+        <p class="alerta-card__mensagem">{{ alerta.mensagem }}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

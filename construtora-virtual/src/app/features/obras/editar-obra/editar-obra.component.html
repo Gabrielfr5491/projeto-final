@@ -1,0 +1,157 @@
+<main class="cadastro-container">
+
+  <header class="cadastro-header">
+    <div>
+      <h1>Editar Obra</h1>
+      <p class="cadastro-header__subtitle" *ngIf="obra.nome">{{ obra.nome }}</p>
+    </div>
+    <button type="button" class="btn-secondary" (click)="cancelar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Voltar
+    </button>
+  </header>
+
+  <!-- Carregando -->
+  <div *ngIf="carregando" class="loading-state" style="padding: 4rem; display:flex; align-items:center; justify-content:center; gap:1rem; color:var(--text-sub)">
+    <div style="width:24px;height:24px;border:2px solid var(--border-color);border-top-color:var(--primary);border-radius:50%;animation:spin 0.7s linear infinite"></div>
+    Carregando dados da obra...
+  </div>
+
+  <section class="cadastro-card" *ngIf="!carregando">
+    <form class="cadastro-form" (ngSubmit)="salvar()">
+
+      <div class="form-group full-width">
+        <label class="form-group__label" for="nome">Nome do Empreendimento <span style="color:var(--danger)">*</span></label>
+        <input
+          id="nome" type="text" class="form-group__input"
+          placeholder="Ex: Residencial Alpha"
+          [(ngModel)]="obra.nome" name="nome" required>
+      </div>
+
+      <div class="form-group full-width">
+        <label class="form-group__label" for="endereco">Endereço Completo</label>
+        <input
+          id="endereco" type="text" class="form-group__input"
+          placeholder="Ex: Av. Tancredo Neves, 1200"
+          [(ngModel)]="obra.endereco" name="endereco">
+      </div>
+
+      <div class="form-group split-70">
+        <label class="form-group__label" for="cidade">Cidade</label>
+        <input
+          id="cidade" type="text" class="form-group__input"
+          placeholder="Ex: Salvador"
+          [(ngModel)]="obra.cidade" name="cidade">
+      </div>
+
+      <div class="form-group split-30">
+        <label class="form-group__label" for="estado">Estado</label>
+        <input
+          id="estado" type="text" class="form-group__input"
+          placeholder="BA"
+          [(ngModel)]="obra.estado" name="estado" maxlength="2">
+      </div>
+
+      <div class="form-group">
+        <label class="form-group__label" for="dataInicio">Data de Início</label>
+        <input
+          id="dataInicio" type="date" class="form-group__input"
+          [(ngModel)]="obra.dataInicio" name="dataInicio">
+      </div>
+
+      <div class="form-group">
+        <label class="form-group__label" for="dataPrevista">Previsão de Entrega</label>
+        <input
+          id="dataPrevista" type="date" class="form-group__input"
+          [(ngModel)]="obra.dataPrevista" name="dataPrevista">
+      </div>
+
+      <div class="form-group">
+        <label class="form-group__label" for="status">Status</label>
+        <div class="select-wrapper">
+          <select id="status" class="form-group__input" [(ngModel)]="obra.status" name="status">
+            <option value="Planejamento">Planejamento</option>
+            <option value="Fundação">Fundação</option>
+            <option value="Estrutura">Estrutura</option>
+            <option value="Acabamento">Acabamento</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Concluída">Concluída</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-group__label" for="orcamento">Orçamento (R$)</label>
+        <input
+          id="orcamento" type="number" class="form-group__input"
+          placeholder="0,00"
+          [(ngModel)]="obra.orcamento" name="orcamento">
+      </div>
+
+      <!-- Anexos -->
+      <div class="form-group full-width upload-section-card" style="margin-top: 8px;">
+        <h3 style="font-size:0.8rem;color:var(--primary);margin-bottom:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">
+          Anexos Técnicos
+        </h3>
+        <div class="upload-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+
+          <!-- Modelo 3D -->
+          <div class="file-box">
+            <span class="file-box__title">📦 Modelo 3D</span>
+            <input type="file" id="up-3d" (change)="onFileSelected($event, 'modelo3d')" accept=".obj,.stl,.fbx,.gltf,.glb" style="display:none">
+            <div class="file-box__dropzone" onclick="document.getElementById('up-3d').click()">
+              <span class="file-box__icon">🧊</span>
+              <span class="file-box__label" *ngIf="!obra.modelo3dNome">Selecionar<br><small>gltf, glb, obj, stl</small></span>
+              <span class="file-box__filename" *ngIf="obra.modelo3dNome">{{ obra.modelo3dNome }}</span>
+            </div>
+            <button type="button" class="file-box__clear" *ngIf="obra.modelo3dNome" (click)="clearFile('modelo3d')">Remover</button>
+          </div>
+
+          <!-- Mapa -->
+          <div class="file-box">
+            <span class="file-box__title">⚡ Mapa do Eletricista</span>
+            <input type="file" id="up-mapa" (change)="onFileSelected($event, 'mapa')" accept="image/*,.pdf" style="display:none">
+            <div class="file-box__dropzone" onclick="document.getElementById('up-mapa').click()">
+              <span class="file-box__icon">🔌</span>
+              <span class="file-box__label" *ngIf="!obra.mapaEletricistaNome">Selecionar<br><small>Imagem ou PDF</small></span>
+              <span class="file-box__filename" *ngIf="obra.mapaEletricistaNome">{{ obra.mapaEletricistaNome }}</span>
+            </div>
+            <button type="button" class="file-box__clear" *ngIf="obra.mapaEletricistaNome" (click)="clearFile('mapa')">Remover</button>
+          </div>
+
+          <!-- PDF -->
+          <div class="file-box">
+            <span class="file-box__title">📄 PDF de Cláusulas</span>
+            <input type="file" id="up-pdf" (change)="onFileSelected($event, 'pdf')" accept=".pdf" style="display:none">
+            <div class="file-box__dropzone" onclick="document.getElementById('up-pdf').click()">
+              <span class="file-box__icon">📜</span>
+              <span class="file-box__label" *ngIf="!obra.pdfClausulasNome">Selecionar<br><small>Apenas PDF</small></span>
+              <span class="file-box__filename" *ngIf="obra.pdfClausulasNome">{{ obra.pdfClausulasNome }}</span>
+            </div>
+            <button type="button" class="file-box__clear" *ngIf="obra.pdfClausulasNome" (click)="clearFile('pdf')">Remover</button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="form-actions full-width">
+        <button type="button" class="btn-secondary btn-cancelar" (click)="cancelar()" [disabled]="isSaving">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="isSaving">
+          <svg *ngIf="!isSaving" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span *ngIf="!isSaving">Salvar Alterações</span>
+          <span *ngIf="isSaving">Salvando...</span>
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+</main>

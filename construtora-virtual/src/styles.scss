@@ -36,49 +36,33 @@ body { margin: 0; }
   --table-hover: #{$black-200};
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-dashboard);
-}
-
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-dashboard); }
 ::-webkit-scrollbar-thumb {
   background: var(--border-color);
-  border-radius: $radius-sm;
-  
-  &:hover {
-    background: var(--primary);
-  }
+  border-radius: 3px;
+  &:hover { background: var(--primary); }
 }
 
 body {
   background-color: var(--bg-dashboard);
   color: var(--text-main);
   font-family: $font-body;
-  transition: background-color $transition-base $ease-out-expo, color $transition-base $ease-out-expo, border-color $transition-base $ease-out-expo;
-  
-  // Textura sutil de fundo para dar profundidade
-  background-image: 
-    radial-gradient(ellipse at top left, rgba(255, 107, 26, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(255, 107, 26, 0.02) 0%, transparent 50%);
-  background-attachment: fixed;
+  transition: background-color $transition-base ease, color $transition-base ease;
 }
 
+// ── CONTAINERS ────────────────────────────────────────────────────────────────
 .listagem-container, .cadastro-container, .dashboard, .screen-container, .container {
   padding: 2.5rem;
   min-height: 100vh;
   background-color: var(--bg-dashboard);
   color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  
-  @media (max-width: 768px) {
-    padding: 1.25rem;
-  }
+  font-family: $font-body;
+
+  @media (max-width: 768px) { padding: 1.25rem; }
 }
 
+// ── CABEÇALHOS ────────────────────────────────────────────────────────────────
 .listagem-header, .cadastro-header, .dashboard__header, .header-screen, .card-header {
   display: flex;
   justify-content: space-between;
@@ -87,15 +71,15 @@ body {
   gap: $space-xl;
 
   h1 {
-    font-size: 1.75rem;
-    font-weight: $weight-extrabold;
+    font-size: 1.6rem;
+    font-weight: $weight-bold;
     color: var(--text-main);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     margin: 0;
   }
 
   p, .cadastro-header__subtitle {
-    font-size: 0.925rem;
+    font-size: 0.875rem;
     color: var(--text-sub);
     margin-top: $space-xs;
     margin-bottom: 0;
@@ -109,13 +93,12 @@ body {
   }
 }
 
+// ── TABELAS ───────────────────────────────────────────────────────────────────
 .table-card {
   background: var(--surface-card);
-  border: 2px solid var(--border-color);
-  border-radius: $radius-md $radius-lg $radius-sm $radius-md;
-  @include hard-shadow(4px, 4px, rgba(0,0,0,0.4));
+  border: 1px solid var(--border-color);
+  border-radius: $radius-lg;
   overflow: hidden;
-  transition: background-color $transition-base $ease-out-expo, border-color $transition-base $ease-out-expo;
 }
 
 .table-responsive, .responsive-wrapper {
@@ -127,7 +110,7 @@ body {
   width: 100% !important;
   border-collapse: collapse !important;
   text-align: left;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   background-color: transparent !important;
   margin-bottom: 0 !important;
 
@@ -140,99 +123,94 @@ body {
   th {
     background-color: var(--table-th-bg) !important;
     color: var(--text-sub) !important;
-    font-weight: $weight-bold;
-    padding: $space-md $space-xl;
-    font-size: 0.8rem;
+    font-weight: $weight-semibold;
+    padding: $space-sm $space-lg;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    border-bottom: 2px solid var(--border-color) !important;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border-color) !important;
   }
 
   td {
-    padding: $space-md $space-xl;
+    padding: $space-sm $space-lg;
     color: var(--text-main) !important;
     border-bottom: 1px solid var(--border-color) !important;
     vertical-align: middle !important;
   }
 
   tbody tr {
-    transition: background-color $transition-fast $ease-out-expo;
-    
-    &:hover {
-      background-color: var(--table-hover) !important;
-    }
-    
-    &:last-child td {
-      border-bottom: none !important;
-    }
+    transition: background-color $transition-fast ease;
+
+    &:hover { background-color: var(--table-hover) !important; }
+    &:last-child td { border-bottom: none !important; }
   }
 }
 
+// ── CARDS DE FORMULÁRIO ───────────────────────────────────────────────────────
 .form-card, .cadastro-card, .card {
-  @include card-asymmetric();
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: $radius-lg;
+  padding: $space-xl;
   max-width: 850px;
 
   h1 {
     color: var(--text-main);
     margin-bottom: $space-xl;
-    font-weight: $weight-extrabold;
+    font-weight: $weight-bold;
     letter-spacing: -0.02em;
   }
 
-  @media (max-width: 768px) {
-    padding: $space-xl;
-  }
+  @media (max-width: 768px) { padding: $space-lg; }
 }
 
 .form-grid, .cadastro-form, .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: $space-xl;
+  gap: $space-lg;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: $space-lg;
+    gap: $space-md;
   }
 }
 
+// ── GRUPOS DE FORMULÁRIO ──────────────────────────────────────────────────────
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: $space-sm;
+  gap: $space-xs;
 
   label, .form-group__label {
-    font-size: 0.85rem;
-    font-weight: $weight-bold;
-    color: var(--text-main);
-    letter-spacing: -0.01em;
+    font-size: 0.8rem;
+    font-weight: $weight-semibold;
+    color: var(--text-sub);
+    letter-spacing: 0.01em;
   }
 
   input, select, .form-group__input {
     background-color: var(--bg-dashboard) !important;
-    border: 2px solid var(--border-color) !important;
+    border: 1px solid var(--border-color) !important;
     color: var(--text-main) !important;
     padding: $space-sm $space-md !important;
-    border-radius: $radius-sm !important;
-    font-size: 0.95rem !important;
-    font-weight: $weight-medium !important;
+    border-radius: $radius-md !important;
+    font-size: 0.9rem !important;
+    font-weight: $weight-regular !important;
     outline: none !important;
-    transition: all $transition-fast $ease-out-expo !important;
+    transition: border-color $transition-fast ease !important;
 
     &::placeholder {
       color: var(--text-sub);
-      opacity: 0.7;
+      opacity: 0.6;
     }
 
     &:focus {
       border-color: var(--primary) !important;
-      background-color: var(--surface-card) !important;
-      box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.15) !important;
-      transform: skewX(-1deg);
     }
 
     &[readonly] {
       background-color: var(--table-th-bg) !important;
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
     }
   }
@@ -241,13 +219,13 @@ body {
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: $space-md;
+  gap: $space-sm;
   margin-top: $space-xl;
 
   @media (max-width: 768px) {
     flex-direction: column;
     margin-top: $space-md;
-    
+
     button, a {
       width: 100%;
       justify-content: center;
@@ -255,113 +233,125 @@ body {
   }
 }
 
+// ── BOTÕES ────────────────────────────────────────────────────────────────────
 .btn-primary, .btn-submit, .btn-create, .btn-add, .btn-salvar {
-  @include button-creative($orange-500, $black-50);
-  text-decoration: none;
-  gap: $space-sm;
-
-  &:hover {
-    background-color: $orange-600;
-    color: $black-50 !important;
-  }
-
-  &:active {
-    transform: translateY(0) skewX(0deg);
-  }
-}
-
-.btn-secondary, .btn-editar, .btn-edit, .btn-cancelar {
-  background-color: transparent;
-  color: var(--text-main) !important;
-  border: 2px solid var(--border-color);
-  padding: $space-sm $space-xl;
-  border-radius: $radius-sm;
-  font-size: 0.95rem;
-  font-weight: $weight-bold;
+  background: var(--primary);
+  color: $black-50;
+  border: none;
+  padding: $space-sm $space-lg;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  font-weight: $weight-semibold;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: $space-sm;
-  transition: all $transition-base $ease-out-expo;
+  gap: $space-xs;
   text-decoration: none;
+  transition: background $transition-fast ease, opacity $transition-fast ease;
+
+  &:hover { background: $orange-600; color: $black-50 !important; }
+  &:active { opacity: 0.85; }
+  &[disabled] { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+}
+
+.btn-secondary, .btn-editar, .btn-edit, .btn-cancelar {
+  background: transparent;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-color);
+  padding: $space-sm $space-lg;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  text-decoration: none;
+  transition: background $transition-fast ease, border-color $transition-fast ease;
 
   &:hover {
-    background-color: var(--table-hover);
-    transform: translateY(-2px) skewX(-1deg);
+    background: var(--table-hover);
     border-color: var(--primary);
     color: var(--text-main) !important;
-  }
-
-  &:active {
-    transform: translateY(0) skewX(0deg);
   }
 }
 
 .btn-danger, .btn-delete, .btn-excluir {
-  @include button-creative($danger, $black-50);
+  background: rgba($danger, 0.1);
+  color: $danger;
+  border: 1px solid rgba($danger, 0.25);
+  padding: $space-sm $space-lg;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  font-weight: $weight-semibold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
   text-decoration: none;
-  gap: $space-sm;
+  transition: background $transition-fast ease;
 
   &:hover {
-    background-color: color.adjust($danger, $lightness: -10%);
-    color: $black-50 !important;
-  }
-
-  &:active {
-    transform: translateY(0) skewX(0deg);
+    background: rgba($danger, 0.18);
+    color: $danger !important;
   }
 }
 
+// ── STATUS BADGES ─────────────────────────────────────────────────────────────
 .status-badge, .status {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: $radius-sm;
-  font-size: 0.775rem;
-  font-weight: $weight-bold;
+  padding: 0.2rem 0.65rem;
+  border-radius: $radius-md;
+  font-size: 0.72rem;
+  font-weight: $weight-semibold;
   letter-spacing: 0.02em;
-  
+  white-space: nowrap;
+
   &.ativo, &--success, &.active, &.normal {
-    background-color: rgba($success, 0.15) !important;
+    background: rgba($success, 0.12) !important;
     color: $success !important;
-    border: 1px solid rgba($success, 0.3);
+    border: 1px solid rgba($success, 0.25);
   }
   &.inativo, &--danger, &.inactive, &.baixo, &.saida {
-    background-color: rgba($danger, 0.15) !important;
+    background: rgba($danger, 0.12) !important;
     color: $danger !important;
-    border: 1px solid rgba($danger, 0.3);
+    border: 1px solid rgba($danger, 0.25);
   }
   &.ferias, &--warning, &.entrada {
-    background-color: rgba($warning, 0.15) !important;
+    background: rgba($warning, 0.12) !important;
     color: $warning !important;
-    border: 1px solid rgba($warning, 0.3);
+    border: 1px solid rgba($warning, 0.25);
   }
   &--info {
-    background-color: rgba($info, 0.15) !important;
+    background: rgba($info, 0.12) !important;
     color: $info !important;
-    border: 1px solid rgba($info, 0.3);
+    border: 1px solid rgba($info, 0.25);
   }
   &--secondary {
-    background-color: rgba($black-400, 0.15) !important;
+    background: rgba($black-400, 0.1) !important;
     color: var(--text-sub) !important;
-    border: 1px solid rgba($black-400, 0.3);
+    border: 1px solid rgba($black-400, 0.2);
   }
 }
 
 .btn-editar-amber {
-  @include button-creative($warning, $black-50);
+  background: rgba($warning, 0.1);
+  color: $warning;
+  border: 1px solid rgba($warning, 0.25);
   padding: $space-xs $space-md;
-  font-size: 0.85rem;
-  text-decoration: none;
+  border-radius: $radius-md;
+  font-size: 0.8rem;
+  font-weight: $weight-semibold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   gap: $space-xs;
+  text-decoration: none;
+  transition: background $transition-fast ease;
 
-  &:hover {
-    background-color: color.adjust($warning, $lightness: -10%);
-    color: $black-50 !important;
-  }
-
-  &:active {
-    transform: translateY(0) skewX(0deg);
-  }
+  &:hover { background: rgba($warning, 0.18); }
 }

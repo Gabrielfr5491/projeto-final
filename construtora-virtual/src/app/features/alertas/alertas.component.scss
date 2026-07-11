@@ -1,0 +1,314 @@
+@use '../../../styles/_variables.scss' as *;
+
+.header-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+// ── BOTÃO REFRESH ─────────────────────────────────────────────────────────────
+.btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-xs $space-lg;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  transition: all $transition-fast ease;
+  font-family: inherit;
+
+  svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+}
+
+// ── RESUMO ────────────────────────────────────────────────────────────────────
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: $space-md;
+  margin-bottom: $space-xl;
+}
+
+.resumo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  padding: $space-md $space-lg;
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  cursor: pointer;
+  transition: all $transition-fast ease;
+
+  &:hover, &--active { border-color: var(--border-strong); }
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: $weight-bold;
+    flex-shrink: 0;
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: 0.68rem;
+    font-weight: $weight-semibold;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__value {
+    font-size: 1.1rem;
+    font-weight: $weight-bold;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &--total   { border-left: 3px solid var(--accent); }
+  &--danger  {
+    border-left: 3px solid $danger;
+    .resumo-card__icon { background: rgba($danger, 0.1); color: $danger; }
+    &.resumo-card--active { background: rgba($danger, 0.05); }
+  }
+  &--warning {
+    border-left: 3px solid $warning;
+    .resumo-card__icon { background: rgba($warning, 0.1); color: $warning; }
+    &.resumo-card--active { background: rgba($warning, 0.05); }
+  }
+  &--info {
+    border-left: 3px solid $info;
+    .resumo-card__icon { background: rgba($info, 0.1); color: $info; }
+    &.resumo-card--active { background: rgba($info, 0.05); }
+  }
+}
+
+// ── FILTROS ───────────────────────────────────────────────────────────────────
+.filtros-bar {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  margin-bottom: $space-xl;
+  flex-wrap: wrap;
+}
+
+.filtro-select {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  padding: $space-xs $space-md !important;
+  border-radius: $radius-md !important;
+  font-size: 0.875rem !important;
+  outline: none !important;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color $transition-fast ease;
+
+  &:focus { border-color: var(--accent) !important; }
+  option  { background: var(--bg-card); color: var(--text-primary); }
+}
+
+.filtro-limpar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: $space-xs $space-md;
+  border: 1px solid rgba($danger, 0.3);
+  border-radius: $radius-md;
+  background: rgba($danger, 0.06);
+  color: $danger;
+  font-size: 0.875rem;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  transition: all $transition-fast ease;
+  font-family: inherit;
+
+  &:hover { background: rgba($danger, 0.12); }
+}
+
+.filtro-count {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+// ── LOADING / EMPTY ───────────────────────────────────────────────────────────
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-3xl $space-md;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-3xl $space-md;
+  color: var(--text-secondary);
+  text-align: center;
+
+  svg { width: 52px; height: 52px; opacity: 0.2; }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    opacity: 0.45;
+  }
+
+  span { font-size: 0.85rem; opacity: 0.35; }
+}
+
+// ── LISTA DE ALERTAS ──────────────────────────────────────────────────────────
+.alertas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+.alerta-card {
+  display: flex;
+  gap: $space-lg;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  padding: $space-lg $space-xl;
+  transition: border-color $transition-fast ease;
+
+  &:hover { border-color: var(--border-strong); }
+
+  &--danger  { border-left: 4px solid $danger;  }
+  &--warning { border-left: 4px solid $warning; }
+  &--info    { border-left: 4px solid $info;    }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+
+    svg { width: 20px; height: 20px; }
+
+    .alerta-card--danger  & { background: rgba($danger,  0.1); color: $danger;  }
+    .alerta-card--warning & { background: rgba($warning, 0.1); color: $warning; }
+    .alerta-card--info    & { background: rgba($info,    0.1); color: $info;    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-sm;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+  }
+
+  &__titulo {
+    margin: 0 0 6px;
+    font-size: 0.95rem;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+  }
+
+  &__mensagem {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+}
+
+// ── BADGES E LINKS ────────────────────────────────────────────────────────────
+.alerta-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: $radius-md;
+  font-size: 0.68rem;
+  font-weight: $weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  &--danger  { background: rgba($danger,  0.1); color: $danger;  border: 1px solid rgba($danger,  0.2); }
+  &--warning { background: rgba($warning, 0.1); color: $warning; border: 1px solid rgba($warning, 0.2); }
+  &--info    { background: rgba($info,    0.1); color: $info;    border: 1px solid rgba($info,    0.2); }
+}
+
+.alerta-categoria {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: $weight-medium;
+
+  svg { width: 12px; height: 12px; }
+}
+
+.alerta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: $weight-semibold;
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity $transition-fast ease;
+
+  svg { width: 12px; height: 12px; }
+
+  &:hover { opacity: 0.75; }
+}

@@ -1,0 +1,499 @@
+<div class="container">
+
+  <!-- ── HEADER ─────────────────────────────────────────────── -->
+  <div class="card-header">
+    <div>
+      <h1>Relatórios</h1>
+      <p class="header-sub">Análise detalhada por módulo</p>
+    </div>
+    <button class="btn-export" (click)="exportarCSV()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Exportar CSV
+    </button>
+  </div>
+
+  <!-- ── ABAS ───────────────────────────────────────────────── -->
+  <div class="tabs">
+    <button class="tab" [class.tab--active]="abaAtiva === 'financeiro'" (click)="mudarAba('financeiro')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Financeiro
+    </button>
+    <button class="tab" [class.tab--active]="abaAtiva === 'obras'" (click)="mudarAba('obras')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M5 21V7m14 14V7M9 7v14m6-14v14"/></svg>
+      Obras
+    </button>
+    <button class="tab" [class.tab--active]="abaAtiva === 'funcionarios'" (click)="mudarAba('funcionarios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+      Funcionários
+    </button>
+    <button class="tab" [class.tab--active]="abaAtiva === 'materiais'" (click)="mudarAba('materiais')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Materiais
+    </button>
+    <button class="tab" [class.tab--active]="abaAtiva === 'equipamentos'" (click)="mudarAba('equipamentos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17h18"/><path d="M5 17V9l4-4h6l4 4v8"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+      Equipamentos
+    </button>
+  </div>
+
+  <!-- ── LOADING ─────────────────────────────────────────────── -->
+  <div *ngIf="carregando" class="loading-state">
+    <div class="loading-spinner"></div>
+    <span>Carregando dados...</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ABA: FINANCEIRO
+  ══════════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="!carregando && abaAtiva === 'financeiro' && financeiro">
+
+    <!-- Cards de resumo -->
+    <div class="resumo-grid">
+      <div class="resumo-card resumo-card--entrada">
+        <div class="resumo-card__icon">↓</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Total Entradas</span>
+          <span class="resumo-card__value text-success">R$ {{ formatarValor(financeiro.totalEntradas) }}</span>
+        </div>
+      </div>
+      <div class="resumo-card resumo-card--saida">
+        <div class="resumo-card__icon">↑</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Total Saídas</span>
+          <span class="resumo-card__value text-danger">R$ {{ formatarValor(financeiro.totalSaidas) }}</span>
+        </div>
+      </div>
+      <div class="resumo-card" [class.resumo-card--positivo]="financeiro.saldo >= 0" [class.resumo-card--negativo]="financeiro.saldo < 0">
+        <div class="resumo-card__icon">≡</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Saldo</span>
+          <span class="resumo-card__value" [class.text-success]="financeiro.saldo >= 0" [class.text-danger]="financeiro.saldo < 0">
+            R$ {{ formatarValor(financeiro.saldo < 0 ? financeiro.saldo * -1 : financeiro.saldo) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Evolução mensal -->
+    <div *ngIf="financeiro.evolucao.length > 0" class="section-card">
+      <h3 class="section-title">Evolução Mensal</h3>
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mês</th>
+              <th class="col-right">Entradas</th>
+              <th class="col-right">Saídas</th>
+              <th class="col-right">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ev of financeiro.evolucao">
+              <td class="mes-text">{{ formatarMes(ev.mes) }}</td>
+              <td class="col-right text-success">R$ {{ formatarValor(ev.entradas) }}</td>
+              <td class="col-right text-danger">R$ {{ formatarValor(ev.saidas) }}</td>
+              <td class="col-right" [class.text-success]="ev.saldo >= 0" [class.text-danger]="ev.saldo < 0">
+                R$ {{ formatarValor(ev.saldo < 0 ? ev.saldo * -1 : ev.saldo) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Detalhamento por categoria -->
+    <div class="section-card">
+      <h3 class="section-title">Por Categoria</h3>
+      <div class="categoria-grid">
+        <div class="categoria-item" *ngFor="let cat of categoriasObj(financeiro.porCategoria)">
+          <span class="categoria-item__nome">{{ cat.chave }}</span>
+          <div class="categoria-item__valores">
+            <span class="text-success">↓ R$ {{ formatarValor(cat.valor.entradas) }}</span>
+            <span class="text-danger">↑ R$ {{ formatarValor(cat.valor.saidas) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtro e tabela de lançamentos -->
+    <div class="section-card">
+      <div class="section-header">
+        <h3 class="section-title">Lançamentos ({{ itensFinanceiroFiltrados.length }})</h3>
+        <div class="filtro-busca">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" [(ngModel)]="buscaFinanceiro" placeholder="Buscar descrição, obra ou categoria..." class="filtro-input" />
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Categoria</th>
+              <th>Obra</th>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th class="col-right">Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="itensFinanceiroFiltrados.length === 0">
+              <td colspan="6" class="empty-state">Nenhum lançamento encontrado</td>
+            </tr>
+            <tr *ngFor="let item of itensFinanceiroFiltrados">
+              <td><span class="text-strong">{{ item.descricao }}</span></td>
+              <td><span class="badge">{{ item.categoria }}</span></td>
+              <td class="text-muted">{{ item.obra }}</td>
+              <td class="text-muted">{{ formatarData(item.data) }}</td>
+              <td>
+                <span class="badge" [class.badge--success]="item.tipo === 'Entrada'" [class.badge--danger]="item.tipo !== 'Entrada'">
+                  {{ item.tipo }}
+                </span>
+              </td>
+              <td class="col-right text-strong" [class.text-success]="item.tipo === 'Entrada'" [class.text-danger]="item.tipo !== 'Entrada'">
+                R$ {{ formatarValor(item.valor) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ABA: OBRAS
+  ══════════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="!carregando && abaAtiva === 'obras'">
+
+    <div class="resumo-grid" *ngIf="obras.length > 0">
+      <div class="resumo-card resumo-card--total">
+        <div class="resumo-card__icon">#</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Total de Obras</span>
+          <span class="resumo-card__value">{{ obras.length }}</span>
+        </div>
+      </div>
+      <div class="resumo-card resumo-card--saida">
+        <div class="resumo-card__icon">!</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Orçamentos Estourados</span>
+          <span class="resumo-card__value text-danger">{{ totalObrasEstouradas }}</span>
+        </div>
+      </div>
+      <div class="resumo-card resumo-card--positivo">
+        <div class="resumo-card__icon">✓</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Concluídas</span>
+          <span class="resumo-card__value text-success">{{ totalObrasConcluidas }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h3 class="section-title">Situação por Obra</h3>
+        <div class="filtro-busca">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" [(ngModel)]="buscaObras" placeholder="Buscar obra, cidade ou estado..." class="filtro-input" />
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Obra</th>
+              <th>Localização</th>
+              <th>Status</th>
+              <th class="col-right">Orçamento</th>
+              <th class="col-right">Custo Real</th>
+              <th class="col-center">Variação</th>
+              <th class="col-center">Dias Restantes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="obrasFiltradas.length === 0">
+              <td colspan="7" class="empty-state">Nenhuma obra encontrada</td>
+            </tr>
+            <tr *ngFor="let o of obrasFiltradas" [class.row-danger]="o.estourado">
+              <td><span class="text-strong">{{ o.nome }}</span></td>
+              <td class="text-muted">{{ o.cidade }}/{{ o.estado }}</td>
+              <td>
+                <span class="badge"
+                  [class.badge--success]="o.status === 'Concluída' || o.status === 'Concluido'"
+                  [class.badge--warning]="o.status === 'Em Andamento' || o.status === 'Em andamento'"
+                  [class.badge--info]="o.status === 'Planejamento'">
+                  {{ o.status }}
+                </span>
+              </td>
+              <td class="col-right">R$ {{ formatarValor(o.orcamento) }}</td>
+              <td class="col-right" [class.text-danger]="o.estourado">R$ {{ formatarValor(o.custoReal) }}</td>
+              <td class="col-center">
+                <span class="badge" [ngClass]="variancaoClass(o.variacao)">
+                  {{ o.variacao > 0 ? '+' : '' }}{{ o.variacao }}%
+                </span>
+              </td>
+              <td class="col-center">
+                <span *ngIf="o.diasRestantes !== null"
+                  [class.text-danger]="o.diasRestantes < 0"
+                  [class.text-warning]="o.diasRestantes >= 0 && o.diasRestantes <= 15">
+                  {{ o.diasRestantes < 0 ? o.diasRestantes * -1 + ' dias atrás' : o.diasRestantes + ' dias' }}
+                </span>
+                <span *ngIf="o.diasRestantes === null" class="text-muted">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ABA: FUNCIONÁRIOS
+  ══════════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="!carregando && abaAtiva === 'funcionarios' && funcionarios">
+
+    <div class="resumo-grid">
+      <div class="resumo-card resumo-card--total">
+        <div class="resumo-card__icon">#</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Total</span>
+          <span class="resumo-card__value">{{ funcionarios.total }}</span>
+        </div>
+      </div>
+      <div class="resumo-card resumo-card--positivo">
+        <div class="resumo-card__icon">✓</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Ativos</span>
+          <span class="resumo-card__value text-success">{{ funcionarios.ativos }}</span>
+        </div>
+      </div>
+      <div class="resumo-card">
+        <div class="resumo-card__icon">R$</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Folha Total</span>
+          <span class="resumo-card__value">R$ {{ formatarValor(funcionarios.totalFolha) }}</span>
+        </div>
+      </div>
+      <div class="resumo-card">
+        <div class="resumo-card__icon">~</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Média Salarial</span>
+          <span class="resumo-card__value">R$ {{ formatarValor(funcionarios.mediaSalarial) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Por cargo -->
+    <div class="section-card">
+      <h3 class="section-title">Por Cargo</h3>
+      <div class="categoria-grid">
+        <div class="categoria-item" *ngFor="let cat of categoriasObj(funcionarios.porCargo)">
+          <span class="categoria-item__nome">{{ cat.chave }}</span>
+          <div class="categoria-item__valores">
+            <span>{{ cat.valor.quantidade }} funcionário(s)</span>
+            <span class="text-muted">R$ {{ formatarValor(cat.valor.folha) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h3 class="section-title">Lista de Funcionários ({{ funcionariosFiltrados.length }})</h3>
+        <div class="filtro-busca">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" [(ngModel)]="buscaFuncionarios" placeholder="Buscar nome ou cargo..." class="filtro-input" />
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Cargo</th>
+              <th class="col-right">Salário</th>
+              <th>Status</th>
+              <th>Email</th>
+              <th>Telefone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="funcionariosFiltrados.length === 0">
+              <td colspan="6" class="empty-state">Nenhum funcionário encontrado</td>
+            </tr>
+            <tr *ngFor="let f of funcionariosFiltrados">
+              <td><span class="text-strong">{{ f.nome }}</span></td>
+              <td><span class="badge">{{ f.cargo }}</span></td>
+              <td class="col-right">R$ {{ formatarValor(f.salario) }}</td>
+              <td>
+                <span class="badge"
+                  [class.badge--success]="f.status.toLowerCase() === 'ativo' || f.status.toLowerCase() === 'ativa'"
+                  [class.badge--danger]="f.status.toLowerCase() === 'inativo' || f.status.toLowerCase() === 'inativa'">
+                  {{ f.status }}
+                </span>
+              </td>
+              <td class="text-muted">{{ f.email }}</td>
+              <td class="text-muted">{{ f.telefone }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ABA: MATERIAIS
+  ══════════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="!carregando && abaAtiva === 'materiais' && materiais">
+
+    <div class="resumo-grid">
+      <div class="resumo-card resumo-card--total">
+        <div class="resumo-card__icon">#</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Total de Itens</span>
+          <span class="resumo-card__value">{{ materiais.total }}</span>
+        </div>
+      </div>
+      <div class="resumo-card" [class.resumo-card--saida]="materiais.totalCriticos > 0">
+        <div class="resumo-card__icon">!</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Itens Críticos</span>
+          <span class="resumo-card__value" [class.text-danger]="materiais.totalCriticos > 0">{{ materiais.totalCriticos }}</span>
+        </div>
+      </div>
+      <div class="resumo-card resumo-card--total">
+        <div class="resumo-card__icon">R$</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Valor Total Estoque</span>
+          <span class="resumo-card__value">R$ {{ formatarValor(materiais.valorTotalEstoque) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerta de críticos -->
+    <div *ngIf="materiais.criticos.length > 0" class="alerta-criticos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span><strong>{{ materiais.criticos.length }} item(ns)</strong> com estoque abaixo do mínimo: {{ nomesCriticos }}</span>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h3 class="section-title">Estoque ({{ materiaisFiltrados.length }})</h3>
+        <div class="filtros-inline">
+          <div class="filtro-busca">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" [(ngModel)]="buscaMateriais" placeholder="Buscar material ou categoria..." class="filtro-input" />
+          </div>
+          <label class="toggle-critico">
+            <input type="checkbox" [(ngModel)]="filtroMaterialCritico" />
+            Somente críticos
+          </label>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Categoria</th>
+              <th class="col-center">Qtd</th>
+              <th class="col-center">Mínimo</th>
+              <th>Unidade</th>
+              <th class="col-right">Vlr Unitário</th>
+              <th class="col-right">Vlr Total</th>
+              <th>Fornecedor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="materiaisFiltrados.length === 0">
+              <td colspan="8" class="empty-state">Nenhum material encontrado</td>
+            </tr>
+            <tr *ngFor="let m of materiaisFiltrados" [class.row-warning]="m.critico">
+              <td>
+                <span class="text-strong">{{ m.nome }}</span>
+                <span *ngIf="m.critico" class="badge badge--danger ml-xs">Crítico</span>
+              </td>
+              <td><span class="badge">{{ m.categoria }}</span></td>
+              <td class="col-center" [class.text-danger]="m.critico">{{ m.quantidade }}</td>
+              <td class="col-center text-muted">{{ m.estoqueMinimo }}</td>
+              <td class="text-muted">{{ m.unidade }}</td>
+              <td class="col-right">R$ {{ formatarValor(m.valorUnitario) }}</td>
+              <td class="col-right text-strong">R$ {{ formatarValor(m.valorTotal) }}</td>
+              <td class="text-muted">{{ m.fornecedor }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ABA: EQUIPAMENTOS
+  ══════════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="!carregando && abaAtiva === 'equipamentos' && equipamentos">
+
+    <div class="resumo-grid">
+      <div class="resumo-card resumo-card--total">
+        <div class="resumo-card__icon">#</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">Total</span>
+          <span class="resumo-card__value">{{ equipamentos.total }}</span>
+        </div>
+      </div>
+      <div class="resumo-card" *ngFor="let st of categoriasObj(equipamentos.porStatus)">
+        <div class="resumo-card__icon">◉</div>
+        <div class="resumo-card__content">
+          <span class="resumo-card__label">{{ st.chave }}</span>
+          <span class="resumo-card__value">{{ st.valor }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3 class="section-title">Lista de Equipamentos</h3>
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Marca / Modelo</th>
+              <th>Placa</th>
+              <th>Status</th>
+              <th class="col-right">Valor/Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="equipamentos.lista.length === 0">
+              <td colspan="6" class="empty-state">Nenhum equipamento cadastrado</td>
+            </tr>
+            <tr *ngFor="let e of equipamentos.lista">
+              <td><span class="text-strong">{{ e.nome }}</span></td>
+              <td><span class="badge">{{ e.tipo }}</span></td>
+              <td class="text-muted">{{ e.marca }} {{ e.modelo }}</td>
+              <td class="text-muted">{{ e.placa || '—' }}</td>
+              <td>
+                <span class="badge"
+                  [class.badge--success]="e.status.toLowerCase() === 'ativo' || e.status.toLowerCase() === 'disponível'"
+                  [class.badge--warning]="statusContemManutencao(e.status)"
+                  [class.badge--danger]="e.status.toLowerCase() === 'inativo' || e.status.toLowerCase() === 'inativa'">
+                  {{ e.status }}
+                </span>
+              </td>
+              <td class="col-right">R$ {{ formatarValor(e.valorHora) }}/h</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

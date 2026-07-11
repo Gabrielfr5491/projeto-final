@@ -1,0 +1,245 @@
+<div class="detalhe-obra-container">
+  <header class="page-header">
+    <button class="btn-voltar" (click)="voltar()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Voltar
+    </button>
+    <h1>{{ obra?.nome || 'Carregando...' }}</h1>
+  </header>
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando informações da obra...</p>
+  </div>
+
+  <div *ngIf="!loading && obra" class="detalhe-content">
+    <!-- Abas de navegação -->
+    <nav class="abas-nav">
+      <button 
+        class="aba-item" 
+        [class.active]="abaAtiva === 'visao-geral'"
+        (click)="abaAtiva = 'visao-geral'">
+        Visão Geral
+      </button>
+      <button 
+        class="aba-item" 
+        [class.active]="abaAtiva === 'custos'"
+        (click)="abaAtiva = 'custos'">
+        Custos
+      </button>
+      <button 
+        class="aba-item" 
+        [class.active]="abaAtiva === 'diario'"
+        (click)="abaAtiva = 'diario'">
+        Diário de Obra
+      </button>
+    </nav>
+
+    <!-- Conteúdo: Visão Geral -->
+    <section *ngIf="abaAtiva === 'visao-geral'" class="aba-content">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon status">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Status</span>
+            <span class="kpi-value" [ngClass]="statusClass(obra.status)">{{ obra.status }}</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon orcamento">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Orçamento</span>
+            <span class="kpi-value">{{ formatarValor(obra.orcamento) }}</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon tempo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Dias Restantes</span>
+            <span class="kpi-value">{{ diasRestantes }} dias</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon progresso">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-label">Tempo Decorrido</span>
+            <span class="kpi-value">{{ percentualTempo }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-sections">
+        <div class="info-card">
+          <h3>Informações Básicas</h3>
+          <dl class="info-list">
+            <div class="info-item">
+              <dt>Endereço</dt>
+              <dd>{{ obra.endereco }}</dd>
+            </div>
+            <div class="info-item">
+              <dt>Data de Início</dt>
+              <dd>{{ formatarData(obra.dataInicio) }}</dd>
+            </div>
+            <div class="info-item">
+              <dt>Data de Término</dt>
+              <dd>{{ formatarData(obra.dataPrevista) }}</dd>
+            </div>
+            <div class="info-item">
+              <dt>Duração Total</dt>
+              <dd>{{ duracaoTotal }} dias</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="info-card">
+          <h3>Responsável</h3>
+          <dl class="info-list">
+            <div class="info-item">
+              <dt>Engenheiro</dt>
+              <dd>{{ $any(obra).engenheiro || 'Não informado' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="acoes-rapidas">
+        <button class="btn-acao" [routerLink]="['/editar-obra', obra.id]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Editar Obra
+        </button>
+      </div>
+    </section>
+
+    <!-- Conteúdo: Custos -->
+    <section *ngIf="abaAtiva === 'custos'" class="aba-content">
+      <div class="resumo-financeiro">
+        <div class="resumo-card entradas">
+          <span class="resumo-label">Total de Entradas</span>
+          <span class="resumo-valor positivo">{{ formatarValor(totalEntradas) }}</span>
+        </div>
+        <div class="resumo-card saidas">
+          <span class="resumo-label">Total de Saídas</span>
+          <span class="resumo-valor negativo">{{ formatarValor(totalSaidas) }}</span>
+        </div>
+        <div class="resumo-card saldo">
+          <span class="resumo-label">Saldo</span>
+          <span class="resumo-valor" [class.positivo]="saldo >= 0" [class.negativo]="saldo < 0">
+            {{ formatarValor(saldo) }}
+          </span>
+        </div>
+        <div class="resumo-card orcamento-usado">
+          <span class="resumo-label">% do Orçamento Usado</span>
+          <span class="resumo-valor">{{ percentualOrcamento }}%</span>
+          <div class="barra-progresso">
+            <div class="barra-fill" [style.width.%]="percentualOrcamento"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabela-container">
+        <h3>Custos Vinculados</h3>
+        <table class="tabela-custos" *ngIf="custosVinculados.length > 0">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Data</th>
+              <th>Fornecedor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let custo of custosVinculados">
+              <td>{{ custo.descricao }}</td>
+              <td>
+                <span class="badge" [class.entrada]="custo.tipo === 'entrada'" [class.saida]="custo.tipo === 'saida'">
+                  {{ custo.tipo }}
+                </span>
+              </td>
+              <td [class.positivo]="custo.tipo === 'entrada'" [class.negativo]="custo.tipo === 'saida'">
+                {{ formatarValor(custo.valor) }}
+              </td>
+              <td>{{ formatarData(custo.data) }}</td>
+              <td>{{ $any(custo).fornecedor || '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-state" *ngIf="custosVinculados.length === 0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>Nenhum custo vinculado a esta obra</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conteúdo: Diário -->
+    <section *ngIf="abaAtiva === 'diario'" class="aba-content">
+      <div class="diario-header">
+        <h3>Entradas do Diário</h3>
+        <button class="btn-nova-entrada" (click)="novaEntradaDiario()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nova Entrada
+        </button>
+      </div>
+
+      <div class="timeline" *ngIf="entradasDiario.length > 0">
+        <div class="timeline-item" *ngFor="let entrada of entradasDiario">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="entrada-header">
+              <h4>{{ entrada.titulo }}</h4>
+              <span class="entrada-data">{{ formatarData(entrada.data) }}</span>
+            </div>
+            <p class="entrada-descricao">{{ entrada.descricao }}</p>
+            <span class="entrada-autor">Por: {{ entrada.autor }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="entradasDiario.length === 0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        <p>Nenhuma entrada no diário para esta obra</p>
+        <button class="btn-primary" (click)="novaEntradaDiario()">Criar Primeira Entrada</button>
+      </div>
+    </section>
+  </div>
+</div>

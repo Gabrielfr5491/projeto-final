@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-import { Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 import { CustoService } from '../../../core/services/custo.service';
 import { ObraService } from '../../../core/services/obra.service';
@@ -13,10 +12,7 @@ import { Obra } from '../../../models/obra';
 @Component({
   selector: 'app-cadastro-custo',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './cadastro-custo.component.html',
   styleUrl: './cadastro-custo.component.scss'
 })

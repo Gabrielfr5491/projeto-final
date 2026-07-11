@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { CustoService } from '../../../core/services/custo.service';
 import { ObraService } from '../../../core/services/obra.service';
@@ -16,10 +12,7 @@ import { Obra } from '../../../models/obra';
 @Component({
   selector: 'app-editar-custo',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './editar-custo.component.html',
   styleUrl: './editar-custo.component.scss'
 })

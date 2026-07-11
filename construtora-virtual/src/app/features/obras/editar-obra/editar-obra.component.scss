@@ -1,0 +1,46 @@
+@use '../../../../styles/_variables.scss' as *;
+
+.full-width {
+  grid-column: span 2;
+  @media (max-width: 768px) { grid-column: span 1; }
+}
+
+.split-70 { grid-column: span 1; }
+.split-30 { grid-column: span 1; }
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  select {
+    width: 100%;
+    appearance: none;
+    cursor: pointer;
+    padding-right: 2.5rem;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--text-sub);
+    border-bottom: 2px solid var(--text-sub);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+}
+
+.loading-state {
+  padding: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--text-sub);
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+}
