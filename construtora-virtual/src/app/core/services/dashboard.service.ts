@@ -29,4 +29,26 @@ export class DashboardService {
 
   }
 
+  custosPorObra() {
+
+    return this.http.get<{
+      obras: string[];
+      entradas: number[];
+      saidas: number[];
+      totais: number[];
+    }>(`${this.api}/dashboard/custos-por-obra`);
+
+  }
+
+  evm() {
+
+    return this.http.get<{
+      meses: string[];
+      pv: number[];
+      ac: number[];
+      ev: number[];
+    }>(`${this.api}/dashboard/evm`);
+
+  }
+
 }

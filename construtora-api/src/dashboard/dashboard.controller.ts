@@ -31,5 +31,21 @@ export class DashboardController {
 
   }
 
+  @Get('custos-por-obra')
+  custosPorObra() {
+
+    return this.dashboardService
+      .custosPorObra();
+
+  }
+
+  @Get('evm')
+  evm() {
+
+    return this.dashboardService
+      .evm();
+
+  }
+
 }
 

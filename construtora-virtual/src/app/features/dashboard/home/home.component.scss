@@ -230,52 +230,318 @@
   }
 }
 
-// Cards de gráfico com tratamento refinado
-.grafico-card {
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: $radius-md $radius-xl $radius-sm $radius-lg;
-  padding: $space-xl;
-  transition: 200ms ease-out;
-  position: relative;
+// ============================================================
+// GRADE DOS 2 GRÁFICOS PRINCIPAIS
+// ============================================================
+.dashboard-graficos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: $space-xl;
 
-  // Elemento de assinatura: linha laranja sutil no topo
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 15%;
-    width: 70%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.5;
-  }
-
-  &:hover {
-    transform: translateY(-3px);
-
-    &::before {
-      opacity: 0.8;
-    }
-  }
-
-  h2 {
-    font-size: 1.1rem;
-    font-weight: $weight-extrabold;
-    margin-bottom: $space-xl;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
   }
 }
 
-.dashboard-graficos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: $space-xl;
-  margin-bottom: $space-xl;
+// ============================================================
+// CARD DE GRÁFICO - BASE PREMIUM
+// ============================================================
+.grafico-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 2rem 1.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 300ms ease-out,
+              border-color 300ms ease-out;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    border-color: var(--accent);
+  }
+
+  // Blob decorativo 1
+  &__deco {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+
+    top: -60px;
+    right: -60px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(255,107,26,0.12), transparent 70%);
+
+    // Blob decorativo 2
+    &--2 {
+      top: auto;
+      bottom: -40px;
+      left: -40px;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(168,85,247,0.08), transparent 70%);
+    }
+  }
+
+  // Modificação para card de status (laranja)
+  &--status {
+    &:hover { border-color: #FF6B1A; }
+    .grafico-card__deco {
+      background: radial-gradient(circle, rgba(255,107,26,0.14), transparent 70%);
+      &--2 { background: radial-gradient(circle, rgba(255,107,26,0.07), transparent 70%); }
+    }
+  }
+
+  // Modificação para card de custos (roxo)
+  &--custos {
+    &:hover { border-color: #A855F7; }
+    .grafico-card__deco {
+      background: radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%);
+      &--2 { background: radial-gradient(circle, rgba(6,182,212,0.08), transparent 70%); }
+    }
+  }
+
+  // Modificação para card EVM (ciano/âmbar)
+  &--evm {
+    &:hover { border-color: #06B6D4; }
+    .grafico-card__deco {
+      background: radial-gradient(circle, rgba(6,182,212,0.12), transparent 70%);
+      &--2 { background: radial-gradient(circle, rgba(245,158,11,0.08), transparent 70%); }
+    }
+  }
+
+  // Header do card
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  // Badge tipo pill acima do título
+  &__badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: $weight-black;
+    letter-spacing: 0.1em;
+    width: fit-content;
+    background: rgba(255, 107, 26, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(255, 107, 26, 0.3);
+
+    &--alt {
+      background: rgba(168, 85, 247, 0.12);
+      color: #A855F7;
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    &--evm {
+      background: rgba(6, 182, 212, 0.12);
+      color: #06B6D4;
+      border-color: rgba(6, 182, 212, 0.3);
+    }
+  }
+
+  &__title {
+    font-size: 1.15rem;
+    font-weight: $weight-extrabold;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: $weight-medium;
+  }
+
+  // Contador total (canto direito do header)
+  &__total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background: rgba(255, 107, 26, 0.08);
+    border: 1px solid rgba(255, 107, 26, 0.2);
+    border-radius: 14px;
+    padding: 0.5rem 0.9rem;
+  }
+
+  &__total-value {
+    font-size: 1.6rem;
+    font-weight: $weight-black;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__total-label {
+    font-size: 0.6rem;
+    font-weight: $weight-bold;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+
+  // Wrapper do gráfico
+  &__chart {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Estado vazio
+  &__empty {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: $weight-medium;
+    padding: 80px 0 60px;
+    opacity: 0.5;
+  }
+
+  // Legenda customizada (3 itens em linha)
+  &__legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Itens da legenda customizada
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    opacity: 0.35;
+  }
+
+  &--concluida {
+    background: #FF6B1A;
+    box-shadow: 0 0 8px rgba(255, 107, 26, 0.6);
+    &::after { background: #FF6B1A; }
+  }
+
+  &--andamento {
+    background: #A855F7;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+    &::after { background: #A855F7; }
+  }
+
+  &--planejamento {
+    background: #06B6D4;
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+    &::after { background: #06B6D4; }
+  }
+}
+
+.legend-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: $weight-medium;
+}
+
+.legend-value {
+  font-size: 0.85rem;
+  font-weight: $weight-black;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+// ============================================================
+// BADGES KPI — SPI e CPI (canto direito do card EVM)
+// ============================================================
+.evm-kpis {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.evm-kpi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-elevated, rgba(255,255,255,0.04));
+  backdrop-filter: blur(8px);
+  min-width: 52px;
+  transition: all 250ms ease-out;
+
+  &__index {
+    font-size: 0.58rem;
+    font-weight: $weight-black;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-secondary);
+  }
+
+  &__value {
+    font-size: 1rem;
+    font-weight: $weight-black;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  // Quando o índice é bom (>= 1)
+  &--good {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.08);
+
+    .evm-kpi__index { color: #10B981; }
+    .evm-kpi__value { color: #10B981; }
+  }
+
+  // Quando o índice está ruim (< 1)
+  &--bad {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.08);
+
+    .evm-kpi__index { color: #EF4444; }
+    .evm-kpi__value { color: #EF4444; }
   }
 }
 

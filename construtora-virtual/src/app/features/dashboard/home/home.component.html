@@ -226,143 +226,110 @@
 
   <section class="dashboard-graficos">
 
-  
+    <!-- GRÁFICO 1: Status das Obras - Multi-ring radialBar -->
+    <section class="grafico-card grafico-card--status">
+      <div class="grafico-card__deco"></div>
+      <div class="grafico-card__deco grafico-card__deco--2"></div>
 
-  <section class="grafico-card">
+      <div class="grafico-card__header">
+        <div class="grafico-card__title-group">
+          <span class="grafico-card__badge">OBRAS</span>
+          <h2 class="grafico-card__title">Status das Obras</h2>
+          <p class="grafico-card__desc">Distribuição por fase de execução</p>
+        </div>
+        <div class="grafico-card__total">
+          <span class="grafico-card__total-value">{{ totalObras }}</span>
+          <span class="grafico-card__total-label">Total</span>
+        </div>
+      </div>
 
+      <div class="grafico-card__chart">
+        <apx-chart
+          *ngIf="chartOptions"
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [labels]="chartOptions.labels"
+          [plotOptions]="chartOptions.plotOptions"
+          [colors]="chartOptions.colors"
+          [stroke]="chartOptions.stroke"
+          [fill]="chartOptions.fill"
+          [legend]="chartOptions.legend">
+        </apx-chart>
+      </div>
 
-<div class="table-container__header">
+      <div class="grafico-card__legend">
+        <div class="legend-item">
+          <span class="legend-dot legend-dot--concluida"></span>
+          <span class="legend-label">Concluídas</span>
+          <span class="legend-value">{{ obrasConcluidas }}</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-dot--andamento"></span>
+          <span class="legend-label">Em Andamento</span>
+          <span class="legend-value">{{ obrasAndamento }}</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-dot--planejamento"></span>
+          <span class="legend-label">Planejamento</span>
+          <span class="legend-value">{{ obrasPlanejamento }}</span>
+        </div>
+      </div>
+    </section>
 
-  <h2>
-    Status das Obras
-  </h2>
+    <!-- GRÁFICO 2: Curva S e Valor Agregado (EVM) -->
+    <section class="grafico-card grafico-card--evm">
+      <div class="grafico-card__deco"></div>
+      <div class="grafico-card__deco grafico-card__deco--2"></div>
 
-</div>
+      <div class="grafico-card__header">
+        <div class="grafico-card__title-group">
+          <span class="grafico-card__badge grafico-card__badge--evm">EVM</span>
+          <h2 class="grafico-card__title">Curva S e Valor Agregado</h2>
+          <p class="grafico-card__desc">
+            Visão cumulativa de planejamento (PV), entrega (EV) e custo (AC) em R$
+          </p>
+        </div>
+        <div class="evm-kpis">
+          <div class="evm-kpi"
+            [class.evm-kpi--good]="spi >= 1"
+            [class.evm-kpi--bad]="spi < 1 && spi > 0">
+            <span class="evm-kpi__index">SPI</span>
+            <span class="evm-kpi__value">{{ spi | number:'1.2-2' }}</span>
+          </div>
+          <div class="evm-kpi"
+            [class.evm-kpi--good]="cpi >= 1"
+            [class.evm-kpi--bad]="cpi < 1 && cpi > 0">
+            <span class="evm-kpi__index">CPI</span>
+            <span class="evm-kpi__value">{{ cpi | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
 
-<apx-chart
-
-  *ngIf="chartOptions"
-
-  [series]="chartOptions.series"
-
-  [chart]="chartOptions.chart"
-
-  [labels]="chartOptions.labels"
-
-  [plotOptions]="chartOptions.plotOptions"
-
-  [colors]="chartOptions.colors">
-
-</apx-chart>
+      <div class="grafico-card__chart">
+        <apx-chart
+          *ngIf="chartEVM"
+          [series]="chartEVM.series"
+          [chart]="chartEVM.chart"
+          [colors]="chartEVM.colors"
+          [stroke]="chartEVM.stroke"
+          [fill]="chartEVM.fill"
+          [markers]="chartEVM.markers"
+          [xaxis]="chartEVM.xaxis"
+          [yaxis]="chartEVM.yaxis"
+          [grid]="chartEVM.grid"
+          [legend]="chartEVM.legend"
+          [tooltip]="chartEVM.tooltip"
+          [dataLabels]="chartEVM.dataLabels"
+          [annotations]="chartEVM.annotations">
+        </apx-chart>
+        <div *ngIf="!chartEVM" class="grafico-card__empty">
+          Aguardando dados do servidor...
+        </div>
+      </div>
+    </section>
 
 
   </section>
-
-  
-
-  <section class="grafico-card">
-
-
-<div class="table-container__header">
-
-  <h2>
-    Financeiro
-  </h2>
-
-</div>
-
-<apx-chart
-
-  *ngIf="chartFinanceiro"
-
-  [series]="chartFinanceiro.series"
-
-  [chart]="chartFinanceiro.chart"
-
-  [xaxis]="chartFinanceiro.xaxis"
-
-  [stroke]="chartFinanceiro.stroke"
-
-  [fill]="chartFinanceiro.fill"
-
-  [markers]="chartFinanceiro.markers"
-
-  [colors]="chartFinanceiro.colors">
-
-</apx-chart>
-
-
-  </section>
-
-  
-
-  <section class="grafico-card">
-
-
-<div class="table-container__header">
-
-  <h2>
-    Indicadores Gerais
-  </h2>
-
-</div>
-
-<apx-chart
-
-  *ngIf="chartKpi"
-
-  [series]="chartKpi.series"
-
-  [chart]="chartKpi.chart"
-
-  [plotOptions]="chartKpi.plotOptions"
-
-  [xaxis]="chartKpi.xaxis"
-
-  [colors]="chartKpi.colors">
-
-</apx-chart>
-
-
-  </section>
-
-  
-
-  <section class="grafico-card">
-
-
-<div class="table-container__header">
-
-  <h2>
-    Custos por Categoria
-  </h2>
-
-</div>
-
-<apx-chart
-
-  *ngIf="chartCustosCategoria"
-
-  [series]="chartCustosCategoria.series"
-
-  [chart]="chartCustosCategoria.chart"
-
-  [labels]="chartCustosCategoria.labels"
-
-  [colors]="chartCustosCategoria.colors"
-
-  [legend]="chartCustosCategoria.legend"
-
-  [plotOptions]="chartCustosCategoria.plotOptions"
-
-  [dataLabels]="chartCustosCategoria.dataLabels">
-
-</apx-chart>
-
-
-  </section>
-
-</section>
 
 
 
