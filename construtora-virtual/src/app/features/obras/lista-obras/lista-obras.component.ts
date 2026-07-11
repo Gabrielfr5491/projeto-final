@@ -6,6 +6,7 @@ import localePt from '@angular/common/locales/pt';
 
 import { ObraService } from '../../../core/services/obra.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Obra } from '../../../models/obra';
 registerLocaleData(localePt);
 
@@ -31,7 +32,8 @@ export class ListaObrasComponent implements OnInit {
 
   constructor(
     private obraService: ObraService,
-    private toast: ToastService
+    private toast: ToastService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

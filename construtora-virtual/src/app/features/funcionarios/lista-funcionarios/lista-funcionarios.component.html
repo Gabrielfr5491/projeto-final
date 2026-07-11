@@ -6,6 +6,7 @@
 
     <button
       class="btn-add"
+      *ngIf="auth.podeEditar()"
       routerLink="/cadastro-funcionario"
     >
       + Novo Funcionário
@@ -68,6 +69,7 @@
           <div class="actions">
 
               <button
+              *ngIf="auth.podeEditar()"
               class="btn-editar"
               [routerLink]="[
                 '/editar-funcionario',
@@ -78,6 +80,7 @@
             </button>
 
             <button
+              *ngIf="auth.podeEditar()"
               class="btn btn-danger"
               (click)="excluir(funcionario.id)">
               Excluir

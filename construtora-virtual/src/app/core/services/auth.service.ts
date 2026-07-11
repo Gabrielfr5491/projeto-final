@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
   private api = 'https://projeto-final-3-7epi.onrender.com';
@@ -11,13 +9,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, senha: string) {
-    return this.http.post<any>(
-      `${this.api}/auth/login`,
-      {
-        email,
-        senha
-      }
-    );
+    return this.http.post<any>(`${this.api}/auth/login`, { email, senha });
   }
 
   logout() {
@@ -25,15 +17,37 @@ export class AuthService {
     localStorage.removeItem('usuario');
   }
 
-  estaLogado() {
+  estaLogado(): boolean {
     return !!localStorage.getItem('token');
   }
 
-  getToken() {
+  getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  getUsuario() {
+  getUsuario(): any {
     return JSON.parse(localStorage.getItem('usuario') || '{}');
+  }
+
+  getPerfil(): string {
+    return (this.getUsuario()?.perfil ?? '').toLowerCase();
+  }
+
+  isAdmin(): boolean {
+    return this.getPerfil() === 'admin';
+  }
+
+  isGerente(): boolean {
+    return this.getPerfil() === 'gerente';
+  }
+
+  isComum(): boolean {
+    return this.getPerfil() === 'comum';
+  }
+
+  /** Verdadeiro para admin e gerente — pode criar/editar/excluir */
+  podeEditar(): boolean {
+    const p = this.getPerfil();
+    return p === 'admin' || p === 'gerente';
   }
 }

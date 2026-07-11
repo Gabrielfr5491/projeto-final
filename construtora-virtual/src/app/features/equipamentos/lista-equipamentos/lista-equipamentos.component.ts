@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { EquipamentoService } from '../../../core/services/equipamento.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Equipamento } from '../../../models/equipamento';
 
 @Component({
@@ -19,9 +20,7 @@ export class ListaEquipamentosComponent implements OnInit {
 
   equipamentos: Equipamento[] = [];
 
-  constructor(
-    private equipamentoService: EquipamentoService
-  ) {}
+  constructor(private equipamentoService: EquipamentoService, public auth: AuthService) {}
 
   ngOnInit(): void {
     this.carregarEquipamentos();

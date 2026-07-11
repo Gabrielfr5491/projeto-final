@@ -10,6 +10,7 @@
 
 <button
   class="btn-add"
+  *ngIf="auth.podeEditar()"
   routerLink="/cadastro-material"
 >
   + Novo Material
@@ -77,6 +78,7 @@
       <div class="actions">
 
         <button
+          *ngIf="auth.podeEditar()"
           class="btn-editar"
           [routerLink]="[
             '/editar-material',
@@ -87,6 +89,7 @@
         </button>
 
         <button
+          *ngIf="auth.podeEditar()"
           class="btn-excluir"
           (click)="excluir(material.id)"
         >

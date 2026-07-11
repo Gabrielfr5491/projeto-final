@@ -65,6 +65,7 @@
                 <button
                   type="button"
                   class="btn-action-edit"
+                  *ngIf="auth.podeEditar()"
                   title="Editar Obra"
                   [routerLink]="['/editar-obra', obra.id]">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -76,6 +77,7 @@
                 <button
                   type="button"
                   class="btn-action-delete"
+                  *ngIf="auth.podeEditar()"
                   title="Excluir Obra"
                   (click)="excluir(obra.id)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

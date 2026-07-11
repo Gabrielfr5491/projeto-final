@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { FuncionarioService } from '../../../core/services/funcionario.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Funcionario } from '../../../models/funcionario';
 
 @Component({
@@ -17,7 +18,8 @@ export class ListaFuncionariosComponent implements OnInit {
   funcionarios: Funcionario[] = [];
 
   constructor(
-    private funcionarioService: FuncionarioService
+    private funcionarioService: FuncionarioService,
+    public auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +40,8 @@ export class ListaFuncionariosComponent implements OnInit {
           );
         }
       });
-  } excluir(id: number | string | undefined) {
+  }
+ excluir(id: number | string | undefined) {
   
   if (id === undefined) {
     console.error('Não é possível excluir um funcionário sem ID.');
@@ -52,7 +55,8 @@ export class ListaFuncionariosComponent implements OnInit {
   this.funcionarioService
     .excluir(Number(id))
     .subscribe({
-      next: () => {        this.carregarFuncionarios();
+      next: () => {
+        this.carregarFuncionarios();
       },
       error: (erro) => {
         console.error('Erro ao excluir funcionário', erro);

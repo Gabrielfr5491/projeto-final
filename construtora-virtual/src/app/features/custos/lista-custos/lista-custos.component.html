@@ -5,7 +5,7 @@
       <h1>Custos</h1>
       <p class="header-sub">{{ custos.length }} lançamento{{ custos.length !== 1 ? 's' : '' }} registrado{{ custos.length !== 1 ? 's' : '' }}</p>
     </div>
-    <a routerLink="/cadastro-custo" class="btn-add">+ Novo Custo</a>
+    <a routerLink="/cadastro-custo" *ngIf="auth.podeEditar()" class="btn-add">+ Novo Custo</a>
   </div>
 
   <div class="resumo-grid">
@@ -147,10 +147,10 @@
           </td>
 
           <td class="col-acoes actions">
-            <a [routerLink]="['/editar-custo', custo.id]" class="btn-editar">
+            <a *ngIf="auth.podeEditar()" [routerLink]="['/editar-custo', custo.id]" class="btn-editar">
               <i class="bi bi-pencil"></i>
             </a>
-            <button class="btn-danger" (click)="excluir(custo.id)">
+            <button *ngIf="auth.podeEditar()" class="btn-danger" (click)="excluir(custo.id)">
               <i class="bi bi-trash"></i>
             </button>
           </td>

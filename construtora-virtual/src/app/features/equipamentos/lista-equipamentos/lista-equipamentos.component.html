@@ -7,6 +7,7 @@
 
 <button
   class="btn-add"
+  *ngIf="auth.podeEditar()"
   routerLink="/cadastro-equipamento"
 >
   + Novo Equipamento
@@ -73,6 +74,7 @@
       <div class="actions">
 
         <button
+          *ngIf="auth.podeEditar()"
           class="btn-editar"
           [routerLink]="[
             '/editar-equipamento',
@@ -83,12 +85,9 @@
         </button>
 
         <button
+          *ngIf="auth.podeEditar()"
           class="btn-danger"
-          (click)="
-            excluir(
-              equipamento.id
-            )
-          "
+          (click)="excluir(equipamento.id)"
         >
           Excluir
         </button>

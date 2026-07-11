@@ -24,7 +24,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     public layout: LayoutService,
-    private auth: AuthService,
+    public auth: AuthService,
     private alertasService: AlertasService,
   ) {}
 
@@ -45,9 +45,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  isAdmin(): boolean {
-    const usuario = this.auth.getUsuario();
-    const perfil = usuario?.perfil?.toLowerCase();
-    return perfil === 'administrador' || perfil === 'admin';
-  }
+  isAdmin(): boolean    { return this.auth.isAdmin(); }
+  podeEditar(): boolean { return this.auth.podeEditar(); }
 }

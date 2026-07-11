@@ -3,17 +3,20 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegistroComponent } from './features/auth/registro/registro.component';
 import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 import { HomeComponent } from './features/dashboard/home/home.component';
 import { ListaObrasComponent } from './features/obras/lista-obras/lista-obras.component';
 import { CadastroObraComponent } from './features/obras/cadastro-obra/cadastro-obra.component';
+import { EditarObraComponent } from './features/obras/editar-obra/editar-obra.component';
+import { DetalheObraComponent } from './features/obras/detalhe-obra/detalhe-obra.component';
 import { ListaFuncionariosComponent } from './features/funcionarios/lista-funcionarios/lista-funcionarios.component';
-import { ListaFornecedoresComponent } from './features/fornecedores/lista-fornecedores/lista-fornecedores.component';
-import { ListaMateriaisComponent } from './features/materiais/lista-materiais/lista-materiais.component';
 import { CadastroFuncionarioComponent } from './features/funcionarios/cadastro-funcionario/cadastro-funcionario.component';
 import { EditarFuncionarioComponent } from './features/funcionarios/editar-funcionario/editar-funcionario.component';
+import { ListaFornecedoresComponent } from './features/fornecedores/lista-fornecedores/lista-fornecedores.component';
 import { CadastroFornecedorComponent } from './features/fornecedores/cadastro-fornecedor/cadastro-fornecedor.component';
 import { EditarFornecedorComponent } from './features/fornecedores/editar-fornecedor/editar-fornecedor.component';
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
+import { ListaMateriaisComponent } from './features/materiais/lista-materiais/lista-materiais.component';
 import { CadastroMaterialComponent } from './features/materiais/cadastro-material/cadastro-material.component';
 import { EditarMaterialComponent } from './features/materiais/editar-material/editar-material.component';
 import { ListaEquipamentosComponent } from './features/equipamentos/lista-equipamentos/lista-equipamentos.component';
@@ -22,15 +25,12 @@ import { EditarEquipamentoComponent } from './features/equipamentos/editar-equip
 import { ListaCustosComponent } from './features/custos/lista-custos/lista-custos.component';
 import { CadastroCustoComponent } from './features/custos/cadastro-custo/cadastro-custo.component';
 import { EditarCustoComponent } from './features/custos/editar-custo/editar-custo.component';
-import { LandingComponent } from './features/landing/landing.component';
-import { adminGuard } from './core/guards/admin.guard';
 import { CadastroUsuarioComponent } from './features/usuarios/cadastro-usuario/cadastro-usuario.component';
 import { ListaUsuariosComponent } from './features/usuarios/lista-usuarios/lista-usuarios.component';
+import { LandingComponent } from './features/landing/landing.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 import { Modelo3dComponent } from './features/modelo3d/modelo3d.component';
 import { DiarioObraComponent } from './features/diario-obra/diario-obra.component';
-import { EditarObraComponent } from './features/obras/editar-obra/editar-obra.component';
-import { DetalheObraComponent } from './features/obras/detalhe-obra/detalhe-obra.component';
 import { RelatoriosComponent } from './features/relatorios/relatorios.component';
 import { AlertasComponent } from './features/alertas/alertas.component';
 
@@ -44,34 +44,42 @@ export const routes: Routes = [
     component: DashboardLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: HomeComponent },
-      { path: 'obras', component: ListaObrasComponent },
-      { path: 'cadastro-obra', component: CadastroObraComponent },
-      { path: 'editar-obra/:id', component: EditarObraComponent },
+
+      // Todos os perfis
+      { path: 'dashboard',       component: HomeComponent },
+      { path: 'obras',           component: ListaObrasComponent },
       { path: 'detalhe-obra/:id', component: DetalheObraComponent },
-      { path: 'funcionarios', component: ListaFuncionariosComponent },
-      { path: 'cadastro-funcionario', component: CadastroFuncionarioComponent },
-      { path: 'editar-funcionario/:id', component: EditarFuncionarioComponent },
-      { path: 'fornecedores', component: ListaFornecedoresComponent },
-      { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
-      { path: 'editar-fornecedor/:id', component: EditarFornecedorComponent },
-      { path: 'materiais', component: ListaMateriaisComponent },
-      { path: 'cadastro-material', component: CadastroMaterialComponent },
-      { path: 'editar-material/:id', component: EditarMaterialComponent },
-      { path: 'equipamentos', component: ListaEquipamentosComponent },
-      { path: 'cadastro-equipamento', component: CadastroEquipamentoComponent },
-      { path: 'editar-equipamento/:id', component: EditarEquipamentoComponent },
-      { path: 'custos', component: ListaCustosComponent },
-      { path: 'cadastro-custo', component: CadastroCustoComponent },
-      { path: 'editar-custo/:id', component: EditarCustoComponent },
-      { path: 'usuarios', component: ListaUsuariosComponent },
-      { path: 'cadastro-usuario', component: CadastroUsuarioComponent, canActivate: [adminGuard] },
-      { path: 'modelo3d', component: Modelo3dComponent },
-      { path: 'diario-obra', component: DiarioObraComponent },
-      { path: 'relatorios', component: RelatoriosComponent },
-      { path: 'alertas', component: AlertasComponent },
-    ]
+      { path: 'diario-obra',     component: DiarioObraComponent },
+      { path: 'alertas',         component: AlertasComponent },
+      { path: 'modelo3d',        component: Modelo3dComponent },
+
+      // Admin e gerente — visualização de listas
+      { path: 'funcionarios',  component: ListaFuncionariosComponent,  canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'fornecedores',  component: ListaFornecedoresComponent,  canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'materiais',     component: ListaMateriaisComponent,     canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'equipamentos',  component: ListaEquipamentosComponent,  canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'custos',        component: ListaCustosComponent,        canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'relatorios',    component: RelatoriosComponent,         canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+
+      // Admin e gerente — criação e edição
+      { path: 'cadastro-obra',           component: CadastroObraComponent,          canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'editar-obra/:id',         component: EditarObraComponent,            canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'cadastro-funcionario',    component: CadastroFuncionarioComponent,   canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'editar-funcionario/:id',  component: EditarFuncionarioComponent,     canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'cadastro-fornecedor',     component: CadastroFornecedorComponent,    canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'editar-fornecedor/:id',   component: EditarFornecedorComponent,      canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'cadastro-material',       component: CadastroMaterialComponent,      canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'editar-material/:id',     component: EditarMaterialComponent,        canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'cadastro-equipamento',    component: CadastroEquipamentoComponent,   canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'editar-equipamento/:id',  component: EditarEquipamentoComponent,     canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'cadastro-custo',          component: CadastroCustoComponent,         canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+      { path: 'editar-custo/:id',        component: EditarCustoComponent,           canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
+
+      // Somente admin — gestão de usuários
+      { path: 'usuarios',          component: ListaUsuariosComponent,   canActivate: [roleGuard], data: { roles: ['admin'] } },
+      { path: 'cadastro-usuario',  component: CadastroUsuarioComponent, canActivate: [roleGuard], data: { roles: ['admin'] } },
+    ],
   },
 
-  { path: '**', component: NotFoundComponent }
+  { path: '**', component: NotFoundComponent },
 ];

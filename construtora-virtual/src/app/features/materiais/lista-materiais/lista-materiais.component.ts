@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { MaterialService } from '../../../core/services/material.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Material } from '../../../models/material';
 
 @Component({
@@ -19,9 +20,7 @@ export class ListaMateriaisComponent implements OnInit {
 
   materiais: Material[] = [];
 
-  constructor(
-    private materialService: MaterialService
-  ) {}
+  constructor(private materialService: MaterialService, public auth: AuthService) {}
 
   ngOnInit(): void {
     this.carregarMateriais();

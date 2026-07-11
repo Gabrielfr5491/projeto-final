@@ -1,5 +1,5 @@
 <aside class="sidebar" [class.collapsed]="layout.sidebarCollapsed$ | async" [class.mobile-open]="layout.mobileSidebarOpen$ | async">
-  
+
   <button type="button" class="sidebar__toggle" (click)="layout.toggleSidebar()" aria-label="Menu">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
@@ -12,7 +12,8 @@
 
   <nav class="sidebar__nav">
     <ul class="sidebar__list">
-      
+
+      <!-- Todos os perfis -->
       <li class="sidebar__item">
         <a routerLink="/dashboard" routerLinkActive="active" title="Dashboard" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -35,8 +36,9 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
-        <a routerLink="/cadastro-obra" routerLinkActive="active" title="Nova Obra" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
+      <!-- Admin e gerente podem criar obras -->
+      <li *ngIf="podeEditar()" class="sidebar__item">
+        <a routerLink="/cadastro-obra" routerLinkActive="active" title="Nova Obra" class="sidebar__link sidebar__link--sub" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <line x1="12" y1="13" x2="12" y2="19"/>
@@ -46,7 +48,8 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
+      <!-- Admin e gerente -->
+      <li *ngIf="podeEditar()" class="sidebar__item">
         <a routerLink="/funcionarios" routerLinkActive="active" title="Funcionários" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -58,7 +61,7 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
+      <li *ngIf="podeEditar()" class="sidebar__item">
         <a routerLink="/fornecedores" routerLinkActive="active" title="Fornecedores" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/>
@@ -71,7 +74,7 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
+      <li *ngIf="podeEditar()" class="sidebar__item">
         <a routerLink="/materiais" routerLinkActive="active" title="Materiais" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/>
@@ -83,7 +86,7 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
+      <li *ngIf="podeEditar()" class="sidebar__item">
         <a routerLink="/equipamentos" routerLinkActive="active" title="Equipamentos" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -94,7 +97,7 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
+      <li *ngIf="podeEditar()" class="sidebar__item">
         <a routerLink="/custos" routerLinkActive="active" title="Custos" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="2" x2="12" y2="22"/>
@@ -104,7 +107,21 @@
         </a>
       </li>
 
-      <li class="sidebar__item">
+      <li *ngIf="podeEditar()" class="sidebar__item">
+        <a routerLink="/relatorios" routerLinkActive="active" title="Relatórios" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
+          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+          <span class="sidebar__text">Relatórios</span>
+        </a>
+      </li>
+
+      <!-- Somente admin -->
+      <li *ngIf="isAdmin()" class="sidebar__item">
         <a routerLink="/usuarios" routerLinkActive="active" title="Usuários" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -127,6 +144,7 @@
         </a>
       </li>
 
+      <!-- Modelo 3D — todos os perfis -->
       <li class="sidebar__item">
         <a routerLink="/modelo3d" routerLinkActive="active" title="Modelo 3D" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
           <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -147,19 +165,6 @@
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
           </svg>
           <span class="sidebar__text">Diário de Obra</span>
-        </a>
-      </li>
-
-      <li class="sidebar__item">
-        <a routerLink="/relatorios" routerLinkActive="active" title="Relatórios" class="sidebar__link" (click)="layout.setMobileSidebarOpen(false)">
-          <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <line x1="10" y1="9" x2="8" y2="9"/>
-          </svg>
-          <span class="sidebar__text">Relatórios</span>
         </a>
       </li>
 

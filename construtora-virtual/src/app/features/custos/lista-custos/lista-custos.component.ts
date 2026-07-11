@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { CustoService } from '../../../core/services/custo.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Custo } from '../../../models/custo';
 
 @Component({
@@ -20,7 +21,7 @@ export class ListaCustosComponent implements OnInit {
   filtroCategoria: string = '';
   busca: string = '';
 
-  constructor(private custoService: CustoService) {}
+  constructor(private custoService: CustoService, public auth: AuthService) {}
 
   ngOnInit(): void {
     this.carregarCustos();
