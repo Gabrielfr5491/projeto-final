@@ -32,9 +32,14 @@ export class CustosService {
   }
 
   findAll() {
+    return this.custoRepository.find({ relations: ['obra'] });
+  }
 
-    return this.custoRepository.find();
-
+  findByObra(obraId: number) {
+    return this.custoRepository.find({
+      where: { obraId },
+      relations: ['obra'],
+    });
   }
 
   findOne(id: number) {

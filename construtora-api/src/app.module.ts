@@ -16,6 +16,8 @@ import { EquipamentosModule } from './equipamentos/equipamentos.module';
 import { CustosModule } from './custos/custos.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
 import { Modelo3dModule } from './modelo3d/modelo3d.module';
+import { DiarioModule } from './diario/diario.module';
+import { AlertasModule } from './alertas/alertas.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { Modelo3dModule } from './modelo3d/modelo3d.module';
     CustosModule,
     RelatoriosModule,
     Modelo3dModule,
+    DiarioModule,
+    AlertasModule,
   ],
 
   controllers: [AppController],

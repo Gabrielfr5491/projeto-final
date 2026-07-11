@@ -9,77 +9,42 @@ import {
 } from '@nestjs/common';
 
 import { CustosService } from './custos.service';
-
 import { CreateCustoDto } from './dto/create-custo.dto';
 import { UpdateCustoDto } from './dto/update-custo.dto';
 
 @Controller('custos')
 export class CustosController {
 
-  constructor(
-    private readonly custosService:
-    CustosService
-  ) {}
+  constructor(private readonly custosService: CustosService) {}
 
   @Post()
-  create(
-    @Body()
-    createCustoDto:
-    CreateCustoDto
-  ) {
-
-    return this.custosService.create(
-      createCustoDto
-    );
-
+  create(@Body() createCustoDto: CreateCustoDto) {
+    return this.custosService.create(createCustoDto);
   }
 
   @Get()
   findAll() {
-
     return this.custosService.findAll();
+  }
 
+  @Get('por-obra/:obraId')
+  findByObra(@Param('obraId') obraId: string) {
+    return this.custosService.findByObra(+obraId);
   }
 
   @Get(':id')
-  findOne(
-    @Param('id')
-    id: string
-  ) {
-
-    return this.custosService.findOne(
-      +id
-    );
-
+  findOne(@Param('id') id: string) {
+    return this.custosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id')
-    id: string,
-
-    @Body()
-    updateCustoDto:
-    UpdateCustoDto
-  ) {
-
-    return this.custosService.update(
-      +id,
-      updateCustoDto
-    );
-
+  update(@Param('id') id: string, @Body() updateCustoDto: UpdateCustoDto) {
+    return this.custosService.update(+id, updateCustoDto);
   }
 
   @Delete(':id')
-  remove(
-    @Param('id')
-    id: string
-  ) {
-
-    return this.custosService.remove(
-      +id
-    );
-
+  remove(@Param('id') id: string) {
+    return this.custosService.remove(+id);
   }
 
 }

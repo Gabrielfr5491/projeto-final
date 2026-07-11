@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
 
 import { Obra } from '../obras/entities/obra.entity';
@@ -15,196 +13,102 @@ import { Custo } from '../custos/entities/custo.entity';
 export class DashboardService {
 
   constructor(
-
     @InjectRepository(Obra)
     private obraRepository: Repository<Obra>,
 
     @InjectRepository(Funcionario)
-    private funcionarioRepository:
-    Repository<Funcionario>,
+    private funcionarioRepository: Repository<Funcionario>,
 
     @InjectRepository(Fornecedor)
-    private fornecedorRepository:
-    Repository<Fornecedor>,
+    private fornecedorRepository: Repository<Fornecedor>,
 
     @InjectRepository(Material)
-    private materialRepository:
-    Repository<Material>,
+    private materialRepository: Repository<Material>,
 
     @InjectRepository(Equipamento)
-    private equipamentoRepository:
-    Repository<Equipamento>,
+    private equipamentoRepository: Repository<Equipamento>,
 
     @InjectRepository(Custo)
-    private custoRepository:
-    Repository<Custo>
-
+    private custoRepository: Repository<Custo>,
   ) {}
 
   async resumo() {
-
-    const obras =
-      await this.obraRepository.count();
-
-    const funcionarios =
-      await this.funcionarioRepository.count();
-
-    const fornecedores =
-      await this.fornecedorRepository.count();
-
-    const materiais =
-      await this.materialRepository.count();
-
-    const equipamentos =
-      await this.equipamentoRepository.count();
-
-    const custos =
-      await this.custoRepository.find();
+    const obras        = await this.obraRepository.count();
+    const funcionarios = await this.funcionarioRepository.count();
+    const fornecedores = await this.fornecedorRepository.count();
+    const materiais    = await this.materialRepository.count();
+    const equipamentos = await this.equipamentoRepository.count();
+    const custos       = await this.custoRepository.find();
 
     let receitas = 0;
     let despesas = 0;
-
     custos.forEach(custo => {
-
       if (custo.tipo === 'Entrada') {
-
         receitas += Number(custo.valor);
-
       } else {
-
         despesas += Number(custo.valor);
-
       }
-
     });
 
-    return {
-
-      obras,
-
-      funcionarios,
-
-      fornecedores,
-
-      materiais,
-
-      equipamentos,
-
-      receitas,
-
-      despesas,
-
-      lucro:
-        receitas - despesas
-
-    };
-
+    return { obras, funcionarios, fornecedores, materiais, equipamentos, receitas, despesas, lucro: receitas - despesas };
   }
 
   async dashboardFinanceiro() {
+    const custos = await this.custoRepository.find();
 
-    const custos =
-      await this.custoRepository.find();
+    const totalCustos = custos.reduce((acc, custo) => acc + Number(custo.valor), 0);
 
-    const totalCustos =
-      custos.reduce(
+    const custosPorCategoria = custos.reduce((acc, custo) => {
+      const categoria = custo.categoria;
+      if (!acc[categoria]) acc[categoria] = 0;
+      acc[categoria] += Number(custo.valor);
+      return acc;
+    }, {} as Record<string, number>);
 
-        (acc, custo) =>
-
-          acc + Number(custo.valor),
-
-        0
-
-      );
-
-    const custosPorCategoria =
-      custos.reduce((acc, custo) => {
-
-        const categoria =
-          custo.categoria;
-
-        if (!acc[categoria]) {
-
-          acc[categoria] = 0;
-
-        }
-
-        acc[categoria] +=
-          Number(custo.valor);
-
-        return acc;
-
-      }, {} as any);
-
-    return {
-
-      totalCustos,
-
-      custosPorCategoria
-
-    };
-
+    return { totalCustos, custosPorCategoria };
   }
 
   async custosPorObra() {
-
-    const custos = await this.custoRepository.find({
-      relations: ['obra'],
-    });
+    const custos = await this.custoRepository.find({ relations: ['obra'] });
 
     const agrupado = custos.reduce((acc, custo) => {
-
       const nomeObra = custo.obra?.nome ?? 'Sem Obra';
-
-      if (!acc[nomeObra]) {
-        acc[nomeObra] = { total: 0, entradas: 0, saidas: 0 };
-      }
-
+      if (!acc[nomeObra]) acc[nomeObra] = { total: 0, entradas: 0, saidas: 0 };
       const valor = Number(custo.valor);
       acc[nomeObra].total += valor;
-
       if (custo.tipo === 'Entrada') {
         acc[nomeObra].entradas += valor;
       } else {
         acc[nomeObra].saidas += valor;
       }
-
       return acc;
-
     }, {} as Record<string, { total: number; entradas: number; saidas: number }>);
 
-    const obras = Object.keys(agrupado);
+    const obras    = Object.keys(agrupado);
     const entradas = obras.map(o => agrupado[o].entradas);
-    const saidas = obras.map(o => agrupado[o].saidas);
-    const totais = obras.map(o => agrupado[o].total);
+    const saidas   = obras.map(o => agrupado[o].saidas);
+    const totais   = obras.map(o => agrupado[o].total);
 
     return { obras, entradas, saidas, totais };
-
   }
 
   async evm() {
     const obras  = await this.obraRepository.find();
     const custos = await this.custoRepository.find();
 
-    // ── parse de data robusto ─────────────────────────────────────────────
-    // Aceita: "YYYY-MM-DD", "YYYY-MM", "DD/MM/YYYY"
     const toDate = (s: string | null | undefined): Date | null => {
       if (!s) return null;
       const str = String(s).trim();
-
-      // DD/MM/YYYY
       if (/^\d{2}\/\d{2}\/\d{4}$/.test(str)) {
         const [d, m, y] = str.split('/');
         const dt = new Date(Number(y), Number(m) - 1, Number(d));
         return isNaN(dt.getTime()) ? null : dt;
       }
-      // YYYY-MM-DD ou YYYY-MM
       if (/^\d{4}-\d{2}(-\d{2})?$/.test(str)) {
         const parts = str.split('-');
         const dt = new Date(Number(parts[0]), Number(parts[1]) - 1, parts[2] ? Number(parts[2]) : 1);
         return isNaN(dt.getTime()) ? null : dt;
       }
-      // fallback
       const dt = new Date(str);
       return isNaN(dt.getTime()) ? null : dt;
     };
@@ -212,20 +116,11 @@ export class DashboardService {
     const toMesKey = (d: Date) =>
       `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 
-    // ── determinar janela de meses ────────────────────────────────────────
-    const obrasDates = obras
-      .map(o => toDate(o.dataInicio))
-      .filter((d): d is Date => d !== null);
+    const obrasDates  = obras.map(o => toDate(o.dataInicio)).filter((d): d is Date => d !== null);
+    const custosDates = custos.map(c => toDate(c.data)).filter((d): d is Date => d !== null);
+    const allDates    = [...obrasDates, ...custosDates];
 
-    const custosDates = custos
-      .map(c => toDate(c.data))
-      .filter((d): d is Date => d !== null);
-
-    // Se não há nenhuma data válida, retornar vazio
-    const allDates = [...obrasDates, ...custosDates];
-    if (allDates.length === 0) {
-      return { meses: [], pv: [], ac: [], ev: [] };
-    }
+    if (allDates.length === 0) return { meses: [], pv: [], ac: [], ev: [] };
 
     const minMs = Math.min(...allDates.map(d => d.getTime()));
     const maxMs = Math.max(...allDates.map(d => d.getTime()));
@@ -235,61 +130,44 @@ export class DashboardService {
     const endDate = new Date(maxMs);
     endDate.setDate(1);
 
-    // Gerar lista de meses YYYY-MM dentro da janela
     const meses: string[] = [];
     const cur = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
     const end = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
-
     while (cur <= end) {
       meses.push(toMesKey(cur));
       cur.setMonth(cur.getMonth() + 1);
     }
-
-    // Garantir pelo menos 2 meses
     if (meses.length < 2) {
-      const extra = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 1);
-      meses.push(toMesKey(extra));
+      meses.push(toMesKey(new Date(startDate.getFullYear(), startDate.getMonth() + 1, 1)));
     }
 
-    // ── PV cumulativo ─────────────────────────────────────────────────────
     const pvPorMes: Record<string, number> = {};
     meses.forEach(m => { pvPorMes[m] = 0; });
 
     for (const obra of obras) {
       const inicio = toDate(obra.dataInicio);
       if (!inicio) continue;
-
       let fim = toDate(obra.dataPrevista);
-      if (!fim) {
-        fim = new Date(inicio.getFullYear(), inicio.getMonth() + 6, 1);
-      }
-
+      if (!fim) fim = new Date(inicio.getFullYear(), inicio.getMonth() + 6, 1);
       const orcamento = Number(obra.orcamento);
       if (!orcamento) continue;
-
-      const obraStart = toMesKey(inicio);
-      const obraEnd   = toMesKey(fim);
-
-      const mesesObra = meses.filter(m => m >= obraStart && m <= obraEnd);
+      const obraStart  = toMesKey(inicio);
+      const obraEnd    = toMesKey(fim);
+      const mesesObra  = meses.filter(m => m >= obraStart && m <= obraEnd);
       if (mesesObra.length === 0) {
-        // Obra fora da janela — creditamos tudo no primeiro mês disponível
         if (pvPorMes[meses[0]] !== undefined) pvPorMes[meses[0]] += orcamento;
         continue;
       }
-
       const pvPorMesObra = orcamento / mesesObra.length;
       mesesObra.forEach(m => { pvPorMes[m] += pvPorMesObra; });
     }
 
-    // ── AC cumulativo ─────────────────────────────────────────────────────
     const acPorMes: Record<string, number> = {};
     meses.forEach(m => { acPorMes[m] = 0; });
-
     for (const custo of custos) {
       const d = toDate(custo.data);
       if (!d) continue;
       const mesKey = toMesKey(d);
-      // Se o custo cair fora da janela, creditamos no mês mais próximo
       if (acPorMes[mesKey] !== undefined) {
         acPorMes[mesKey] += Number(custo.valor);
       } else if (mesKey < meses[0]) {
@@ -299,40 +177,33 @@ export class DashboardService {
       }
     }
 
-    // ── EV cumulativo ─────────────────────────────────────────────────────
     const evPorMes: Record<string, number> = {};
     meses.forEach(m => { evPorMes[m] = 0; });
 
     const custosPorObraMap: Record<number, number> = {};
     for (const custo of custos) {
-      custosPorObraMap[custo.obraId] =
-        (custosPorObraMap[custo.obraId] || 0) + Number(custo.valor);
+      custosPorObraMap[custo.obraId] = (custosPorObraMap[custo.obraId] || 0) + Number(custo.valor);
     }
 
     for (const obra of obras) {
       const orcamento = Number(obra.orcamento);
       if (!orcamento) continue;
-
-      const custoObra = custosPorObraMap[obra.id] || 0;
-      const isConcluida =
-        obra.status === 'Concluída' || obra.status === 'Concluido';
+      const custoObra   = custosPorObraMap[obra.id] || 0;
+      const isConcluida = obra.status === 'Concluída' || obra.status === 'Concluido';
 
       if (isConcluida) {
-        const fim = toDate(obra.dataPrevista);
+        const fim    = toDate(obra.dataPrevista);
         const mesKey = fim ? toMesKey(fim) : meses[meses.length - 1];
         const target = evPorMes[mesKey] !== undefined ? mesKey : meses[meses.length - 1];
         evPorMes[target] += orcamento;
       } else {
-        const ratio = Math.min(custoObra / orcamento, 1);
+        const ratio   = Math.min(custoObra / orcamento, 1);
         const evTotal = orcamento * ratio;
         if (evTotal === 0) continue;
-
-        const inicio = toDate(obra.dataInicio);
-        const obraStart = inicio ? toMesKey(inicio) : meses[0];
-        const mesesComCusto = meses.filter(m => m >= obraStart && acPorMes[m] > 0);
-
+        const inicio         = toDate(obra.dataInicio);
+        const obraStart      = inicio ? toMesKey(inicio) : meses[0];
+        const mesesComCusto  = meses.filter(m => m >= obraStart && acPorMes[m] > 0);
         if (mesesComCusto.length === 0) {
-          // Sem custo registrado ainda — distribuir pelo primeiro mês
           evPorMes[meses[0]] += evTotal;
         } else {
           const evPorMesObra = evTotal / mesesComCusto.length;
@@ -341,12 +212,10 @@ export class DashboardService {
       }
     }
 
-    // ── acumular ──────────────────────────────────────────────────────────
     let pvAcc = 0, acAcc = 0, evAcc = 0;
     const pvArr: number[] = [];
     const acArr: number[] = [];
     const evArr: number[] = [];
-
     for (const m of meses) {
       pvAcc += pvPorMes[m] || 0;
       acAcc += acPorMes[m] || 0;
@@ -356,9 +225,7 @@ export class DashboardService {
       evArr.push(Math.round(evAcc));
     }
 
-    // Labels amigáveis: "Jan/25", "Fev/25" ...
-    const mesesNomes = ['Jan','Fev','Mar','Abr','Mai','Jun',
-                        'Jul','Ago','Set','Out','Nov','Dez'];
+    const mesesNomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
     const labels = meses.map(m => {
       const [ano, mes] = m.split('-');
       return `${mesesNomes[Number(mes) - 1]}/${ano.slice(2)}`;
@@ -366,6 +233,5 @@ export class DashboardService {
 
     return { meses: labels, pv: pvArr, ac: acArr, ev: evArr };
   }
-
 
 }
