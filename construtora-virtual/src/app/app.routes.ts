@@ -45,7 +45,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
 
-      // Todos os perfis
       { path: 'dashboard',       component: HomeComponent },
       { path: 'obras',           component: ListaObrasComponent },
       { path: 'detalhe-obra/:id', component: DetalheObraComponent },
@@ -53,7 +52,6 @@ export const routes: Routes = [
       { path: 'alertas',         component: AlertasComponent },
       { path: 'modelo3d',        component: Modelo3dComponent },
 
-      // Admin e gerente — visualização de listas
       { path: 'funcionarios',  component: ListaFuncionariosComponent,  canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
       { path: 'fornecedores',  component: ListaFornecedoresComponent,  canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
       { path: 'materiais',     component: ListaMateriaisComponent,     canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
@@ -61,7 +59,6 @@ export const routes: Routes = [
       { path: 'custos',        component: ListaCustosComponent,        canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
       { path: 'relatorios',    component: RelatoriosComponent,         canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
 
-      // Admin e gerente — criação e edição
       { path: 'cadastro-obra',           component: CadastroObraComponent,          canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
       { path: 'editar-obra/:id',         component: EditarObraComponent,            canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
       { path: 'cadastro-funcionario',    component: CadastroFuncionarioComponent,   canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
@@ -75,7 +72,6 @@ export const routes: Routes = [
       { path: 'cadastro-custo',          component: CadastroCustoComponent,         canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
       { path: 'editar-custo/:id',        component: EditarCustoComponent,           canActivate: [roleGuard], data: { roles: ['admin', 'gerente'] } },
 
-      // Somente admin — gestão de usuários
       { path: 'usuarios',          component: ListaUsuariosComponent,   canActivate: [roleGuard], data: { roles: ['admin'] } },
       { path: 'cadastro-usuario',  component: CadastroUsuarioComponent, canActivate: [roleGuard], data: { roles: ['admin'] } },
     ],

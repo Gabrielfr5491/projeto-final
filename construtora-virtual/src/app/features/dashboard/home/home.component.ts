@@ -576,6 +576,14 @@ export class HomeComponent implements OnInit {
     };
   }
 
+  formatarValor(v: number): string {
+    if (!v && v !== 0) return '—';
+    return Number(v).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
   carregarRingChart() {
     const isDark = this.themeService.currentTheme === 'dark';
     const trackColor = isDark ? '#1A1A1A' : '#E8E6E1';

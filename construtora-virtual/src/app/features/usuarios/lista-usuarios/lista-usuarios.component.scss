@@ -5,11 +5,11 @@
   align-items: center;
   gap: $space-sm;
   background: var(--surface-card);
-  border: 2px solid var(--border-color);
-  border-radius: $radius-sm;
-  padding: $space-sm $space-md;
+  border: 1px solid var(--border-color);
+  border-radius: $radius-md;
+  padding: $space-xs $space-md;
   margin-bottom: $space-xl;
-  transition: border-color $transition-fast $ease-out-expo;
+  transition: border-color $transition-fast ease;
 
   svg { color: var(--text-sub); flex-shrink: 0; }
 
@@ -18,52 +18,50 @@
     background: transparent;
     outline: none;
     color: var(--text-main);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     width: 100%;
-    &::placeholder { color: var(--text-sub); opacity: 0.7; }
+    &::placeholder { color: var(--text-sub); opacity: 0.65; }
   }
 
-  &:focus-within { border-color: var(--primary); transform: skewX(-1deg); }
+  &:focus-within { border-color: var(--primary); }
 }
 
 .avatar-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: $radius-sm;
-  background: linear-gradient(135deg, $orange-500, $orange-700);
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-md;
+  background: var(--primary);
   color: $black-50;
-  font-size: 0.85rem;
-  font-weight: $weight-extrabold;
+  font-size: 0.8rem;
+  font-weight: $weight-bold;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 2px solid rgba($orange-500, 0.3);
 }
 
 .perfil-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: $radius-sm;
-  font-size: 0.78rem;
-  font-weight: $weight-bold;
-  letter-spacing: 0.02em;
+  padding: 0.2rem 0.6rem;
+  border-radius: $radius-md;
+  font-size: 0.72rem;
+  font-weight: $weight-semibold;
 
   &--admin {
-    background: rgba($orange-500, 0.15);
+    background: rgba($orange-500, 0.12);
     color: $orange-500;
-    border: 1px solid rgba($orange-500, 0.3);
+    border: 1px solid rgba($orange-500, 0.25);
   }
   &--gerente {
-    background: rgba($warning, 0.15);
+    background: rgba($warning, 0.12);
     color: $warning;
-    border: 1px solid rgba($warning, 0.3);
+    border: 1px solid rgba($warning, 0.25);
   }
   &--comum {
-    background: rgba($black-400, 0.15);
+    background: rgba($black-400, 0.1);
     color: $black-400;
-    border: 1px solid rgba($black-400, 0.3);
+    border: 1px solid rgba($black-400, 0.2);
   }
 }
 
@@ -74,16 +72,17 @@
 }
 
 .btn-excluir {
-  background: rgba($danger, 0.15);
+  background: rgba($danger, 0.1);
   color: $danger;
-  border: 2px solid rgba($danger, 0.3);
-  padding: 0.45rem 0.9rem;
-  border-radius: $radius-sm;
-  font-size: 0.83rem;
-  font-weight: $weight-bold;
+  border: 1px solid rgba($danger, 0.22);
+  padding: 0.35rem 0.8rem;
+  border-radius: $radius-md;
+  font-size: 0.8rem;
+  font-weight: $weight-medium;
   cursor: pointer;
-  transition: all $transition-fast $ease-out-expo;
-  &:hover { background: $danger; color: $black-50; transform: skewX(-2deg); }
+  transition: background $transition-fast ease;
+
+  &:hover { background: rgba($danger, 0.18); }
 }
 
 .loading-state {
@@ -96,11 +95,11 @@
   color: var(--text-sub);
 
   .spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--border-color);
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border-color);
     border-top-color: var(--primary);
-    border-radius: $radius-sm;
+    border-radius: 50%;
     animation: spin 0.7s linear infinite;
   }
 
@@ -110,22 +109,17 @@
 .btn-add {
   display: inline-flex;
   align-items: center;
-  gap: $space-sm;
+  gap: $space-xs;
   background: var(--primary);
   color: $black-50 !important;
   border: none;
-  padding: $space-sm $space-xl;
-  border-radius: $radius-sm;
-  font-size: 0.9rem;
-  font-weight: $weight-bold;
+  padding: $space-xs $space-lg;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  font-weight: $weight-semibold;
   text-decoration: none;
   cursor: pointer;
-  @include hard-shadow(3px, 3px, rgba(0,0,0,0.3));
-  transition: all $transition-base $ease-out-expo;
+  transition: background $transition-fast ease;
 
-  &:hover {
-    background: $orange-600;
-    transform: translateY(-2px) skewX(-2deg);
-    @include hard-shadow(5px, 5px, rgba(0,0,0,0.4));
-  }
+  &:hover { background: $orange-600; }
 }

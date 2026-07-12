@@ -1,11 +1,11 @@
 .toast-container {
   position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
+  top: 1.25rem;
+  right: 1.25rem;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
   pointer-events: none;
 }
 
@@ -13,40 +13,27 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1.1rem;
-  border-radius: 12px;
-  min-width: 280px;
-  max-width: 380px;
-  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  min-width: 260px;
+  max-width: 360px;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   pointer-events: all;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  animation: toastIn 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
-  @keyframes slideIn {
-    from { transform: translateX(110%); opacity: 0; }
-    to   { transform: translateX(0);    opacity: 1; }
+  @keyframes toastIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);   opacity: 1; }
   }
 
-  &--sucesso {
-    background: rgba(22, 163, 74, 0.92);
-    color: #ffffff;
-  }
-  &--erro {
-    background: rgba(220, 38, 38, 0.92);
-    color: #ffffff;
-  }
-  &--aviso {
-    background: rgba(217, 119, 6, 0.92);
-    color: #ffffff;
-  }
-  &--info {
-    background: rgba(37, 99, 235, 0.92);
-    color: #ffffff;
-  }
+  &--sucesso { background: rgba(22, 163, 74, 0.94); color: #fff; }
+  &--erro    { background: rgba(220, 38, 38, 0.94); color: #fff; }
+  &--aviso   { background: rgba(217, 119, 6, 0.94);  color: #fff; }
+  &--info    { background: rgba(37, 99, 235, 0.94);  color: #fff; }
 
   &__icon {
     flex-shrink: 0;
@@ -63,12 +50,12 @@
     background: none;
     border: none;
     color: inherit;
-    opacity: 0.7;
+    opacity: 0.65;
     cursor: pointer;
     font-size: 0.85rem;
     padding: 0;
     flex-shrink: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.15s;
 
     &:hover { opacity: 1; }
   }

@@ -143,7 +143,7 @@
 
       <h2 class="budget-card__value">
 
-        {{ orcamentoTotal }}
+        R$ {{ formatarValor(orcamentoTotal) }}
 
       </h2>
 
@@ -171,7 +171,7 @@
 
       <span class="metric-card__value text-success">
 
-        {{ resumo.receitas }}
+        R$ {{ formatarValor(resumo.receitas) }}
 
       </span>
 
@@ -196,7 +196,7 @@
 
       <span class="metric-card__value text-danger">
 
-        {{ resumo.despesas }}
+        R$ {{ formatarValor(resumo.despesas) }}
 
       </span>
 
@@ -210,7 +210,7 @@
 
       <span class="metric-card__value text-primary">
 
-        {{ resumo.lucro }}
+        R$ {{ formatarValor(resumo.lucro) }}
 
       </span>
 
@@ -393,7 +393,7 @@
 
             <td>
 
-              {{ obra.orcamento }}
+              R$ {{ formatarValor(obra.orcamento) }}
 
             </td>
 

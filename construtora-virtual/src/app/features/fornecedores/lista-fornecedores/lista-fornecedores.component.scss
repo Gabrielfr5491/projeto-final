@@ -2,24 +2,24 @@
 
 .custom-table {
   .cell-supplier {
-    .name { 
-      font-weight: $weight-bold; 
-      color: var(--text-main); 
+    .name {
+      font-weight: $weight-semibold;
+      color: var(--text-main);
       display: flex;
       align-items: center;
     }
-    .cnpj { 
-      font-size: 0.75rem; 
-      color: var(--text-sub); 
-      opacity: 0.8; 
-      padding-left: 1.25rem; 
+    .cnpj {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      opacity: 0.75;
+      padding-left: 1.2rem;
     }
   }
 
   .arrow-icon {
     display: inline-block;
-    font-size: 0.65rem;
-    margin-right: 0.6rem;
+    font-size: 0.62rem;
+    margin-right: 0.5rem;
     color: var(--text-sub);
     width: 0.75rem;
   }
@@ -30,47 +30,46 @@
     gap: 0.5rem;
 
     .main-product {
-      font-weight: 500;
+      font-weight: $weight-medium;
       color: var(--text-main);
     }
 
     .badge-more {
-      background-color: var(--primary);
+      background: var(--primary);
       color: $black-50;
-      font-size: 0.75rem;
-      font-weight: $weight-bold;
-      padding: 0.2rem 0.5rem;
-      border-radius: $radius-sm;
-      @include hard-shadow(2px, 2px, rgba(0,0,0,0.2));
+      font-size: 0.72rem;
+      font-weight: $weight-semibold;
+      padding: 0.15rem 0.45rem;
+      border-radius: $radius-md;
     }
   }
 
   .expanded-row {
-    background-color: rgba($black-700, 0.1) !important;
-    
+    background-color: rgba($black-700, 0.08) !important;
+
     td {
       padding: 0 !important;
-      border-bottom: 2px solid var(--border-color) !important;
+      border-bottom: 1px solid var(--border-color) !important;
     }
   }
 
   .expanded-content {
-    padding: $space-lg $space-2xl;
-    animation: slideDown $transition-base $ease-out-expo;
+    padding: $space-md $space-xl;
+    animation: slideDown $transition-base ease;
 
     h4 {
-      margin: 0 0 $space-sm 0;
-      font-size: 0.85rem;
-      font-weight: $weight-extrabold;
+      margin: 0 0 $space-sm;
+      font-size: 0.78rem;
+      font-weight: $weight-semibold;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       color: var(--text-sub);
     }
   }
 
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: $space-sm;
     margin-bottom: $space-xs;
   }
@@ -79,25 +78,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.65rem $space-md;
-    background-color: var(--surface-card) !important;
-    border: 2px solid var(--border-color) !important;
-    border-radius: $radius-sm $radius-md $radius-sm $radius-lg;
-    
+    padding: 0.55rem $space-md;
+    background: var(--surface-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: $radius-md;
+
     .prod-name {
       font-weight: $weight-medium;
       color: var(--text-main);
+      font-size: 0.875rem;
     }
 
     .prod-price {
-      font-weight: $weight-bold;
+      font-weight: $weight-semibold;
       color: var(--primary);
-      font-size: 0.875rem;
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
     }
   }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

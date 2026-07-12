@@ -1,9 +1,7 @@
 <div class="viewer-root">
 
-  <!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
   <aside class="sidebar" [class.sidebar--collapsed]="sidebarCollapsed">
 
-    <!-- Header -->
     <div class="sidebar__header">
       <div class="sidebar__logo">
         <span class="sidebar__logo-icon">⬡</span>
@@ -16,7 +14,7 @@
 
     <ng-container *ngIf="!sidebarCollapsed">
 
-      <!-- Tabs -->
+      
       <nav class="sidebar__tabs">
         <button [class.active]="currentTab === 'tools'"       (click)="currentTab = 'tools'">Ferramentas</button>
         <button [class.active]="currentTab === 'lighting'"    (click)="currentTab = 'lighting'">Luz</button>
@@ -24,10 +22,10 @@
         <button [class.active]="currentTab === 'projects'"    (click)="currentTab = 'projects'">Projetos</button>
       </nav>
 
-      <!-- ── TAB: TOOLS ──────────────────────────────────────────────── -->
+      
       <div class="tab-content" *ngIf="currentTab === 'tools'">
 
-        <!-- Source Toggle -->
+        
         <section class="sidebar__section">
           <h3 class="sidebar__section-title">Origem do Modelo</h3>
           <div class="source-toggle" style="display: flex; gap: 4px; background: #0d0d0d; padding: 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 8px;">
@@ -40,7 +38,7 @@
           </div>
         </section>
 
-        <!-- Upload (Local) -->
+        
         <section class="sidebar__section" *ngIf="viewModeSource === 'local'">
           <h3 class="sidebar__section-title">Importar Arquivo Local</h3>
           <label class="upload-zone" [class.upload-zone--drag]="isDragOver"
@@ -53,7 +51,7 @@
           <p class="model-name" *ngIf="modelName">📄 {{ modelName }}</p>
         </section>
 
-        <!-- Obra Selection (Database) -->
+        
         <section class="sidebar__section" *ngIf="viewModeSource === 'obra'">
           <h3 class="sidebar__section-title">Selecionar Obra Cadastrada</h3>
           <label class="ctrl-label" style="margin-top: 0;">Escolha a Obra</label>
@@ -62,7 +60,7 @@
             <option *ngFor="let o of listaObras" [ngValue]="o.id">{{ o.nome }}</option>
           </select>
 
-          <!-- Status indicator if the selected work doesn't have a 3D model -->
+          
           <div *ngIf="obraVisualizarId && !selectedObraHasModel" style="padding: 12px; background: rgba(255, 107, 26, 0.05); border: 1px dashed rgba(255, 107, 26, 0.3); border-radius: 6px; text-align: center;">
             <p class="hint-text" style="color: #ff6b1a; line-height: 1.4; margin: 0;">
               Esta obra não possui um modelo 3D cadastrado.<br>
@@ -71,7 +69,7 @@
           </div>
         </section>
 
-        <!-- Samples -->
+        
         <section class="sidebar__section">
           <h3 class="sidebar__section-title">Modelos de Amostra</h3>
           <button class="sample-btn" *ngFor="let s of sampleModels" (click)="loadSampleModel(s)">
@@ -81,7 +79,7 @@
           </button>
         </section>
 
-        <!-- Render Mode -->
+        
         <section class="sidebar__section" *ngIf="modelFile">
           <h3 class="sidebar__section-title">Modo de Renderização</h3>
           <div class="render-modes">
@@ -95,7 +93,7 @@
           </div>
         </section>
 
-        <!-- Interaction Mode -->
+        
         <section class="sidebar__section" *ngIf="modelFile">
           <h3 class="sidebar__section-title">Modo de Interação</h3>
           <div class="interact-modes">
@@ -111,7 +109,7 @@
           </div>
         </section>
 
-        <!-- Metadata -->
+        
         <section class="sidebar__section metadata-panel" *ngIf="metadata">
           <h3 class="sidebar__section-title">Metadados do Modelo</h3>
           <dl class="meta-list">
@@ -124,7 +122,7 @@
           </dl>
         </section>
 
-        <!-- Scale Calibration Panel -->
+        
         <section class="sidebar__section" *ngIf="modelFile">
           <h3 class="sidebar__section-title">Calibrar Proporção</h3>
           <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -139,14 +137,14 @@
           </div>
         </section>
 
-        <!-- Camera reset -->
+        
         <section class="sidebar__section" *ngIf="modelFile">
           <button class="btn btn--ghost btn--full" (click)="resetCamera()">🔄 Resetar Câmera</button>
         </section>
 
-      </div><!-- /tools -->
+      </div>
 
-      <!-- ── TAB: LIGHTING ───────────────────────────────────────────── -->
+      
       <div class="tab-content" *ngIf="currentTab === 'lighting'">
 
         <section class="sidebar__section">
@@ -190,9 +188,9 @@
           </label>
         </section>
 
-      </div><!-- /lighting -->
+      </div>
 
-      <!-- ── TAB: ANNOTATIONS ─────────────────────────────────────────── -->
+      
       <div class="tab-content" *ngIf="currentTab === 'annotations'">
 
         <section class="sidebar__section">
@@ -235,7 +233,7 @@
           </p>
         </div>
 
-        <!-- Measurements -->
+        
         <section class="sidebar__section">
           <h3 class="sidebar__section-title">Medições ({{ measurements.length }})</h3>
           <div class="measurement-list">
@@ -250,9 +248,9 @@
           </div>
         </section>
 
-      </div><!-- /annotations -->
+      </div>
 
-      <!-- ── TAB: PROJECTS ────────────────────────────────────────────── -->
+      
       <div class="tab-content" *ngIf="currentTab === 'projects'">
 
         <section class="sidebar__section">
@@ -289,15 +287,15 @@
           </div>
         </section>
 
-      </div><!-- /projects -->
+      </div>
 
     </ng-container>
   </aside>
 
-  <!-- ══ CANVAS AREA ═══════════════════════════════════════════════════════ -->
+  
   <main class="canvas-area">
 
-    <!-- Top toolbar -->
+    
     <div class="canvas-toolbar" *ngIf="modelFile">
       <span class="canvas-toolbar__model">⬡ {{ modelName }}</span>
       <div class="canvas-toolbar__modes">
@@ -316,7 +314,7 @@
       </div>
     </div>
 
-    <!-- Three.js viewport -->
+    
     <div #canvasContainer class="canvas-container"
          [class.drag-over]="isDragOver"
          (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
@@ -331,7 +329,7 @@
               (mouseleave)="onMouseLeave()">
       </canvas>
 
-      <!-- Annotation pin overlays -->
+      
       <div class="canvas-overlay">
         <ng-container *ngFor="let pin of projectedPins; trackBy: trackById">
           <div *ngIf="pin.visible && getAnnotation(pin.id)"
@@ -346,7 +344,7 @@
           </div>
         </ng-container>
 
-        <!-- Measurement badges -->
+        
         <ng-container *ngFor="let m of projectedMeasurements; trackBy: trackById">
           <div *ngIf="m.visible"
                class="measurement-badge"
@@ -356,7 +354,7 @@
           </div>
         </ng-container>
 
-        <!-- Live measurement preview -->
+        
         <div *ngIf="projectedTempMeasure && viewerMode === 'measure' && measureStartPoint"
              class="measurement-badge measurement-badge--live"
              [style.left.px]="projectedTempMeasure.x"
@@ -365,7 +363,7 @@
         </div>
       </div>
 
-      <!-- Mode tooltip banner -->
+      
       <div *ngIf="modelFile && viewerMode !== 'view'" class="mode-banner">
         <span class="mode-banner__dot" [class.mode-banner__dot--orange]="viewerMode === 'annotate'" [class.mode-banner__dot--green]="viewerMode === 'measure'"></span>
         <span *ngIf="viewerMode === 'annotate'">Modo Anotação — Clique no modelo para fixar um pino</span>
@@ -373,14 +371,14 @@
         <span *ngIf="viewerMode === 'measure' && measureStartPoint">Medição — Clique no 2º ponto para concluir</span>
       </div>
 
-      <!-- Loading overlay -->
+      
       <div *ngIf="isLoading" class="overlay overlay--loading">
         <div class="spinner"></div>
         <p>Carregando Modelo 3D…</p>
         <small>Calculando geometria e buffers</small>
       </div>
 
-      <!-- Error overlay -->
+      
       <div *ngIf="errorMessage" class="overlay overlay--error">
         <span class="overlay--error__icon">⚠</span>
         <div>
@@ -390,14 +388,14 @@
         </div>
       </div>
 
-      <!-- Empty state -->
+      
       <div *ngIf="!modelFile && !isLoading" class="overlay overlay--empty">
         <div class="empty-icon">⬡</div>
         <h3>Nenhum modelo carregado</h3>
         <p>Selecione uma amostra no painel ou arraste um arquivo <strong>.OBJ</strong>, <strong>.STL</strong>, <strong>.FBX</strong> ou <strong>.GLTF</strong> aqui</p>
       </div>
 
-    </div><!-- /canvas-container -->
+    </div>
   </main>
 
 </div>

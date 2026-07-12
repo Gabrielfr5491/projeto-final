@@ -26,21 +26,18 @@ export class RelatoriosComponent implements OnInit {
 
   carregando = false;
 
-  // Dados por aba
   financeiro: RelatorioFinanceiro | null = null;
   obras: RelatorioObra[] = [];
   funcionarios: RelatorioFuncionarios | null = null;
   materiais: RelatorioMateriais | null = null;
   equipamentos: RelatorioEquipamentos | null = null;
 
-  // Filtros
   buscaFinanceiro = '';
   buscaObras = '';
   buscaFuncionarios = '';
   buscaMateriais = '';
   filtroMaterialCritico = false;
 
-  // Controle de carregamento por aba
   private carregadas = new Set<Aba>();
 
   constructor(private relatoriosService: RelatoriosService) {}

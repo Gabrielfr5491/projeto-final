@@ -1,159 +1,141 @@
 @use '../../../../styles/_variables.scss' as *;
 
-// Cores agora usando CSS custom properties para suporte a tema
-
 $navbar-height: 70px;
-$transition-premium: all $transition-base $ease-out-expo;
 
 .navbar-custom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: $navbar-height;
-  padding: 0 $space-2xl;
+  padding: 0 $space-xl;
   background-color: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 999;
-  transition: $transition-premium;
 
   &__hamburger {
     display: none;
     background: transparent;
-    border: 2px solid var(--border);
+    border: 1px solid var(--border);
     color: var(--text-secondary);
-    width: 38px;
-    height: 38px;
-    border-radius: $radius-sm;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: $transition-premium;
+    transition: background $transition-fast ease, border-color $transition-fast ease;
 
     &:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-      background-color: var(--accent-light);
-      transform: rotate(90deg);
+      background: var(--bg-elevated);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
     }
   }
 
-  &__welcome {
-    display: flex;
-    flex-direction: column;
-  }
+  &__welcome { display: flex; flex-direction: column; }
 
   &__greeting {
-    font-size: 0.95rem;
-    font-weight: $weight-bold;
+    font-size: 0.9rem;
+    font-weight: $weight-semibold;
     color: var(--text-primary);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
 
   &__date {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-secondary);
-    font-weight: $weight-medium;
+    font-weight: $weight-regular;
   }
 
   &__right {
     display: flex;
     align-items: center;
-    gap: $space-xl;
+    gap: $space-lg;
   }
 
-  &__actions {
-    display: flex;
-    align-items: center;
-  }
+  &__actions { display: flex; align-items: center; }
 
   &__btn-action {
     background: transparent;
-    border: 2px solid var(--border);
+    border: 1px solid var(--border);
     color: var(--text-secondary);
-    width: 38px;
-    height: 38px;
-    border-radius: $radius-sm;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: $transition-premium;
+    transition: background $transition-fast ease, border-color $transition-fast ease, color $transition-fast ease;
 
     &:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-      background-color: var(--accent-light);
-      transform: translateY(-2px) rotate(5deg);
+      background: var(--bg-elevated);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
     }
   }
 
   &__divider {
     width: 1px;
-    height: 24px;
-    background-color: var(--border);
+    height: 22px;
+    background: var(--border);
   }
 
   &__profile {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 
   &__avatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: $radius-md;
-    background: linear-gradient(135deg, var(--accent), #C44908);
-    color: var(--bg-main);
-    font-weight: $weight-extrabold;
-    font-size: 1.05rem;
+    background: var(--accent);
+    color: #fff;
+    font-weight: $weight-bold;
+    font-size: 0.9rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    @include hard-shadow(3px, 3px, rgba(0,0,0,0.3));
+    flex-shrink: 0;
   }
 
-  &__user-info {
-    display: flex;
-    flex-direction: column;
-  }
+  &__user-info { display: flex; flex-direction: column; }
 
   &__user-name {
-    font-size: 0.875rem;
-    font-weight: $weight-bold;
+    font-size: 0.85rem;
+    font-weight: $weight-semibold;
     color: var(--text-primary);
     line-height: 1.2;
   }
 
   &__user-role {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
-    font-weight: $weight-medium;
+    font-weight: $weight-regular;
   }
 
   &__btn-logout {
     background: transparent;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     color: var(--text-secondary);
     padding: $space-xs $space-sm;
-    border-radius: $radius-sm;
-    font-size: 0.85rem;
-    font-weight: $weight-bold;
+    border-radius: $radius-md;
+    font-size: 0.8rem;
+    font-weight: $weight-medium;
     display: flex;
     align-items: center;
     gap: $space-xs;
     cursor: pointer;
-    transition: $transition-premium;
+    transition: color $transition-fast ease, background $transition-fast ease, border-color $transition-fast ease;
 
     &:hover {
       color: var(--danger);
-      background-color: rgba(199, 62, 58, 0.1);
-      border-color: rgba(199, 62, 58, 0.3);
-      transform: skewX(-2deg);
+      background: rgba(199, 62, 58, 0.08);
+      border-color: rgba(199, 62, 58, 0.2);
     }
   }
 }
@@ -162,12 +144,42 @@ $transition-premium: all $transition-base $ease-out-expo;
   .navbar-custom {
     padding: 0 $space-md;
 
-    &__hamburger {
-      display: flex;
-    }
-
-    &__welcome, &__user-info, &__divider {
-      display: none;
-    }
+    &__hamburger { display: flex; }
+    &__welcome, &__user-info, &__divider { display: none; }
   }
+}
+
+// ── Botão e badge de alertas ──────────────────────────────────────────────────
+.navbar-custom__btn-alertas {
+  text-decoration: none;
+  margin-left: $space-xs;
+}
+
+.navbar-custom__alertas-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-custom__alertas-badge {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  font-size: 0.58rem;
+  font-weight: $weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--bg-card);
+  pointer-events: none;
+  background: $warning;
+  color: #fff;
+
+  &--danger  { background: $danger; }
+  &--warning { background: $warning; }
 }

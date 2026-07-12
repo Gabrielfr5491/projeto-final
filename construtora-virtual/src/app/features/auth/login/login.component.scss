@@ -2,20 +2,17 @@
 
 $accent-color: $orange-500;
 $accent-hover: $orange-600;
-$bg-form-side: $black-900;
 
 .login-wrapper {
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 450px 1fr;
-  background-color: $bg-form-side;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  grid-template-columns: 420px 1fr;
+  background-color: $black-900;
+  font-family: $font-body;
   overflow: hidden;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-  }
+  @media (max-width: 1024px) { grid-template-columns: 1fr; }
 }
 
 .login-aside-form {
@@ -24,8 +21,8 @@ $bg-form-side: $black-900;
   justify-content: center;
   align-items: center;
   padding: 3rem;
-  background-color: $bg-form-side;
-  border-right: 2px solid rgba($black-700, 0.5);
+  background-color: $black-900;
+  border-right: 1px solid rgba($black-700, 0.4);
   z-index: 20;
 }
 
@@ -39,58 +36,58 @@ $bg-form-side: $black-900;
 
   &__header {
     margin-top: auto;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   &__logo {
     display: block;
-    width: 140px;
+    width: 130px;
     height: auto;
     margin-bottom: 1.25rem;
   }
 
   &__logo-icon {
-    width: 46px;
-    height: 46px;
-    background: linear-gradient(135deg, $accent-color, $orange-700);
+    width: 44px;
+    height: 44px;
+    background: $accent-color;
     color: $black-50;
-    border-radius: $radius-sm;
+    border-radius: $radius-md;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 1.5rem;
-    @include hard-shadow(4px, 4px, rgba(0,0,0,0.4));
   }
 
   &__title {
     font-size: 1.6rem;
-    font-weight: $weight-extrabold;
+    font-weight: $weight-bold;
     color: $black-50;
     letter-spacing: -0.02em;
     margin: 0;
+    line-height: 1.2;
   }
 
   &__subtitle {
     font-size: 0.875rem;
     color: $black-400;
-    margin-top: 0;
+    margin-top: $space-xs;
     margin-bottom: 0;
     line-height: 1.5;
+    font-weight: $weight-regular;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.1rem;
     margin-bottom: auto;
   }
 
   &__footer {
     margin-top: auto;
-
     p {
       font-size: 0.75rem;
-      color: #475569;
+      color: $black-500;
       margin: 0;
     }
   }
@@ -99,14 +96,13 @@ $bg-form-side: $black-900;
 .input-premium-group {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 5px;
 
   &__label {
     font-size: 0.775rem;
-    font-weight: $weight-bold;
-    color: $black-200;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-weight: $weight-semibold;
+    color: $black-300;
+    letter-spacing: 0.02em;
   }
 
   &__wrapper {
@@ -117,69 +113,55 @@ $bg-form-side: $black-900;
 
   &__icon {
     position: absolute;
-    left: 1.1rem;
+    left: 0.9rem;
     color: $black-500;
     pointer-events: none;
-    transition: color $transition-fast $ease-out-expo;
+    transition: color $transition-fast ease;
   }
 
   &__input {
     width: 100%;
     background: $black-800;
-    border: 2px solid rgba($black-400, 0.15);
+    border: 1px solid rgba($black-500, 0.3);
     color: $black-50;
-    padding: 0.8rem 1rem 0.8rem 2.8rem;
-    border-radius: $radius-sm;
-    font-size: 0.925rem;
-    font-weight: $weight-medium;
+    padding: 0.75rem 1rem 0.75rem 2.6rem;
+    border-radius: $radius-md;
+    font-size: 0.9rem;
+    font-weight: $weight-regular;
     outline: none;
-    transition: all $transition-fast $ease-out-expo;
+    transition: border-color $transition-fast ease;
 
-    &::placeholder {
-      color: $black-600;
-    }
+    &::placeholder { color: $black-600; }
 
     &:focus {
       border-color: $accent-color;
-      background: $black-900;
-      box-shadow: 0 0 0 3px rgba($accent-color, 0.15);
-      transform: skewX(-1deg);
+
+      ~ .input-premium-group__icon { color: $accent-color; }
     }
   }
 }
 
 .btn-login-premium {
-  background: linear-gradient(135deg, $accent-color, $orange-700);
+  background: $accent-color;
   color: $black-50;
   border: none;
-  padding: 0.85rem;
-  border-radius: $radius-sm;
-  font-size: 0.925rem;
-  font-weight: $weight-bold;
+  padding: 0.8rem;
+  border-radius: $radius-md;
+  font-size: 0.9rem;
+  font-weight: $weight-semibold;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: $space-xs;
   margin-top: $space-xs;
-  @include hard-shadow(4px, 4px, rgba(0,0,0,0.4));
-  transition: all $transition-base $ease-out-expo;
+  transition: background $transition-fast ease;
 
-  svg {
-    transition: transform $transition-base $ease-out-expo;
-  }
-
-  &:hover {
-    background: linear-gradient(135deg, $accent-hover, $orange-800);
-    transform: translateY(-2px) skewX(-2deg);
-    @include hard-shadow(6px, 6px, rgba(0,0,0,0.5));
-
-    svg {
-      transform: translateX(4px) rotate(5deg);
-    }
-  }
+  &:hover { background: $accent-hover; }
+  &:active { opacity: 0.85; }
 }
 
+// ── LADO DIREITO (carousel) ───────────────────────────────────────────────────
 .login-aside-carousel {
   position: relative;
   height: 100%;
@@ -187,122 +169,103 @@ $bg-form-side: $black-900;
   background-color: $black-900;
   display: flex;
   align-items: flex-end;
-  padding: 5rem;
+  padding: 4rem;
 
-  @media (max-width: 1024px) {
-    display: none;
-  }
+  @media (max-width: 1024px) { display: none; }
 }
 
 .carousel-slide {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  transition: opacity 0.6s ease, visibility 0.6s;
   display: flex;
   align-items: flex-end;
-  padding: 5rem;
+  padding: 4rem;
 
-  &--active {
-    opacity: 1;
-    visibility: visible;
-  }
+  &--active { opacity: 1; visibility: visible; }
 
   &__bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background-size: cover;
     background-position: center;
-    transform: scale(1.05);
-    transition: transform 6s ease;
 
     &::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(0deg, rgba(#020617, 0.85) 0%, rgba(#020617, 0.3) 50%, rgba(0, 0, 0, 0) 100%);
+      inset: 0;
+      background: linear-gradient(to top, rgba($black-900, 0.88) 0%, rgba($black-900, 0.3) 60%, transparent 100%);
     }
-  }
-
-  &--active &__bg {
-    transform: scale(1);
   }
 
   &__content {
     position: relative;
     z-index: 10;
-    max-width: 550px;
-    color: #ffffff;
-    transform: translateY(20px);
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+    max-width: 520px;
+    color: $black-50;
+    transition: transform 0.5s ease 0.15s;
+    transform: translateY(12px);
   }
 
-  &--active &__content {
-    transform: translateY(0);
-  }
+  &--active &__content { transform: translateY(0); }
 
   &__tag {
     background: rgba($accent-color, 0.15);
-    backdrop-filter: blur(4px);
-    padding: 0.35rem 0.75rem;
-    border-radius: $radius-sm;
-    font-size: 0.75rem;
-    font-weight: $weight-bold;
+    padding: 0.3rem 0.75rem;
+    border-radius: $radius-md;
+    font-size: 0.72rem;
+    font-weight: $weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     border: 1px solid rgba($accent-color, 0.3);
     display: inline-block;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
+    color: $accent-color;
   }
 
   &__title {
-    font-size: 2.25rem;
-    font-weight: $weight-black;
+    font-size: 2rem;
+    font-weight: $weight-bold;
     line-height: 1.2;
-    letter-spacing: -0.03em;
-    margin: 0 0 1rem 0;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.75rem;
   }
 
   &__description {
-    font-size: 1rem;
-    color: $black-200;
+    font-size: 0.95rem;
+    color: $black-300;
     line-height: 1.6;
     margin: 0;
+    font-weight: $weight-regular;
   }
 }
 
 .carousel-indicators {
   position: absolute;
-  right: 5rem;
-  bottom: 5rem;
+  right: 4rem;
+  bottom: 4rem;
   z-index: 30;
   display: flex;
   gap: 0.5rem;
 
   &__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: $radius-sm;
-    background: rgba($black-400, 0.3);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba($black-400, 0.35);
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: all $transition-base $ease-out-expo;
+    transition: background $transition-base ease, width $transition-base ease;
 
     &--active {
       background: $accent-color;
-      width: 24px;
+      width: 20px;
       border-radius: $radius-sm;
     }
+
+    &:hover { background: rgba($accent-color, 0.6); }
   }
 }
