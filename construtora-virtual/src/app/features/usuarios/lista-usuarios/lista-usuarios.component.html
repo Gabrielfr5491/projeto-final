@@ -58,7 +58,7 @@
             <td *ngIf="isAdmin()">
               <div class="actions-cell">
                 <a
-                  [routerLink]="['/cadastro-usuario']"
+                  [routerLink]="['/editar-usuario', u.id]"
                   class="btn-action btn-action--warn"
                   title="Editar Usuário">
                   <i class="bi bi-pencil"></i>

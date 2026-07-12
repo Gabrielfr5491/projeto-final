@@ -26,6 +26,7 @@ import { ListaCustosComponent } from './features/custos/lista-custos/lista-custo
 import { CadastroCustoComponent } from './features/custos/cadastro-custo/cadastro-custo.component';
 import { EditarCustoComponent } from './features/custos/editar-custo/editar-custo.component';
 import { CadastroUsuarioComponent } from './features/usuarios/cadastro-usuario/cadastro-usuario.component';
+import { EditarUsuarioComponent } from './features/usuarios/editar-usuario/editar-usuario.component';
 import { ListaUsuariosComponent } from './features/usuarios/lista-usuarios/lista-usuarios.component';
 import { LandingComponent } from './features/landing/landing.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
@@ -74,6 +75,7 @@ export const routes: Routes = [
 
       { path: 'usuarios',          component: ListaUsuariosComponent,   canActivate: [roleGuard], data: { roles: ['admin'] } },
       { path: 'cadastro-usuario',  component: CadastroUsuarioComponent, canActivate: [roleGuard], data: { roles: ['admin'] } },
+      { path: 'editar-usuario/:id', component: EditarUsuarioComponent,  canActivate: [roleGuard], data: { roles: ['admin'] } },
     ],
   },
 

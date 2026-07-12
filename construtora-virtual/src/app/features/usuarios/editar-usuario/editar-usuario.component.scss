@@ -1,0 +1,66 @@
+@use '../../../../styles/_variables.scss' as *;
+
+.full-width {
+  grid-column: span 2;
+
+  @include mobile {
+    grid-column: span 1;
+  }
+}
+
+// ── LOADING ───────────────────────────────────────────────────────────────────
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-3xl $space-md;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ── SEÇÃO DE SENHA ────────────────────────────────────────────────────────────
+.senha-section {
+  margin-top: $space-xl;
+  padding-top: $space-lg;
+  border-top: 1px solid var(--border);
+}
+
+.senha-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-sm;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: $weight-medium;
+  color: var(--text-secondary);
+  margin-bottom: $space-md;
+  user-select: none;
+
+  input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+
+  &:hover {
+    color: var(--text-primary);
+  }
+}
+
+.senha-fields {
+  margin-top: $space-md;
+  margin-bottom: 0;
+}

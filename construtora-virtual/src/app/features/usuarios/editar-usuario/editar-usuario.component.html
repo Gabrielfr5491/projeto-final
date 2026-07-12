@@ -1,0 +1,119 @@
+<div class="cadastro-container">
+
+  <div class="page-header">
+    <h1>Editar Usuário</h1>
+    <p>Atualize os dados e permissões do usuário</p>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="carregando" class="loading-state">
+    <div class="loading-spinner"></div>
+    <span>Carregando dados...</span>
+  </div>
+
+  <div class="form-card" *ngIf="!carregando">
+    <form (ngSubmit)="salvar()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="nome">Nome Completo</label>
+          <input
+            id="nome"
+            type="text"
+            [(ngModel)]="usuario.nome"
+            name="nome"
+            placeholder="Digite o nome completo"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="usuario.email"
+            name="email"
+            placeholder="email@empresa.com"
+            required
+          >
+        </div>
+
+        <div class="form-group full-width">
+          <label for="perfil">Nível de Restrição (Perfil)</label>
+          <select
+            id="perfil"
+            [(ngModel)]="usuario.perfil"
+            name="perfil"
+            required
+          >
+            <option value="">Selecione o perfil</option>
+            <option value="admin">Administrador</option>
+            <option value="gerente">Gerente</option>
+            <option value="comum">Comum</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Seção de troca de senha -->
+      <div class="senha-section">
+        <label class="senha-toggle">
+          <input
+            type="checkbox"
+            [(ngModel)]="alterarSenha"
+            name="alterarSenha"
+          >
+          <span>Alterar senha</span>
+        </label>
+
+        <div class="form-grid senha-fields" *ngIf="alterarSenha">
+          <div class="form-group">
+            <label for="novaSenha">Nova Senha</label>
+            <input
+              id="novaSenha"
+              type="password"
+              [(ngModel)]="novaSenha"
+              name="novaSenha"
+              placeholder="Digite a nova senha"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="confirmarSenha">Confirmar Nova Senha</label>
+            <input
+              id="confirmarSenha"
+              type="password"
+              [(ngModel)]="confirmarSenha"
+              name="confirmarSenha"
+              placeholder="Confirme a nova senha"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cancelar()"
+          [disabled]="salvando"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-salvar"
+          [disabled]="salvando"
+        >
+          <span *ngIf="!salvando">Salvar Alterações</span>
+          <span *ngIf="salvando">Salvando...</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
