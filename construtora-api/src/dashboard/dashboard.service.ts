@@ -47,12 +47,8 @@ export class DashboardService {
     // Agora: SUM condicional direto no banco — zero linhas trafegam.
     const financeiro = await this.custoRepository
       .createQueryBuilder('custo')
-      .select([
-        `COALESCE(SUM(CASE WHEN custo.tipo = 'Entrada' THEN custo.valor ELSE 0 END), 0)`,
-        'receitas',
-        `COALESCE(SUM(CASE WHEN custo.tipo != 'Entrada' THEN custo.valor ELSE 0 END), 0)`,
-        'despesas',
-      ])
+      .select(`COALESCE(SUM(CASE WHEN custo.tipo = 'Entrada' THEN custo.valor ELSE 0 END), 0)`, 'receitas')
+      .addSelect(`COALESCE(SUM(CASE WHEN custo.tipo != 'Entrada' THEN custo.valor ELSE 0 END), 0)`, 'despesas')
       .getRawOne<{ receitas: string; despesas: string }>();
 
     const receitas = Number(financeiro?.receitas ?? 0);
