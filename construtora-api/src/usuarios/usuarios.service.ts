@@ -51,4 +51,10 @@ export class UsuariosService {
       where: { email }
     });
   }
+
+  contarAdmins(): Promise<number> {
+    return this.usuarioRepository.count({
+      where: { perfil: 'admin' }
+    });
+  }
 }

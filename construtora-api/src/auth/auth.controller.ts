@@ -58,4 +58,29 @@ export class AuthController {
 
   }
 
+  /** Cria o primeiro admin do sistema — só funciona se não existir nenhum admin ainda */
+  @Post('seed-admin')
+  async seedAdmin(
+    @Body() body: { nome: string; email: string; senha: string }
+  ) {
+    const existe = await this.usuariosService.buscarPorEmail(body.email);
+    if (existe) {
+      throw new UnauthorizedException('Usuário já existe.');
+    }
+
+    const admins = await this.usuariosService.contarAdmins();
+    if (admins > 0) {
+      throw new UnauthorizedException('Já existe um administrador cadastrado. Use o login normal.');
+    }
+
+    const novoAdmin = await this.usuariosService.create({
+      nome: body.nome,
+      email: body.email,
+      senha: body.senha,
+      perfil: 'admin' as any,
+    });
+
+    return this.authService.login(novoAdmin);
+  }
+
 }

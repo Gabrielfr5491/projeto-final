@@ -102,7 +102,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
       nome: this.usuario.nome,
       email: this.usuario.email,
       senha: this.usuario.senha,
-      perfil: 'Administrador'
+      perfil: 'admin'
     };
 
     this.usuarioService.adicionar(novoUsuario).subscribe({
