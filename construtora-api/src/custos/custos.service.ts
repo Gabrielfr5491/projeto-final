@@ -37,18 +37,18 @@ export class CustosService {
   }
 
   /**
-   * Lista custos com paginação e JOIN controlado na obra.
-   * Nunca traz os campos base64 da Obra — apenas as colunas necessárias para exibição.
+   * Lista custos com JOIN controlado na obra (sem campos base64).
    *
+   * - Sem parâmetros → retorna array simples (retrocompatível com o frontend existente)
+   * - Com page/limit  → retorna envelope paginado { data, total, page, limit, totalPages }
+   *
+   * GET /custos
    * GET /custos?page=1&limit=20
    */
-  async findAll(pagination: PaginationDto): Promise<PaginatedResult<Custo>> {
-    const { skip, take } = pagination.toQuery();
-
-    const result = await this.custoRepository
+  async findAll(pagination?: PaginationDto): Promise<Custo[] | PaginatedResult<Custo>> {
+    const qb = this.custoRepository
       .createQueryBuilder('custo')
       .leftJoin('custo.obra', 'obra')
-      // Seleciona só as colunas necessárias do custo
       .select([
         'custo.id',
         'custo.descricao',
@@ -60,21 +60,29 @@ export class CustosService {
         ...OBRA_SAFE_COLUMNS,
       ])
       .orderBy('custo.data', 'DESC')
-      .addOrderBy('custo.id', 'DESC')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .addOrderBy('custo.id', 'DESC');
 
+    // Sem paginação → array simples (mantém compatibilidade com o frontend)
+    if (!pagination?.page) {
+      return qb.getMany();
+    }
+
+    const { skip, take } = pagination.toQuery();
+    const result = await qb.skip(skip).take(take).getManyAndCount();
     return toPaginatedResult(result, pagination);
   }
 
   /**
-   * Lista custos de uma obra específica, também sem base64.
+   * Lista custos de uma obra específica, sem campos base64.
+   *
+   * GET /custos/por-obra/42
+   * GET /custos/por-obra/42?page=1&limit=20
    */
-  async findByObra(obraId: number, pagination: PaginationDto): Promise<PaginatedResult<Custo>> {
-    const { skip, take } = pagination.toQuery();
-
-    const result = await this.custoRepository
+  async findByObra(
+    obraId: number,
+    pagination?: PaginationDto,
+  ): Promise<Custo[] | PaginatedResult<Custo>> {
+    const qb = this.custoRepository
       .createQueryBuilder('custo')
       .leftJoin('custo.obra', 'obra')
       .select([
@@ -89,16 +97,18 @@ export class CustosService {
       ])
       .where('custo.obraId = :obraId', { obraId })
       .orderBy('custo.data', 'DESC')
-      .addOrderBy('custo.id', 'DESC')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .addOrderBy('custo.id', 'DESC');
 
+    if (!pagination?.page) {
+      return qb.getMany();
+    }
+
+    const { skip, take } = pagination.toQuery();
+    const result = await qb.skip(skip).take(take).getManyAndCount();
     return toPaginatedResult(result, pagination);
   }
 
   findOne(id: number) {
-    // findOne pode trazer o objeto completo — é chamado pontualmente
     return this.custoRepository.findOne({
       where: { id },
       relations: ['obra'],

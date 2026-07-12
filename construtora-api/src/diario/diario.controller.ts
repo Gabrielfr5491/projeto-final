@@ -24,13 +24,19 @@ export class DiarioController {
     return this.diarioService.create(dto);
   }
 
-  /** GET /diario?page=1&limit=20 — lista sem descricao (text longo) */
+  /**
+   * GET /diario            → array completo (retrocompatível)
+   * GET /diario?page=1&limit=20 → resposta paginada
+   */
   @Get()
   findAll(@Query() pagination: PaginationDto) {
     return this.diarioService.findAll(pagination);
   }
 
-  /** GET /diario/obra/42?page=1&limit=20 */
+  /**
+   * GET /diario/obra/42            → array completo
+   * GET /diario/obra/42?page=1&limit=20 → paginado
+   */
   @Get('obra/:obraId')
   findByObra(
     @Param('obraId') obraId: string,

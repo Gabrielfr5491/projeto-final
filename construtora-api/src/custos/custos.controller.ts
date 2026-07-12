@@ -24,13 +24,19 @@ export class CustosController {
     return this.custosService.create(createCustoDto);
   }
 
-  /** GET /custos?page=1&limit=20 */
+  /**
+   * GET /custos            → array completo (retrocompatível)
+   * GET /custos?page=1&limit=20 → resposta paginada
+   */
   @Get()
   findAll(@Query() pagination: PaginationDto) {
     return this.custosService.findAll(pagination);
   }
 
-  /** GET /custos/por-obra/42?page=1&limit=20 */
+  /**
+   * GET /custos/por-obra/42            → array completo
+   * GET /custos/por-obra/42?page=1&limit=20 → paginado
+   */
   @Get('por-obra/:obraId')
   findByObra(
     @Param('obraId') obraId: string,

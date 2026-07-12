@@ -28,20 +28,51 @@ export class RelatoriosService {
     private equipamentoRepository: Repository<Equipamento>,
   ) {}
 
+  /**
+   * Antes: find({ relations: ['obra'] }) carregava base64 de cada obra para cada custo.
+   * Agora: GROUP BY no banco — só o nome da obra e a soma trafegam.
+   */
   async custosPorObra() {
-    const custos = await this.custoRepository.find({ relations: ['obra'] });
+    const rows = await this.custoRepository
+      .createQueryBuilder('custo')
+      .leftJoin('custo.obra', 'obra')
+      .select('COALESCE(obra.nome, :semObra)', 'nomeObra')
+      .addSelect('SUM(custo.valor)', 'total')
+      .setParameter('semObra', 'Sem Obra')
+      .groupBy('obra.nome')
+      .getRawMany<{ nomeObra: string; total: string }>();
+
     const resultado: Record<string, number> = {};
-    custos.forEach(custo => {
-      const nomeObra = custo.obra?.nome || 'Sem Obra';
-      if (!resultado[nomeObra]) resultado[nomeObra] = 0;
-      resultado[nomeObra] += Number(custo.valor);
-    });
+    for (const row of rows) {
+      resultado[row.nomeObra] = Number(row.total);
+    }
     return resultado;
   }
 
+  /**
+   * Antes: find({ where, relations }) carregava base64 para calcular totais em JS.
+   * Agora: apenas as colunas necessárias (sem base64 da obra).
+   */
   async relatorioFinanceiro(obraId?: number) {
-    const where = obraId ? { obraId } : {};
-    const custos = await this.custoRepository.find({ where, relations: ['obra'] });
+    const qb = this.custoRepository
+      .createQueryBuilder('custo')
+      .leftJoin('custo.obra', 'obra')
+      .select([
+        'custo.id',
+        'custo.descricao',
+        'custo.categoria',
+        'custo.tipo',
+        'custo.valor',
+        'custo.data',
+        'custo.obraId',
+        'obra.nome',   // só o nome, sem base64
+      ]);
+
+    if (obraId) {
+      qb.where('custo.obraId = :obraId', { obraId });
+    }
+
+    const custos = await qb.getMany();
 
     const totalEntradas = custos
       .filter(c => c.tipo === 'Entrada')
@@ -80,8 +111,8 @@ export class RelatoriosService {
     const evolucao = mesesOrdenados.map(mes => ({
       mes,
       entradas: evolucaoMensal[mes].entradas,
-      saidas: evolucaoMensal[mes].saidas,
-      saldo: evolucaoMensal[mes].entradas - evolucaoMensal[mes].saidas,
+      saidas:   evolucaoMensal[mes].saidas,
+      saldo:    evolucaoMensal[mes].entradas - evolucaoMensal[mes].saidas,
     }));
 
     return {
@@ -91,13 +122,13 @@ export class RelatoriosService {
       porCategoria,
       evolucao,
       itens: custos.map(c => ({
-        id: c.id,
+        id:        c.id,
         descricao: c.descricao,
         categoria: c.categoria,
-        tipo: c.tipo,
-        valor: Number(c.valor),
-        data: c.data,
-        obra: c.obra?.nome ?? 'Sem Obra',
+        tipo:      c.tipo,
+        valor:     Number(c.valor),
+        data:      c.data,
+        obra:      c.obra?.nome ?? 'Sem Obra',
       })),
     };
   }
@@ -126,12 +157,12 @@ export class RelatoriosService {
       mediaSalarial: funcionarios.length > 0 ? totalFolha / funcionarios.length : 0,
       porCargo: porcargo,
       lista: funcionarios.map(f => ({
-        id: f.id,
-        nome: f.nome,
-        cargo: f.cargo,
-        salario: Number(f.salario),
-        status: f.status,
-        email: f.email,
+        id:       f.id,
+        nome:     f.nome,
+        cargo:    f.cargo,
+        salario:  Number(f.salario),
+        status:   f.status,
+        email:    f.email,
         telefone: f.telefone,
       })),
     };
@@ -163,25 +194,25 @@ export class RelatoriosService {
       valorTotalEstoque,
       porCategoria,
       criticos: criticos.map(m => ({
-        id: m.id,
-        nome: m.nome,
-        categoria: m.categoria,
-        quantidade: Number(m.quantidade),
+        id:           m.id,
+        nome:         m.nome,
+        categoria:    m.categoria,
+        quantidade:   Number(m.quantidade),
         estoqueMinimo: Number(m.estoqueMinimo),
-        unidade: m.unidade,
-        fornecedor: m.fornecedor,
+        unidade:      m.unidade,
+        fornecedor:   m.fornecedor,
       })),
       lista: materiais.map(m => ({
-        id: m.id,
-        nome: m.nome,
-        categoria: m.categoria,
-        unidade: m.unidade,
-        quantidade: Number(m.quantidade),
+        id:            m.id,
+        nome:          m.nome,
+        categoria:     m.categoria,
+        unidade:       m.unidade,
+        quantidade:    Number(m.quantidade),
         estoqueMinimo: Number(m.estoqueMinimo),
         valorUnitario: Number(m.valorUnitario),
-        valorTotal: Number(m.valorUnitario) * Number(m.quantidade),
-        fornecedor: m.fornecedor,
-        critico: Number(m.quantidade) <= Number(m.estoqueMinimo),
+        valorTotal:    Number(m.valorUnitario) * Number(m.quantidade),
+        fornecedor:    m.fornecedor,
+        critico:       Number(m.quantidade) <= Number(m.estoqueMinimo),
       })),
     };
   }
@@ -206,33 +237,59 @@ export class RelatoriosService {
       porStatus,
       porTipo,
       lista: equipamentos.map(e => ({
-        id: e.id,
-        nome: e.nome,
-        tipo: e.tipo,
-        marca: e.marca,
-        modelo: e.modelo,
-        placa: e.placa,
-        status: e.status,
+        id:        e.id,
+        nome:      e.nome,
+        tipo:      e.tipo,
+        marca:     e.marca,
+        modelo:    e.modelo,
+        placa:     e.placa,
+        status:    e.status,
         valorHora: Number(e.valorHora),
       })),
     };
   }
 
+  /**
+   * Antes: dois find() completos (obras + custos com relations) puxando base64.
+   * Agora: obras sem base64 + custos só com obraId e valor (SUM via mapa).
+   */
   async relatorioObras() {
-    const obras = await this.obraRepository.find();
-    const custos = await this.custoRepository.find({ relations: ['obra'] });
+    const [obras, custosSumarizados] = await Promise.all([
+      // obras sem campos base64
+      this.obraRepository
+        .createQueryBuilder('obra')
+        .select([
+          'obra.id',
+          'obra.nome',
+          'obra.cidade',
+          'obra.estado',
+          'obra.status',
+          'obra.dataInicio',
+          'obra.dataPrevista',
+          'obra.orcamento',
+        ])
+        .getMany(),
+
+      // SUM por obraId — zero linhas de detalhe trafegam
+      this.custoRepository
+        .createQueryBuilder('custo')
+        .select('custo.obraId', 'obraId')
+        .addSelect('SUM(custo.valor)', 'totalCusto')
+        .groupBy('custo.obraId')
+        .getRawMany<{ obraId: number; totalCusto: string }>(),
+    ]);
 
     const custosPorObraId: Record<number, number> = {};
-    custos.forEach(c => {
-      custosPorObraId[c.obraId] = (custosPorObraId[c.obraId] || 0) + Number(c.valor);
-    });
+    for (const row of custosSumarizados) {
+      custosPorObraId[Number(row.obraId)] = Number(row.totalCusto);
+    }
 
     const hoje = new Date();
 
     return obras.map(o => {
-      const custoReal = custosPorObraId[o.id] || 0;
+      const custoReal = custosPorObraId[o.id] ?? 0;
       const orcamento = Number(o.orcamento);
-      const variacao = orcamento > 0 ? ((custoReal - orcamento) / orcamento) * 100 : 0;
+      const variacao  = orcamento > 0 ? ((custoReal - orcamento) / orcamento) * 100 : 0;
 
       let diasRestantes: number | null = null;
       if (o.dataPrevista) {
@@ -241,20 +298,19 @@ export class RelatoriosService {
       }
 
       return {
-        id: o.id,
-        nome: o.nome,
-        cidade: o.cidade,
-        estado: o.estado,
-        status: o.status,
-        dataInicio: o.dataInicio,
+        id:           o.id,
+        nome:         o.nome,
+        cidade:       o.cidade,
+        estado:       o.estado,
+        status:       o.status,
+        dataInicio:   o.dataInicio,
         dataPrevista: o.dataPrevista,
         orcamento,
         custoReal,
-        variacao: +variacao.toFixed(1),
+        variacao:     +variacao.toFixed(1),
         diasRestantes,
-        estourado: custoReal > orcamento,
+        estourado:    custoReal > orcamento,
       };
     });
   }
-
 }

@@ -34,19 +34,23 @@ export class DiarioService {
   }
 
   /**
-   * Lista entradas do diário com paginação.
+   * Lista entradas do diário.
    * A coluna `descricao` (text longo) é omitida na listagem —
-   * o frontend deve buscar o texto completo apenas no findOne.
+   * carregada apenas no findOne (detalhe).
    *
+   * - Sem parâmetros → array simples (retrocompatível com o frontend existente)
+   * - Com page/limit  → envelope paginado
+   *
+   * GET /diario
    * GET /diario?page=1&limit=20
    */
-  async findAll(pagination: PaginationDto): Promise<PaginatedResult<DiarioEntrada>> {
-    const { skip, take } = pagination.toQuery();
-
-    const result = await this.diarioRepository
+  async findAll(
+    pagination?: PaginationDto,
+  ): Promise<DiarioEntrada[] | PaginatedResult<DiarioEntrada>> {
+    const qb = this.diarioRepository
       .createQueryBuilder('entrada')
       .leftJoin('entrada.obra', 'obra')
-      // descricao (text) é excluída da listagem — carregada só no detalhe
+      // descricao (text) omitida na listagem — carregada só no findOne
       .select([
         'entrada.id',
         'entrada.titulo',
@@ -57,21 +61,28 @@ export class DiarioService {
         ...OBRA_SAFE_COLUMNS,
       ])
       .orderBy('entrada.data', 'DESC')
-      .addOrderBy('entrada.id', 'DESC')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .addOrderBy('entrada.id', 'DESC');
 
+    if (!pagination?.page) {
+      return qb.getMany();
+    }
+
+    const { skip, take } = pagination.toQuery();
+    const result = await qb.skip(skip).take(take).getManyAndCount();
     return toPaginatedResult(result, pagination);
   }
 
   /**
-   * Lista entradas de uma obra específica com paginação.
+   * Lista entradas de uma obra específica.
+   *
+   * GET /diario/obra/42
+   * GET /diario/obra/42?page=1&limit=20
    */
-  async findByObra(obraId: number, pagination: PaginationDto): Promise<PaginatedResult<DiarioEntrada>> {
-    const { skip, take } = pagination.toQuery();
-
-    const result = await this.diarioRepository
+  async findByObra(
+    obraId: number,
+    pagination?: PaginationDto,
+  ): Promise<DiarioEntrada[] | PaginatedResult<DiarioEntrada>> {
+    const qb = this.diarioRepository
       .createQueryBuilder('entrada')
       .leftJoin('entrada.obra', 'obra')
       .select([
@@ -85,16 +96,19 @@ export class DiarioService {
       ])
       .where('entrada.obraId = :obraId', { obraId })
       .orderBy('entrada.data', 'DESC')
-      .addOrderBy('entrada.id', 'DESC')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .addOrderBy('entrada.id', 'DESC');
 
+    if (!pagination?.page) {
+      return qb.getMany();
+    }
+
+    const { skip, take } = pagination.toQuery();
+    const result = await qb.skip(skip).take(take).getManyAndCount();
     return toPaginatedResult(result, pagination);
   }
 
   /**
-   * Detalhe completo — traz descricao e obra completa (sem base64).
+   * Detalhe completo — traz descricao e obra (sem campos base64).
    */
   findOne(id: number) {
     return this.diarioRepository
