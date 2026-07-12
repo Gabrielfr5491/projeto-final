@@ -14,7 +14,8 @@ async function bootstrap() {
       'http://localhost:52562',
       'http://localhost:3000',
       /^http:\/\/localhost(:\d+)?$/,
-      'https://zap-construction.netlify.app'
+      'https://zap-construction.netlify.app',
+      'https://projeto-final-hxph.vercel.app'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
