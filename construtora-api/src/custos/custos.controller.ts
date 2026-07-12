@@ -5,12 +5,14 @@ import {
   Body,
   Patch,
   Param,
-  Delete
+  Delete,
+  Query,
 } from '@nestjs/common';
 
 import { CustosService } from './custos.service';
 import { CreateCustoDto } from './dto/create-custo.dto';
 import { UpdateCustoDto } from './dto/update-custo.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('custos')
 export class CustosController {
@@ -22,14 +24,19 @@ export class CustosController {
     return this.custosService.create(createCustoDto);
   }
 
+  /** GET /custos?page=1&limit=20 */
   @Get()
-  findAll() {
-    return this.custosService.findAll();
+  findAll(@Query() pagination: PaginationDto) {
+    return this.custosService.findAll(pagination);
   }
 
+  /** GET /custos/por-obra/42?page=1&limit=20 */
   @Get('por-obra/:obraId')
-  findByObra(@Param('obraId') obraId: string) {
-    return this.custosService.findByObra(+obraId);
+  findByObra(
+    @Param('obraId') obraId: string,
+    @Query() pagination: PaginationDto,
+  ) {
+    return this.custosService.findByObra(+obraId, pagination);
   }
 
   @Get(':id')
@@ -46,5 +53,4 @@ export class CustosController {
   remove(@Param('id') id: string) {
     return this.custosService.remove(+id);
   }
-
 }

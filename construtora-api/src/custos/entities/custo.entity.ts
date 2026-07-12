@@ -32,13 +32,9 @@ export class Custo {
   @Column()
   obraId!: number;
 
-  @ManyToOne(
-    () => Obra,
-    { eager: true }
-  )
-  @JoinColumn({
-    name: 'obraId'
-  })
+  // eager removido: evita JOIN automático com campos base64 da Obra em todo find()
+  @ManyToOne(() => Obra)
+  @JoinColumn({ name: 'obraId' })
   obra!: Obra;
 
 }

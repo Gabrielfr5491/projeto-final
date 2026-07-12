@@ -33,68 +33,106 @@ export class DashboardService {
   ) {}
 
   async resumo() {
-    const obras        = await this.obraRepository.count();
-    const funcionarios = await this.funcionarioRepository.count();
-    const fornecedores = await this.fornecedorRepository.count();
-    const materiais    = await this.materialRepository.count();
-    const equipamentos = await this.equipamentoRepository.count();
-    const custos       = await this.custoRepository.find();
+    // Todos os counts em paralelo — nenhuma linha de dados trafega, só um número
+    const [obras, funcionarios, fornecedores, materiais, equipamentos] =
+      await Promise.all([
+        this.obraRepository.count(),
+        this.funcionarioRepository.count(),
+        this.fornecedorRepository.count(),
+        this.materialRepository.count(),
+        this.equipamentoRepository.count(),
+      ]);
 
-    let receitas = 0;
-    let despesas = 0;
-    custos.forEach(custo => {
-      if (custo.tipo === 'Entrada') {
-        receitas += Number(custo.valor);
-      } else {
-        despesas += Number(custo.valor);
-      }
-    });
+    // Antes: find() trazia todas as colunas de todos os custos para somar em JS.
+    // Agora: SUM condicional direto no banco — zero linhas trafegam.
+    const financeiro = await this.custoRepository
+      .createQueryBuilder('custo')
+      .select([
+        `COALESCE(SUM(CASE WHEN custo.tipo = 'Entrada' THEN custo.valor ELSE 0 END), 0)`,
+        'receitas',
+        `COALESCE(SUM(CASE WHEN custo.tipo != 'Entrada' THEN custo.valor ELSE 0 END), 0)`,
+        'despesas',
+      ])
+      .getRawOne<{ receitas: string; despesas: string }>();
 
-    return { obras, funcionarios, fornecedores, materiais, equipamentos, receitas, despesas, lucro: receitas - despesas };
+    const receitas = Number(financeiro?.receitas ?? 0);
+    const despesas = Number(financeiro?.despesas ?? 0);
+
+    return {
+      obras,
+      funcionarios,
+      fornecedores,
+      materiais,
+      equipamentos,
+      receitas,
+      despesas,
+      lucro: receitas - despesas,
+    };
   }
 
   async dashboardFinanceiro() {
-    const custos = await this.custoRepository.find();
+    // Antes: find() completo + reduce em JS.
+    // Agora: GROUP BY no banco — só os totais por categoria trafegam.
+    const rows = await this.custoRepository
+      .createQueryBuilder('custo')
+      .select('custo.categoria', 'categoria')
+      .addSelect('SUM(custo.valor)', 'total')
+      .groupBy('custo.categoria')
+      .getRawMany<{ categoria: string; total: string }>();
 
-    const totalCustos = custos.reduce((acc, custo) => acc + Number(custo.valor), 0);
+    const custosPorCategoria: Record<string, number> = {};
+    let totalCustos = 0;
 
-    const custosPorCategoria = custos.reduce((acc, custo) => {
-      const categoria = custo.categoria;
-      if (!acc[categoria]) acc[categoria] = 0;
-      acc[categoria] += Number(custo.valor);
-      return acc;
-    }, {} as Record<string, number>);
+    for (const row of rows) {
+      const valor = Number(row.total);
+      custosPorCategoria[row.categoria] = valor;
+      totalCustos += valor;
+    }
 
     return { totalCustos, custosPorCategoria };
   }
 
   async custosPorObra() {
-    const custos = await this.custoRepository.find({ relations: ['obra'] });
+    // Antes: find({ relations: ['obra'] }) — trazia todas as linhas + join completo com Obra.
+    // Agora: GROUP BY no banco com join controlado, só as colunas necessárias.
+    const rows = await this.custoRepository
+      .createQueryBuilder('custo')
+      .leftJoin('custo.obra', 'obra')
+      .select('obra.nome', 'nomeObra')
+      .addSelect(`SUM(CASE WHEN custo.tipo = 'Entrada' THEN custo.valor ELSE 0 END)`, 'entradas')
+      .addSelect(`SUM(CASE WHEN custo.tipo != 'Entrada' THEN custo.valor ELSE 0 END)`, 'saidas')
+      .addSelect('SUM(custo.valor)', 'total')
+      .groupBy('obra.nome')
+      .getRawMany<{ nomeObra: string; entradas: string; saidas: string; total: string }>();
 
-    const agrupado = custos.reduce((acc, custo) => {
-      const nomeObra = custo.obra?.nome ?? 'Sem Obra';
-      if (!acc[nomeObra]) acc[nomeObra] = { total: 0, entradas: 0, saidas: 0 };
-      const valor = Number(custo.valor);
-      acc[nomeObra].total += valor;
-      if (custo.tipo === 'Entrada') {
-        acc[nomeObra].entradas += valor;
-      } else {
-        acc[nomeObra].saidas += valor;
-      }
-      return acc;
-    }, {} as Record<string, { total: number; entradas: number; saidas: number }>);
-
-    const obras    = Object.keys(agrupado);
-    const entradas = obras.map(o => agrupado[o].entradas);
-    const saidas   = obras.map(o => agrupado[o].saidas);
-    const totais   = obras.map(o => agrupado[o].total);
+    const obras    = rows.map(r => r.nomeObra ?? 'Sem Obra');
+    const entradas = rows.map(r => Number(r.entradas));
+    const saidas   = rows.map(r => Number(r.saidas));
+    const totais   = rows.map(r => Number(r.total));
 
     return { obras, entradas, saidas, totais };
   }
 
   async evm() {
-    const obras  = await this.obraRepository.find();
-    const custos = await this.custoRepository.find();
+    // Antes: dois find() completos (obras + custos) com todos os campos.
+    // Agora: select apenas das colunas usadas no cálculo EVM.
+    const [obras, custos] = await Promise.all([
+      this.obraRepository
+        .createQueryBuilder('obra')
+        .select([
+          'obra.id',
+          'obra.dataInicio',
+          'obra.dataPrevista',
+          'obra.orcamento',
+          'obra.status',
+        ])
+        .getMany(),
+
+      this.custoRepository
+        .createQueryBuilder('custo')
+        .select(['custo.obraId', 'custo.data', 'custo.valor'])
+        .getMany(),
+    ]);
 
     const toDate = (s: string | null | undefined): Date | null => {
       if (!s) return null;
@@ -225,7 +263,7 @@ export class DashboardService {
       evArr.push(Math.round(evAcc));
     }
 
-    const mesesNomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const mesesNomes = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     const labels = meses.map(m => {
       const [ano, mes] = m.split('-');
       return `${mesesNomes[Number(mes) - 1]}/${ano.slice(2)}`;
@@ -233,5 +271,4 @@ export class DashboardService {
 
     return { meses: labels, pv: pvArr, ac: acArr, ev: evArr };
   }
-
 }

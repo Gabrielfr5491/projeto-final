@@ -39,19 +39,56 @@ export class AlertasService {
     const hoje = new Date();
     const agora = new Date().toISOString();
 
-    const obras = await this.obraRepository.find();
-    const custos = await this.custoRepository.find({ relations: ['obra'] });
+    // Antes: find() em obras trazia modelo3dBase64, mapaEletricistaBase64 e pdfClausulasBase64.
+    // Agora: select explícito com apenas as colunas usadas na lógica de alertas.
+    //
+    // Antes: find({ relations: ['obra'] }) em custos carregava eager + relations duplicando base64.
+    // Agora: QueryBuilder com SUM agrupado por obraId — zero linhas de custo trafegam.
+    const [obras, custosPorObra, materiais, equipamentos] = await Promise.all([
+      this.obraRepository
+        .createQueryBuilder('obra')
+        .select([
+          'obra.id',
+          'obra.nome',
+          'obra.cidade',
+          'obra.estado',
+          'obra.status',
+          'obra.dataInicio',
+          'obra.dataPrevista',
+          'obra.orcamento',
+        ])
+        .getMany(),
 
+      // SUM no banco — substitui find() + forEach acumulando em JS
+      this.custoRepository
+        .createQueryBuilder('custo')
+        .select('custo.obraId', 'obraId')
+        .addSelect('SUM(custo.valor)', 'totalCusto')
+        .groupBy('custo.obraId')
+        .getRawMany<{ obraId: number; totalCusto: string }>(),
+
+      // Material: só as colunas usadas na comparação de estoque
+      this.materialRepository
+        .createQueryBuilder('mat')
+        .select(['mat.id', 'mat.nome', 'mat.quantidade', 'mat.estoqueMinimo', 'mat.unidade'])
+        .getMany(),
+
+      // Equipamento: só as colunas usadas no filtro de status
+      this.equipamentoRepository
+        .createQueryBuilder('eq')
+        .select(['eq.id', 'eq.nome', 'eq.marca', 'eq.modelo', 'eq.status'])
+        .getMany(),
+    ]);
+
+    // Monta mapa obraId → totalCusto a partir do resultado agregado
     const custosPorObraId: Record<number, number> = {};
-    custos.forEach(c => {
-      custosPorObraId[c.obraId] = (custosPorObraId[c.obraId] || 0) + Number(c.valor);
-    });
+    for (const row of custosPorObra) {
+      custosPorObraId[Number(row.obraId)] = Number(row.totalCusto);
+    }
 
+    // --- Alertas de obras ---
     for (const obra of obras) {
-      const isConcluida =
-        obra.status === 'Concluída' ||
-        obra.status === 'Concluido';
-
+      const isConcluida = obra.status === 'Concluída' || obra.status === 'Concluido';
       if (isConcluida) continue;
 
       if (obra.dataPrevista) {
@@ -85,11 +122,11 @@ export class AlertasService {
         }
       }
 
-      const custoReal = custosPorObraId[obra.id] || 0;
+      const custoReal = custosPorObraId[obra.id] ?? 0;
       const orcamento = Number(obra.orcamento);
 
       if (orcamento > 0 && custoReal > orcamento) {
-        const excesso = custoReal - orcamento;
+        const excesso    = custoReal - orcamento;
         const percentual = ((excesso / orcamento) * 100).toFixed(1);
         alertas.push({
           id: `obra-orcamento-${obra.id}`,
@@ -114,65 +151,57 @@ export class AlertasService {
           criadoEm: agora,
         });
       }
+
+      if (!obra.dataInicio) {
+        alertas.push({
+          id: `obra-sem-data-${obra.id}`,
+          tipo: 'info',
+          categoria: 'obra',
+          titulo: `Obra sem data de início: ${obra.nome}`,
+          mensagem: `A obra "${obra.nome}" não possui data de início cadastrada.`,
+          link: `/editar-obra/${obra.id}`,
+          criadoEm: agora,
+        });
+      }
     }
 
-    const obrasSemData = obras.filter(
-      o =>
-        !o.dataInicio &&
-        o.status !== 'Concluída' &&
-        o.status !== 'Concluido',
-    );
-    for (const obra of obrasSemData) {
-      alertas.push({
-        id: `obra-sem-data-${obra.id}`,
-        tipo: 'info',
-        categoria: 'obra',
-        titulo: `Obra sem data de início: ${obra.nome}`,
-        mensagem: `A obra "${obra.nome}" não possui data de início cadastrada.`,
-        link: `/editar-obra/${obra.id}`,
-        criadoEm: agora,
-      });
+    // --- Alertas de materiais ---
+    for (const mat of materiais) {
+      if (Number(mat.quantidade) <= Number(mat.estoqueMinimo)) {
+        const tipo: 'danger' | 'warning' = Number(mat.quantidade) === 0 ? 'danger' : 'warning';
+        alertas.push({
+          id: `material-critico-${mat.id}`,
+          tipo,
+          categoria: 'material',
+          titulo: `Estoque crítico: ${mat.nome}`,
+          mensagem:
+            Number(mat.quantidade) === 0
+              ? `O material "${mat.nome}" está com estoque zerado. Reposição urgente necessária.`
+              : `O material "${mat.nome}" está abaixo do estoque mínimo (${mat.quantidade} ${mat.unidade} disponível, mínimo: ${mat.estoqueMinimo} ${mat.unidade}).`,
+          link: `/materiais`,
+          criadoEm: agora,
+        });
+      }
     }
 
-    const materiais = await this.materialRepository.find();
-    const materiaisCriticos = materiais.filter(
-      m => Number(m.quantidade) <= Number(m.estoqueMinimo),
-    );
-
-    for (const mat of materiaisCriticos) {
-      const tipo: 'danger' | 'warning' = Number(mat.quantidade) === 0 ? 'danger' : 'warning';
-      alertas.push({
-        id: `material-critico-${mat.id}`,
-        tipo,
-        categoria: 'material',
-        titulo: `Estoque crítico: ${mat.nome}`,
-        mensagem:
-          Number(mat.quantidade) === 0
-            ? `O material "${mat.nome}" está com estoque zerado. Reposição urgente necessária.`
-            : `O material "${mat.nome}" está abaixo do estoque mínimo (${mat.quantidade} ${mat.unidade} disponível, mínimo: ${mat.estoqueMinimo} ${mat.unidade}).`,
-        link: `/materiais`,
-        criadoEm: agora,
-      });
-    }
-
-    const equipamentos = await this.equipamentoRepository.find();
-    const emManutencao = equipamentos.filter(
-      e =>
-        e.status?.toLowerCase().includes('manuten') ||
-        e.status?.toLowerCase() === 'inativo' ||
-        e.status?.toLowerCase() === 'inativa',
-    );
-
-    for (const eq of emManutencao) {
-      alertas.push({
-        id: `equipamento-manutencao-${eq.id}`,
-        tipo: 'info',
-        categoria: 'equipamento',
-        titulo: `Equipamento indisponível: ${eq.nome}`,
-        mensagem: `O equipamento "${eq.nome}" (${eq.marca} ${eq.modelo}) está com status "${eq.status}".`,
-        link: `/equipamentos`,
-        criadoEm: agora,
-      });
+    // --- Alertas de equipamentos ---
+    for (const eq of equipamentos) {
+      const statusLower = eq.status?.toLowerCase() ?? '';
+      if (
+        statusLower.includes('manuten') ||
+        statusLower === 'inativo' ||
+        statusLower === 'inativa'
+      ) {
+        alertas.push({
+          id: `equipamento-manutencao-${eq.id}`,
+          tipo: 'info',
+          categoria: 'equipamento',
+          titulo: `Equipamento indisponível: ${eq.nome}`,
+          mensagem: `O equipamento "${eq.nome}" (${eq.marca} ${eq.modelo}) está com status "${eq.status}".`,
+          link: `/equipamentos`,
+          criadoEm: agora,
+        });
+      }
     }
 
     const prioridade = { danger: 0, warning: 1, info: 2 };
@@ -184,11 +213,10 @@ export class AlertasService {
   async resumoAlertas() {
     const alertas = await this.listarAlertas();
     return {
-      total: alertas.length,
-      danger: alertas.filter(a => a.tipo === 'danger').length,
+      total:   alertas.length,
+      danger:  alertas.filter(a => a.tipo === 'danger').length,
       warning: alertas.filter(a => a.tipo === 'warning').length,
-      info: alertas.filter(a => a.tipo === 'info').length,
+      info:    alertas.filter(a => a.tipo === 'info').length,
     };
   }
-
 }
