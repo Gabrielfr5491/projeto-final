@@ -4,33 +4,31 @@
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-sub);
-  font-weight: $weight-medium;
+  font-weight: $weight-regular;
 }
 
-.card {
-  max-width: 780px;
-}
+.card { max-width: 780px; }
 
 .section-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: $weight-bold;
+  gap: $space-xs;
+  font-size: 0.75rem;
+  font-weight: $weight-semibold;
   color: var(--text-sub);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
+  letter-spacing: 0.08em;
+  margin-bottom: $space-lg;
+  padding-bottom: $space-xs;
   border-bottom: 1px solid var(--border-color);
 
-  i { color: var(--primary); font-size: 0.95rem; }
+  i { color: var(--primary); font-size: 0.9rem; }
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
+  gap: $space-md;
 
   @media (max-width: 600px) { grid-template-columns: 1fr; }
 }
@@ -45,6 +43,7 @@
   margin-left: 2px;
 }
 
+// ── INPUT COM PREFIXO ─────────────────────────────────────────────────────────
 .input-prefix {
   position: relative;
   display: flex;
@@ -52,22 +51,18 @@
 
   .prefix {
     position: absolute;
-    left: 0.85rem;
-    font-size: 0.9rem;
-    font-weight: $weight-bold;
+    left: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: $weight-semibold;
     color: var(--text-sub);
     pointer-events: none;
   }
 
-  input {
-    padding-left: 2.4rem !important;
-  }
+  input { padding-left: 2.2rem !important; }
 }
 
-.tipo-toggle {
-  display: flex;
-  gap: 0.5rem;
-}
+// ── TIPO TOGGLE — idêntico ao cadastro-custo ──────────────────────────────────
+.tipo-toggle { display: flex; gap: $space-xs; }
 
 .tipo-btn {
   flex: 1;
@@ -75,15 +70,18 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.6rem 0.85rem;
-  border-radius: 10px;
-  border: 1.5px solid var(--border-color);
+  padding: $btn-padding-y $space-md;
+  height: $btn-height;
+  border-radius: $radius-md;
+  border: 1px solid var(--border-color);
   background: transparent;
   color: var(--text-sub);
-  font-size: 0.875rem;
-  font-weight: $weight-bold;
+  font-size: $btn-font-size;
+  font-weight: $weight-semibold;
   cursor: pointer;
-  transition: all 150ms ease;
+  transition: border-color $transition-fast ease,
+              color $transition-fast ease,
+              background $transition-fast ease;
 
   &:hover {
     border-color: var(--primary);
@@ -92,24 +90,25 @@
 
   &--entrada {
     border-color: $warning;
-    background: rgba($warning, 0.1);
+    background: rgba($warning, 0.08);
     color: $warning;
   }
 
   &--saida {
     border-color: $danger;
-    background: rgba($danger, 0.1);
+    background: rgba($danger, 0.08);
     color: $danger;
   }
 }
 
+// ── FORM ACTIONS ──────────────────────────────────────────────────────────────
 .form-actions {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 2rem;
-  padding-top: 1.25rem;
+  gap: $space-sm;
+  margin-top: $space-xl;
+  padding-top: $space-md;
   border-top: 1px solid var(--border-color);
 
   @media (max-width: 500px) {
@@ -120,7 +119,7 @@
 }
 
 button[disabled] {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
 }

@@ -44,15 +44,6 @@
     }
   }
 
-  .expanded-row {
-    background-color: rgba($black-700, 0.08) !important;
-
-    td {
-      padding: 0 !important;
-      border-bottom: 1px solid var(--border-color) !important;
-    }
-  }
-
   .expanded-content {
     padding: $space-md $space-xl;
     animation: slideDown $transition-base ease;

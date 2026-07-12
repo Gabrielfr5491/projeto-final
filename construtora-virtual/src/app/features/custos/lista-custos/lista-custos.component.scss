@@ -188,7 +188,7 @@
 
 .col-valor { text-align: right  !important; }
 .col-tipo  { text-align: center !important; }
-.col-acoes { text-align: center !important; width: 90px; }
+.col-acoes { text-align: center !important; width: 88px; }
 
 .descricao-text { font-weight: $weight-semibold; color: var(--text-primary); }
 .obra-text      { font-size: 0.85rem; color: var(--text-secondary); }
@@ -228,55 +228,6 @@
     background: rgba($danger, 0.1);
     color: $danger;
     border: 1px solid rgba($danger, 0.22);
-  }
-}
-
-.actions {
-  display: flex;
-  gap: $space-xs;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-editar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: $radius-md;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  text-decoration: none;
-  transition: background $transition-fast ease, border-color $transition-fast ease, color $transition-fast ease;
-
-  &:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-light);
-  }
-}
-
-.btn-danger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: $radius-md;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background $transition-fast ease, border-color $transition-fast ease, color $transition-fast ease;
-
-  &:hover {
-    border-color: rgba($danger, 0.35);
-    color: $danger;
-    background: rgba($danger, 0.07);
   }
 }
 

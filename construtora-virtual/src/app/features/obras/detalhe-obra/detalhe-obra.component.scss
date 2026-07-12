@@ -34,23 +34,29 @@
 }
 
 .btn-voltar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: $space-xs $space-lg;
+  gap: $btn-gap;
+  padding: $btn-padding-y $btn-padding-x;
+  height: $btn-height;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: $radius-md;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: $btn-font-size;
   font-weight: $weight-medium;
   cursor: pointer;
-  transition: all $transition-fast ease;
+  transition: background $transition-fast ease,
+              border-color $transition-fast ease,
+              color $transition-fast ease;
   font-family: inherit;
+  text-decoration: none;
 
   svg {
-    transition: transform $transition-fast ease;
+    width: $icon-md;
+    height: $icon-md;
     flex-shrink: 0;
+    transition: transform $transition-fast ease;
   }
 
   &:hover {
@@ -58,9 +64,7 @@
     border-color: var(--border-strong);
     color: var(--text-primary);
 
-    svg {
-      transform: translateX(-3px);
-    }
+    svg { transform: translateX(-3px); }
   }
 }
 
@@ -325,30 +329,29 @@
 }
 
 .btn-acao {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: $space-sm $space-lg;
+  gap: $btn-gap;
+  padding: $btn-padding-y $btn-padding-x;
+  height: $btn-height;
   background: var(--accent);
-  color: white;
+  color: #fff;
   border: none;
   border-radius: $radius-md;
-  font-size: 0.95rem;
-  font-weight: $weight-medium;
+  font-size: $btn-font-size;
+  font-weight: $weight-semibold;
   cursor: pointer;
-  transition: all $transition-fast ease;
+  transition: background $transition-fast ease;
   font-family: inherit;
+  text-decoration: none;
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: $icon-lg;
+    height: $icon-lg;
     flex-shrink: 0;
   }
 
-  &:hover {
-    background: var(--accent-hover);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
+  &:hover { background: var(--accent-hover); }
 }
 
 .resumo-financeiro {
@@ -541,30 +544,28 @@
 }
 
 .btn-nova-entrada {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: $space-xs $space-lg;
+  gap: $btn-gap;
+  padding: $btn-padding-y $btn-padding-x;
+  height: $btn-height;
   background: var(--accent);
-  color: white;
+  color: #fff;
   border: none;
   border-radius: $radius-md;
-  font-size: 0.9rem;
-  font-weight: $weight-medium;
+  font-size: $btn-font-size;
+  font-weight: $weight-semibold;
   cursor: pointer;
-  transition: all $transition-fast ease;
+  transition: background $transition-fast ease;
   font-family: inherit;
 
   svg {
-    width: 18px;
-    height: 18px;
+    width: $icon-lg;
+    height: $icon-lg;
     flex-shrink: 0;
   }
 
-  &:hover {
-    background: var(--accent-hover);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
+  &:hover { background: var(--accent-hover); }
 }
 
 .timeline {
@@ -681,20 +682,21 @@
   }
 
   .btn-primary {
-    padding: $space-sm $space-lg;
+    display: inline-flex;
+    align-items: center;
+    gap: $btn-gap;
+    padding: $btn-padding-y $btn-padding-x;
+    height: $btn-height;
     background: var(--accent);
-    color: white;
+    color: #fff;
     border: none;
     border-radius: $radius-md;
-    font-size: 0.95rem;
-    font-weight: $weight-medium;
+    font-size: $btn-font-size;
+    font-weight: $weight-semibold;
     cursor: pointer;
-    transition: all $transition-fast ease;
+    transition: background $transition-fast ease;
     font-family: inherit;
 
-    &:hover {
-      background: var(--accent-hover);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
+    &:hover { background: var(--accent-hover); }
   }
 }

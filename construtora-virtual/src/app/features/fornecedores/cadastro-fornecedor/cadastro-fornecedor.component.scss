@@ -1,18 +1,20 @@
+@use '../../../../styles/_variables.scss' as *;
+
 .section-title {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-main);
+  font-size: 0.75rem;
+  font-weight: $weight-semibold;
+  color: var(--text-sub);
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.25rem;
+  padding-bottom: $space-xs;
+  margin-bottom: $space-lg;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .row {
   display: flex;
-  gap: 1.25rem;
-  margin-bottom: 1.1rem;
+  gap: $space-lg;
+  margin-bottom: $space-md;
 
   &.cols-2, &.cols-3 {
     .form-group { flex: 1; }
@@ -20,7 +22,7 @@
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 0.85rem;
+    gap: $space-sm;
   }
 }
 
@@ -28,7 +30,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: $space-lg;
 
   .section-title {
     border-bottom: none;
@@ -37,59 +39,69 @@
   }
 }
 
+// Botão "Adicionar produto" — secundário com borda accent
 .btn-add-product {
+  display: inline-flex;
+  align-items: center;
+  gap: $btn-gap;
   background: transparent;
   border: 1px solid var(--primary);
   color: var(--text-main);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  padding: $btn-padding-y $btn-padding-x;
+  height: $btn-height;
+  border-radius: $radius-md;
+  font-size: $btn-font-size;
+  font-weight: $weight-semibold;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background $transition-fast ease, color $transition-fast ease;
 
   &:hover {
     background: var(--primary);
-    color: white;
+    color: $black-50;
   }
 }
 
 .products-list {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: $space-sm;
 }
 
 .product-row {
   display: flex;
   align-items: flex-end;
-  gap: 1rem;
-  padding: 1rem 1.1rem;
-  border-radius: 8px;
+  gap: $space-md;
+  padding: $space-md $space-lg;
+  border-radius: $radius-lg;
   border: 1px solid var(--border-color);
   background: var(--table-th-bg) !important;
 
   .product-number {
-    font-weight: 600;
+    font-weight: $weight-semibold;
     color: var(--text-sub);
-    padding-bottom: 0.65rem;
-    font-size: 0.875rem;
+    padding-bottom: $btn-padding-y;
+    font-size: $btn-font-size;
   }
 
-  .flex-grow { flex: 2; }
+  .flex-grow  { flex: 2; }
   .price-width { flex: 1; max-width: 180px; }
 }
 
+// Botão "Remover produto" — ícone quadrado destrutivo
 .btn-remove-product {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  padding: 0.65rem;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $btn-action-size;
+  height: $btn-action-size;
+  flex-shrink: 0;
+  background: rgba($danger, 0.08);
+  border: 1px solid rgba($danger, 0.22);
+  color: $danger;
+  border-radius: $radius-md;
   cursor: pointer;
-  transition: background 0.15s ease;
+  font-size: $btn-action-icon;
+  transition: background $transition-fast ease;
 
-  &:hover {
-    background: rgba(239, 68, 68, 0.18);
-  }
+  &:hover { background: rgba($danger, 0.16); }
 }

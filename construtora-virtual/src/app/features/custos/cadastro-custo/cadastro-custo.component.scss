@@ -12,14 +12,14 @@
 .section-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $space-xs;
   font-size: 0.75rem;
   font-weight: $weight-semibold;
   color: var(--text-sub);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.65rem;
+  margin-bottom: $space-lg;
+  padding-bottom: $space-xs;
   border-bottom: 1px solid var(--border-color);
 
   i { color: var(--primary); font-size: 0.9rem; }
@@ -28,7 +28,7 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.1rem;
+  gap: $space-md;
 
   @media (max-width: 600px) { grid-template-columns: 1fr; }
 }
@@ -70,13 +70,14 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.55rem 0.8rem;
+  padding: $btn-padding-y $space-md;
+  height: $btn-height;
   border-radius: $radius-md;
   border: 1px solid var(--border-color);
   background: transparent;
   color: var(--text-sub);
-  font-size: 0.875rem;
-  font-weight: $weight-medium;
+  font-size: $btn-font-size;
+  font-weight: $weight-semibold;
   cursor: pointer;
   transition: border-color $transition-fast ease, color $transition-fast ease, background $transition-fast ease;
 
@@ -103,9 +104,9 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 0.65rem;
-  margin-top: 1.75rem;
-  padding-top: 1.1rem;
+  gap: $space-sm;
+  margin-top: $space-xl;
+  padding-top: $space-md;
   border-top: 1px solid var(--border-color);
 
   @media (max-width: 500px) {

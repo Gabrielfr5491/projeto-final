@@ -338,6 +338,78 @@ body {
   }
 }
 
+// ── BOTÕES DE AÇÃO DE TABELA (ícone quadrado) ─────────────────────────────────
+// Uso: <button class="btn-action btn-action--view">
+//      <button class="btn-action btn-action--edit">
+//      <button class="btn-action btn-action--delete">
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $btn-action-size;
+  height: $btn-action-size;
+  border-radius: $radius-md;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-sub);
+  font-size: $btn-action-font;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color $transition-fast ease,
+              background $transition-fast ease,
+              border-color $transition-fast ease;
+  flex-shrink: 0;
+
+  i, svg {
+    font-size: $btn-action-icon;
+    width: $btn-action-icon;
+    height: $btn-action-icon;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  &--view:hover {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.22);
+  }
+
+  &--edit:hover {
+    color: var(--primary);
+    background: var(--accent-light);
+    border-color: rgba($orange-500, 0.3);
+  }
+
+  &--delete:hover {
+    color: $danger;
+    background: rgba($danger, 0.08);
+    border-color: rgba($danger, 0.25);
+  }
+
+  &--warn:hover {
+    color: $warning;
+    background: rgba($warning, 0.08);
+    border-color: rgba($warning, 0.25);
+  }
+}
+
+// Célula de ações centralizada
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+}
+
+// ── BOTÕES DE AÇÃO COM TEXTO (cabeçalhos de página) ───────────────────────────
+// Reutiliza as classes .btn-primary / .btn-secondary já existentes
+// Garante altura fixa para manter consistência
+.btn-primary, .btn-submit, .btn-create, .btn-add, .btn-salvar,
+.btn-secondary, .btn-editar, .btn-edit, .btn-cancelar,
+.btn-danger, .btn-delete, .btn-excluir {
+  min-height: $btn-height;
+}
+
 .btn-editar-amber {
   background: rgba($warning, 0.1);
   color: $warning;

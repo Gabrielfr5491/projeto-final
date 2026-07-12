@@ -65,29 +65,22 @@
         </td>
 
         <td>
-
-          <div class="actions">
-
-              <button
-              *ngIf="auth.podeEditar()"
-              class="btn-editar"
-              [routerLink]="[
-                '/editar-funcionario',
-                funcionario.id
-              ]"
-            >
-              Editar
-            </button>
-
+          <div class="actions-cell">
             <button
               *ngIf="auth.podeEditar()"
-              class="btn btn-danger"
-              (click)="excluir(funcionario.id)">
-              Excluir
+              class="btn-action btn-action--edit"
+              title="Editar Funcionário"
+              [routerLink]="['/editar-funcionario', funcionario.id]">
+              <i class="bi bi-pencil"></i>
             </button>
-
+            <button
+              *ngIf="auth.podeEditar()"
+              class="btn-action btn-action--delete"
+              title="Excluir Funcionário"
+              (click)="excluir(funcionario.id)">
+              <i class="bi bi-trash"></i>
+            </button>
           </div>
-
         </td>
 
       </tr>

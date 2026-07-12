@@ -16,6 +16,9 @@
     color: var(--text-sub);
     pointer-events: none;
     opacity: 0.65;
+    font-size: $icon-md;
+    width: $icon-md;
+    height: $icon-md;
   }
 
   .search-input {
@@ -23,66 +26,14 @@
     background: var(--surface-card);
     border: 1px solid var(--border-color);
     color: var(--text-main);
-    padding: $space-xs $space-md $space-xs 2.5rem;
+    padding: $btn-padding-y $space-md $btn-padding-y 2.5rem;
     border-radius: $radius-md;
-    font-size: 0.875rem;
+    font-size: $btn-font-size;
     outline: none;
     transition: border-color $transition-fast ease;
 
     &::placeholder { color: var(--text-sub); opacity: 0.65; }
     &:focus { border-color: var(--primary); }
-  }
-}
-
-.actions-cell { 
-  display: flex; 
-  justify-content: center; 
-  gap: 0.5rem;
-}
-
-.btn-action-view,
-.btn-action-edit,
-.btn-action-delete {
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-sub);
-  padding: 0.35rem 0.7rem;
-  border-radius: $radius-md;
-  font-size: 0.8rem;
-  font-weight: $weight-medium;
-  display: inline-flex;
-  align-items: center;
-  gap: $space-xs;
-  cursor: pointer;
-  transition: color $transition-fast ease, background $transition-fast ease, border-color $transition-fast ease;
-  text-decoration: none;
-
-  svg {
-    flex-shrink: 0;
-  }
-}
-
-.btn-action-view {
-  &:hover {
-    color: #3b82f6;
-    background: rgba(59, 130, 246, 0.08);
-    border-color: rgba(59, 130, 246, 0.18);
-  }
-}
-
-.btn-action-edit {
-  &:hover {
-    color: var(--primary);
-    background: rgba(var(--primary-rgb), 0.08);
-    border-color: rgba(var(--primary-rgb), 0.18);
-  }
-}
-
-.btn-action-delete {
-  &:hover {
-    color: $danger;
-    background: rgba($danger, 0.08);
-    border-color: rgba($danger, 0.18);
   }
 }
 

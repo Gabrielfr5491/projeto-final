@@ -57,8 +57,18 @@
             </td>
             <td *ngIf="isAdmin()">
               <div class="actions-cell">
-                <a [routerLink]="['/cadastro-usuario']" class="btn-editar-amber">Editar</a>
-                <button class="btn-excluir" (click)="excluir(u.id)">Excluir</button>
+                <a
+                  [routerLink]="['/cadastro-usuario']"
+                  class="btn-action btn-action--warn"
+                  title="Editar Usuário">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <button
+                  class="btn-action btn-action--delete"
+                  title="Excluir Usuário"
+                  (click)="excluir(u.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
               </div>
             </td>
           </tr>

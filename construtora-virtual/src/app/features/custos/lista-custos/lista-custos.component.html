@@ -146,11 +146,19 @@
             </span>
           </td>
 
-          <td class="col-acoes actions">
-            <a *ngIf="auth.podeEditar()" [routerLink]="['/editar-custo', custo.id]" class="btn-editar">
+          <td class="col-acoes actions-cell">
+            <a
+              *ngIf="auth.podeEditar()"
+              [routerLink]="['/editar-custo', custo.id]"
+              class="btn-action btn-action--edit"
+              title="Editar Custo">
               <i class="bi bi-pencil"></i>
             </a>
-            <button *ngIf="auth.podeEditar()" class="btn-danger" (click)="excluir(custo.id)">
+            <button
+              *ngIf="auth.podeEditar()"
+              class="btn-action btn-action--delete"
+              title="Excluir Custo"
+              (click)="excluir(custo.id)">
               <i class="bi bi-trash"></i>
             </button>
           </td>

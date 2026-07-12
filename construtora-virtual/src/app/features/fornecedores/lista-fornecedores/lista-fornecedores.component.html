@@ -62,14 +62,18 @@
               </td>
 
               <td class="actions-cell" (click)="$event.stopPropagation()">
-                <div class="actions-flex">
-                  <button [routerLink]="['/editar-fornecedor', f.id]" class="btn-action btn-edit">
-                    Editar
-                  </button>
-                  <button (click)="excluirFornecedor(f.id)" class="btn-action btn-delete">
-                    Excluir
-                  </button>
-                </div>
+                <button
+                  [routerLink]="['/editar-fornecedor', f.id]"
+                  class="btn-action btn-action--edit"
+                  title="Editar Fornecedor">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  (click)="excluirFornecedor(f.id)"
+                  class="btn-action btn-action--delete"
+                  title="Excluir Fornecedor">
+                  <i class="bi bi-trash"></i>
+                </button>
               </td>
 
             </tr>

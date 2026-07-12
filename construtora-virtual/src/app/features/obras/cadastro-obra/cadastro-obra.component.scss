@@ -1,14 +1,12 @@
+@use '../../../../styles/_variables.scss' as *;
+
 .full-width {
   grid-column: span 2;
 
-  @media (max-width: 768px) {
-    grid-column: span 1;
-  }
+  @media (max-width: 768px) { grid-column: span 1; }
 }
 
-.split-70, .split-30 {
-  grid-column: span 1;
-}
+.split-70, .split-30 { grid-column: span 1; }
 
 .select-wrapper {
   position: relative;
@@ -26,9 +24,9 @@
   &::after {
     content: '';
     position: absolute;
-    right: 1.25rem;
-    width: 8px;
-    height: 8px;
+    right: $space-md;
+    width: $icon-xs;
+    height: $icon-xs;
     border-right: 2px solid var(--text-sub);
     border-bottom: 2px solid var(--text-sub);
     transform: rotate(45deg);
@@ -41,22 +39,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5);
 }
 
+// ── CARD DE UPLOAD ─────────────────────────────────────────────────────────────
 .upload-section-card {
-  background: var(--bg-card, #161616);
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: $radius-xl;
+  padding: $space-lg;
 }
 
 .file-box {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: $space-xs;
 
   &__title {
     font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--text-secondary, #8a8a8a);
+    font-weight: $weight-semibold;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -66,59 +65,58 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 16px 12px;
-    background: var(--bg-main, #0d0d0d);
-    border: 2px dashed var(--border-strong, rgba(255, 255, 255, 0.14));
-    border-radius: 8px;
+    gap: $space-xs;
+    padding: $space-md $space-sm;
+    background: var(--bg-main);
+    border: 2px dashed var(--border-strong);
+    border-radius: $radius-lg;
     cursor: pointer;
     text-align: center;
-    transition: all 0.25s ease;
+    transition: border-color $transition-base ease, background $transition-base ease;
 
     &:hover {
-      border-color: var(--accent, #ff6b1a);
+      border-color: var(--accent);
       background: rgba(255, 107, 26, 0.05);
     }
   }
 
-  &__icon {
-    font-size: 1.5rem;
-  }
+  &__icon { font-size: 1.5rem; }
 
   &__label {
     font-size: 0.7rem;
-    color: var(--text-secondary, #8a8a8a);
+    color: var(--text-secondary);
     line-height: 1.4;
 
     small {
       font-size: 0.6rem;
-      color: var(--text-muted, #5c5954);
+      color: var(--text-muted);
     }
   }
 
   &__filename {
     font-size: 0.72rem;
-    color: var(--accent, #ff6b1a);
-    font-weight: 600;
+    color: var(--accent);
+    font-weight: $weight-semibold;
     word-break: break-all;
     max-width: 100%;
     white-space: normal;
   }
 
   &__clear {
-    background: rgba(231, 76, 60, 0.1);
-    border: 1px solid rgba(231, 76, 60, 0.3);
-    color: #e74c3c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($danger, 0.08);
+    border: 1px solid rgba($danger, 0.25);
+    color: $danger;
     font-size: 0.65rem;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 4px;
+    font-weight: $weight-semibold;
+    padding: $space-xs $space-sm;
+    border-radius: $radius-md;
     cursor: pointer;
     align-self: center;
-    transition: all 0.2s;
+    transition: background $transition-fast ease;
 
-    &:hover {
-      background: rgba(231, 76, 60, 0.2);
-    }
+    &:hover { background: rgba($danger, 0.16); }
   }
 }

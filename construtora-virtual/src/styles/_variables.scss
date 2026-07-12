@@ -143,6 +143,35 @@ $transition-slow: 400ms;
 $transition-slower: 600ms;
 
 // ============================================
+// TAMANHOS DE COMPONENTES - Tokens Globais
+// ============================================
+
+// Ícones
+$icon-xs:  12px;
+$icon-sm:  14px;
+$icon-md:  16px;
+$icon-lg:  18px;
+$icon-xl:  20px;
+$icon-2xl: 24px;
+
+// Botões de ação de tabela (ícone quadrado)
+$btn-action-size: 32px;
+$btn-action-font: 0.8rem;
+$btn-action-icon: $icon-md;
+
+// Botão padrão (com texto)
+$btn-height:      36px;
+$btn-font-size:   0.875rem;
+$btn-padding-x:   $space-lg;
+$btn-padding-y:   $space-xs;
+$btn-gap:         $space-xs;
+
+// Avatar/Badge de usuário
+$avatar-size-sm:  28px;
+$avatar-size-md:  34px;
+$avatar-size-lg:  40px;
+
+// ============================================
 // MIXINS
 // ============================================
 
