@@ -21,6 +21,27 @@
   }
 }
 
+// ── SIDEBAR BACKDROP (mobile only) ───────────────────────────────────────────
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040; // just below sidebar (1050)
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+
+  &--visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .dashboard-main-content {
   flex: 1;
   display: flex;

@@ -379,6 +379,10 @@
   border-collapse: collapse;
   font-size: 0.875rem;
 
+  @include mobile {
+    font-size: 0.8rem;
+  }
+
   thead {
     background: var(--bg-elevated);
     border-bottom: 1px solid var(--border);
@@ -392,6 +396,11 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       white-space: nowrap;
+
+      @include mobile {
+        padding: $space-xs $space-sm;
+        font-size: 0.68rem;
+      }
     }
   }
 
@@ -412,6 +421,10 @@
     td {
       padding: $space-md;
       color: var(--text-primary);
+
+      @include mobile {
+        padding: $space-sm;
+      }
     }
   }
 }

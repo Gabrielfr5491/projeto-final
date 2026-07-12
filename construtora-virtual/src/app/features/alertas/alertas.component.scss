@@ -37,6 +37,9 @@
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: $space-md;
   margin-bottom: $space-xl;
+
+  @include mobile  { grid-template-columns: repeat(2, 1fr); }
+  @include xs      { grid-template-columns: 1fr; }
 }
 
 .resumo-card {
@@ -112,6 +115,12 @@
   gap: $space-sm;
   margin-bottom: $space-xl;
   flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $space-xs;
+  }
 }
 
 .filtro-select {
@@ -152,6 +161,11 @@
   font-size: 0.8rem;
   color: var(--text-secondary);
   margin-left: auto;
+
+  @include mobile {
+    margin-left: 0;
+    text-align: center;
+  }
 }
 
 // ── LOADING / EMPTY ───────────────────────────────────────────────────────────
@@ -214,6 +228,16 @@
   padding: $space-lg $space-xl;
   transition: border-color $transition-fast ease;
 
+  @include mobile {
+    padding: $space-md $space-lg;
+    gap: $space-md;
+  }
+
+  @include xs {
+    flex-direction: column;
+    gap: $space-sm;
+  }
+
   &:hover { border-color: var(--border-strong); }
 
   &--danger  { border-left: 4px solid $danger;  }
@@ -229,6 +253,12 @@
     justify-content: center;
     flex-shrink: 0;
     margin-top: 2px;
+
+    @include xs {
+      width: 36px;
+      height: 36px;
+      margin-top: 0;
+    }
 
     svg { width: 20px; height: 20px; }
 
@@ -262,6 +292,10 @@
     font-size: 0.95rem;
     font-weight: $weight-semibold;
     color: var(--text-primary);
+
+    @include mobile {
+      font-size: 0.9rem;
+    }
   }
 
   &__mensagem {
@@ -269,6 +303,10 @@
     font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.55;
+
+    @include mobile {
+      font-size: 0.8rem;
+    }
   }
 }
 

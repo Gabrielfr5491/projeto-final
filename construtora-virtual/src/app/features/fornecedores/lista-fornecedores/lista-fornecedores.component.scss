@@ -44,9 +44,17 @@
     }
   }
 
+  // Ocultar coluna de produto em mobile — info disponível via expand
+  @include mobile {
+    .col-produto { display: none; }
+    .col-contato { display: none; }
+  }
+
   .expanded-content {
-    padding: $space-md $space-xl;
+    padding: $space-md $space-lg;
     animation: slideDown $transition-base ease;
+
+    @include mobile { padding: $space-sm $space-md; }
 
     h4 {
       margin: 0 0 $space-sm;
@@ -63,6 +71,8 @@
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: $space-sm;
     margin-bottom: $space-xs;
+
+    @include mobile { grid-template-columns: 1fr; }
   }
 
   .product-item {

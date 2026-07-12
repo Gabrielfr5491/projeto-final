@@ -89,3 +89,9 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 }
+
+// ── RESPONSIVO ────────────────────────────────────────────────────────────────
+@include mobile {
+  // Ocultar coluna de email em mobile (visível no nome via perfil-badge)
+  .col-email { display: none; }
+}

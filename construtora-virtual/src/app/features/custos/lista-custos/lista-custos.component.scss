@@ -183,7 +183,12 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: $radius-lg;
-  overflow: hidden;
+  overflow-x: auto;           // era overflow:hidden — quebrava scroll horizontal
+  -webkit-overflow-scrolling: touch;
+
+  @include mobile {
+    border-radius: $radius-md;
+  }
 }
 
 .col-valor { text-align: right  !important; }
@@ -193,6 +198,12 @@
 .descricao-text { font-weight: $weight-semibold; color: var(--text-primary); }
 .obra-text      { font-size: 0.85rem; color: var(--text-secondary); }
 .data-text      { font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; }
+
+// Ocultar coluna de obra em telas pequenas
+@include mobile {
+  .col-obra { display: none; }
+  .col-data { display: none; }
+}
 
 .categoria-pill {
   display: inline-block;

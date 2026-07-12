@@ -1,5 +1,13 @@
 <div class="dashboard-structure" [class.sidebar-collapsed]="layout.sidebarCollapsed$ | async" [class.mobile-sidebar-open]="layout.mobileSidebarOpen$ | async">
-  
+
+  <!-- backdrop: only visible on mobile when sidebar is open -->
+  <div
+    class="sidebar-backdrop"
+    [class.sidebar-backdrop--visible]="layout.mobileSidebarOpen$ | async"
+    (click)="layout.setMobileSidebarOpen(false)"
+    aria-hidden="true">
+  </div>
+
   <app-sidebar></app-sidebar>
 
   <div class="dashboard-main-content">

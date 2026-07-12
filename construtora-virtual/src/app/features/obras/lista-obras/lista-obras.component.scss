@@ -3,6 +3,8 @@
 .actions-bar {
   margin-bottom: $space-xl;
   max-width: 480px;
+
+  @include mobile { max-width: 100%; }
 }
 
 .search-wrapper {
@@ -35,6 +37,11 @@
     &::placeholder { color: var(--text-sub); opacity: 0.65; }
     &:focus { border-color: var(--primary); }
   }
+}
+
+// Ocultar colunas menos críticas em telas pequenas
+@include mobile {
+  .col-orcamento { display: none; }
 }
 
 .table-empty-state {

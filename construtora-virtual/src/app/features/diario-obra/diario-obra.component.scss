@@ -188,6 +188,10 @@
   border-radius: 6px;
   padding: $space-xl;
   margin-bottom: $space-xl;
+
+  @include mobile {
+    padding: $space-lg;
+  }
 }
 
 .form-titulo {
@@ -358,6 +362,10 @@
   padding-left: 28px;
   margin-top: $space-md;
 
+  @include mobile {
+    padding-left: 20px;
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -366,6 +374,10 @@
     bottom: 8px;
     width: 1px;
     background: var(--border);
+
+    @include mobile {
+      left: 4px;
+    }
   }
 
   &__item {
@@ -390,6 +402,12 @@
     background: var(--bg-main);
     border: 2px solid var(--border-strong);
     transition: background 160ms ease, border-color 160ms ease;
+
+    @include mobile {
+      left: -18px;
+      width: 8px;
+      height: 8px;
+    }
   }
 
   &__card {
@@ -398,6 +416,10 @@
     border-radius: 6px;
     padding: $space-md $space-lg;
     transition: border-color 160ms ease;
+
+    @include mobile {
+      padding: $space-sm $space-md;
+    }
 
     &:hover { border-color: var(--border-strong); }
     &--edit { border-color: var(--accent); }
@@ -432,6 +454,11 @@
     background: var(--bg-elevated);
     border-radius: 3px;
     border: 1px solid var(--border);
+
+    @include mobile {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+    }
   }
 
   &__acoes {
@@ -446,6 +473,10 @@
     font-weight: $weight-semibold;
     color: var(--text-primary);
     line-height: 1.35;
+
+    @include mobile {
+      font-size: 0.9rem;
+    }
   }
 
   &__descricao {
@@ -455,5 +486,9 @@
     line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
+
+    @include mobile {
+      font-size: 0.8rem;
+    }
   }
 }

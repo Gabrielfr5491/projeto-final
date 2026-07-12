@@ -172,6 +172,20 @@ $avatar-size-md:  34px;
 $avatar-size-lg:  40px;
 
 // ============================================
+// BREAKPOINTS
+// ============================================
+
+$bp-xs:     480px;   // Small mobile
+$bp-mobile: 768px;   // Mobile / tablet portrait
+$bp-tablet: 1024px;  // Tablet landscape
+$bp-desktop:1280px;  // Desktop
+
+// Mixin de media query (mobile-first invert — max-width)
+@mixin mobile  { @media (max-width: #{$bp-mobile})  { @content; } }
+@mixin tablet  { @media (max-width: #{$bp-tablet})  { @content; } }
+@mixin xs      { @media (max-width: #{$bp-xs})      { @content; } }
+
+// ============================================
 // MIXINS
 // ============================================
 
