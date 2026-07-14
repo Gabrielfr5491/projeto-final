@@ -43,7 +43,9 @@ import { AlertasModule } from './alertas/alertas.module';
             rejectUnauthorized: false,
           },
           autoLoadEntities: true,
-          synchronize: true,
+          // synchronize recria as tabelas se não existirem, mas não dropa colunas existentes
+          // Controlado por variável de ambiente: TYPEORM_SYNC=true apenas no primeiro deploy
+          synchronize: config.get<string>('TYPEORM_SYNC') === 'true',
         };
       },
     }),
