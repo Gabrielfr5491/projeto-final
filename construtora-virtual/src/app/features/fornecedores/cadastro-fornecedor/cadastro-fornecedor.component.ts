@@ -21,7 +21,7 @@ export class CadastroFornecedorComponent implements OnInit {
     private fb: FormBuilder,
     private fornecedorService: FornecedorService,
     private toast: ToastService,
-    private router: Router
+    public router: Router
   ) {
     this.criarFormulario();
   }

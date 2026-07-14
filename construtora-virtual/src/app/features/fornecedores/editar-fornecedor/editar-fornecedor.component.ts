@@ -22,7 +22,7 @@ export class EditarFornecedorComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     private fornecedorService: FornecedorService,
     private toast: ToastService
   ) {
