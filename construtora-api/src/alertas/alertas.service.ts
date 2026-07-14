@@ -59,11 +59,11 @@ export class AlertasService {
         ])
         .getMany(),
 
-      // SUM no banco — substitui find() + forEach acumulando em JS
+      // SUM apenas de saídas (tipo != 'Entrada') — receitas não consomem orçamento
       this.custoRepository
         .createQueryBuilder('custo')
         .select('custo.obraId', 'obraId')
-        .addSelect('SUM(custo.valor)', 'totalCusto')
+        .addSelect(`SUM(CASE WHEN custo.tipo != 'Entrada' THEN custo.valor ELSE 0 END)`, 'totalCusto')
         .groupBy('custo.obraId')
         .getRawMany<{ obraId: number; totalCusto: string }>(),
 

@@ -270,11 +270,11 @@ export class RelatoriosService {
         ])
         .getMany(),
 
-      // SUM por obraId — zero linhas de detalhe trafegam
+      // SUM apenas de saídas por obraId — receitas não consomem orçamento
       this.custoRepository
         .createQueryBuilder('custo')
         .select('custo.obraId', 'obraId')
-        .addSelect('SUM(custo.valor)', 'totalCusto')
+        .addSelect(`SUM(CASE WHEN custo.tipo != 'Entrada' THEN custo.valor ELSE 0 END)`, 'totalCusto')
         .groupBy('custo.obraId')
         .getRawMany<{ obraId: number; totalCusto: string }>(),
     ]);
