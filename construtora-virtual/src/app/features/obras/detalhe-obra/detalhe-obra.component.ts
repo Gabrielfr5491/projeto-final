@@ -78,8 +78,9 @@ export class DetalheObraComponent implements OnInit {
   }
 
   get totalSaidas(): number {
+    // Qualquer tipo que não seja 'Entrada' é contado como saída
     return this.custos
-      .filter(c => c.tipo === 'Saida')
+      .filter(c => c.tipo !== 'Entrada')
       .reduce((s, c) => s + Number(c.valor), 0);
   }
 

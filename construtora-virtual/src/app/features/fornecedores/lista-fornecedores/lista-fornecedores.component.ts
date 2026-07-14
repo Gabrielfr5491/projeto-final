@@ -1,78 +1,68 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';export interface ProdutoFornecedor {
-  nome: string;
-  precoBase: number;
-}
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-export interface Fornecedor {
-  id: number;
-  nome: string;
-  cnpj: string;
-  telefone: string;
-  email: string;
-  status: 'Ativo' | 'Inativo';
-  produtos: ProdutoFornecedor[];
-}
+import { FornecedorService } from '../../../core/services/fornecedor.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { Fornecedor } from '../../../models/fornecedor';
 
 @Component({
   selector: 'app-lista-fornecedores',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './lista-fornecedores.component.html',
   styleUrl: './lista-fornecedores.component.scss'
 })
-export class ListaFornecedoresComponent implements OnInit {  fornecedorExpandidoId: number | null = null;  fornecedores: Fornecedor[] = [
-    {
-      id: 1,
-      nome: 'Gerdau Comercial de Aços S.A.',
-      cnpj: '12.345.678/0001-90',
-      telefone: '(11) 99999-9999',
-      email: 'vendas@gerdau.com',
-      status: 'Ativo',
-      produtos: [
-        { nome: 'Vergalhão CA-50 10mm', precoBase: 54.90 },
-        { nome: 'Arame Recozido Fio 18', precoBase: 14.50 },
-        { nome: 'Malha de Aço Pop EQ092', precoBase: 115.00 }
-      ]
-    },
-    {
-      id: 2,
-      nome: 'Votorantim Cimentos',
-      cnpj: '98.765.432/0001-10',
-      telefone: '(21) 98888-8888',
-      email: 'suprimentos@votorantim.com',
-      status: 'Ativo',
-      produtos: [
-        { nome: 'Cimento CP-II Votoran 50kg', precoBase: 38.50 }
-      ]
-    },
-    {
-      id: 3,
-      nome: 'Madeireira Rio Claro Ltda',
-      cnpj: '45.678.123/0002-40',
-      telefone: '(71) 97777-7777',
-      email: 'contato@rioclaromadeiras.com',
-      status: 'Inativo',
-      produtos: []
-    }
-  ];
+export class ListaFornecedoresComponent implements OnInit {
 
-  constructor() {}
+  fornecedores: Fornecedor[] = [];
+  filtro = '';
+  carregando = false;
+
+  constructor(
+    private fornecedorService: FornecedorService,
+    private toast: ToastService
+  ) {}
 
   ngOnInit(): void {
-    this.carregarFornecedores();
-  }  toggleFornecedor(id: number): void {
-    this.fornecedorExpandidoId = this.fornecedorExpandidoId === id ? null : id;
+    this.carregar();
   }
 
-  carregarFornecedores(): void {    console.log('Fornecedores carregados com portfólio de produtos.');
+  carregar(): void {
+    this.carregando = true;
+    this.fornecedorService.listar().subscribe({
+      next: (dados) => {
+        this.fornecedores = dados;
+        this.carregando = false;
+      },
+      error: () => {
+        this.toast.erro('Erro ao carregar fornecedores.');
+        this.carregando = false;
+      }
+    });
   }
 
-  excluirFornecedor(id: number): void {
-    if (confirm('Tem certeza que deseja remover este fornecedor e todo o seu catálogo de produtos?')) {
-      this.fornecedores = this.fornecedores.filter(f => f.id !== id);
-      console.log(`Fornecedor ${id} removido.`);
-    }
+  get fornecedoresFiltrados(): Fornecedor[] {
+    const q = this.filtro.toLowerCase();
+    if (!q) return this.fornecedores;
+    return this.fornecedores.filter(f =>
+      f.nome.toLowerCase().includes(q) ||
+      f.cnpj.toLowerCase().includes(q) ||
+      f.categoria?.toLowerCase().includes(q) ||
+      f.status?.toLowerCase().includes(q)
+    );
+  }
+
+  excluir(id: number | undefined): void {
+    if (!id) return;
+    if (!confirm('Tem certeza que deseja remover este fornecedor?')) return;
+    this.fornecedorService.excluir(id).subscribe({
+      next: () => {
+        this.toast.sucesso('Fornecedor removido com sucesso.');
+        this.carregar();
+      },
+      error: () => this.toast.erro('Erro ao remover fornecedor.')
+    });
   }
 }

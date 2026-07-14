@@ -2,104 +2,83 @@
   <div class="header-screen">
     <div>
       <h1>Fornecedores</h1>
-      <p>Gerencie a lista de fornecedores e veja seus produtos cadastrados.</p>
+      <p>Gerencie a lista de fornecedores cadastrados no sistema.</p>
     </div>
     <button routerLink="/cadastro-fornecedor" class="btn-create">
       + Novo Fornecedor
     </button>
   </div>
 
-  <div class="table-card">
+  <div class="filtro-container">
+    <input
+      type="text"
+      class="input-filtro"
+      placeholder="Buscar por nome, CNPJ, categoria..."
+      [(ngModel)]="filtro">
+  </div>
+
+  <div *ngIf="carregando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando fornecedores...</p>
+  </div>
+
+  <div *ngIf="!carregando" class="table-card">
     <div class="responsive-wrapper">
-      <table class="custom-table">
+      <table class="custom-table" *ngIf="fornecedoresFiltrados.length > 0">
         <thead>
           <tr>
             <th>Fornecedor / CNPJ</th>
             <th>Contato</th>
-            <th>Produto Principal</th>
+            <th>Categoria</th>
             <th>Status</th>
             <th style="text-align: center;">Ações</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let f of fornecedores">
-            
-            <tr (click)="toggleFornecedor(f.id)" style="cursor: pointer;" title="Clique para ver todo o catálogo de produtos">
-              
-              <td class="cell-supplier">
-                <div class="name">
-                  <span class="arrow-icon">{{ fornecedorExpandidoId === f.id ? '▼' : '▶' }}</span>
-                  {{ f.nome }}
-                </div>
-                <div class="cnpj">{{ f.cnpj }}</div>
-              </td>
+          <tr *ngFor="let f of fornecedoresFiltrados">
+            <td class="cell-supplier">
+              <div class="name">{{ f.nome }}</div>
+              <div class="cnpj">{{ f.cnpj }}</div>
+            </td>
 
-              <td>
-                {{ f.telefone }}
-              </td>
+            <td>
+              <div>{{ f.telefone }}</div>
+              <div class="text-muted small">{{ f.email }}</div>
+            </td>
 
-              <td>
-                <div class="cell-product-info">
-                  <span *ngIf="f.produtos && f.produtos.length === 1" class="main-product">
-                    {{ f.produtos[0].nome }}
-                  </span>
+            <td>{{ f.categoria || '—' }}</td>
 
-                  <div *ngIf="f.produtos && f.produtos.length > 1">
-                    <span class="main-product">{{ f.produtos[0].nome }}</span>
-                    <span class="badge-more">+{{ f.produtos.length - 1 }} itens</span>
-                  </div>
-                  
-                  <span *ngIf="!f.produtos || f.produtos.length === 0" class="text-muted">
-                    Nenhum produto
-                  </span>
-                </div>
-              </td>
+            <td>
+              <span class="status-badge" [ngClass]="f.status === 'Ativo' ? 'active' : 'inactive'">
+                {{ f.status }}
+              </span>
+            </td>
 
-              <td>
-                <span class="status-badge" [ngClass]="f.status === 'Ativo' ? 'active' : 'inactive'">
-                  {{ f.status }}
-                </span>
-              </td>
-
-              <td class="actions-cell" (click)="$event.stopPropagation()">
-                <button
-                  [routerLink]="['/editar-fornecedor', f.id]"
-                  class="btn-action btn-action--edit"
-                  title="Editar Fornecedor">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button
-                  (click)="excluirFornecedor(f.id)"
-                  class="btn-action btn-action--delete"
-                  title="Excluir Fornecedor">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-
-            </tr>
-
-            <tr *ngIf="fornecedorExpandidoId === f.id" class="expanded-row">
-              <td colspan="5">
-                <div class="expanded-content">
-                  <h4>📋 Catálogo Completo de Insumos</h4>
-                  
-                  <div *ngIf="f.produtos && f.produtos.length > 0; else semProdutos" class="products-grid">
-                    <div *ngFor="let prod of f.produtos" class="product-item">
-                      <span class="prod-name">{{ prod.nome }}</span>
-                      <span class="prod-price">R$ {{ prod.precoBase }}</span>
-                    </div>
-                  </div>
-                  
-                  <ng-template #semProdutos>
-                    <p class="text-muted text-center py-2">Este fornecedor ainda não possui produtos cadastrados.</p>
-                  </ng-template>
-                </div>
-              </td>
-            </tr>
-
-          </ng-container>
+            <td class="actions-cell">
+              <button
+                [routerLink]="['/editar-fornecedor', f.id]"
+                class="btn-action btn-action--edit"
+                title="Editar Fornecedor">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                (click)="excluir(f.id)"
+                class="btn-action btn-action--delete"
+                title="Excluir Fornecedor">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
+
+      <div *ngIf="fornecedoresFiltrados.length === 0" class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <p>Nenhum fornecedor encontrado</p>
+      </div>
     </div>
   </div>
 </div>

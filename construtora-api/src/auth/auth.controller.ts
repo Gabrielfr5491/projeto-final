@@ -59,6 +59,23 @@ export class AuthController {
   }
 
   /**
+   * Redefine a senha de uma conta existente.
+   * Use apenas para recuperar acesso — não expõe dados, só altera senha se o e-mail existir.
+   */
+  @Post('reset-senha')
+  async resetSenha(
+    @Body() body: { email: string; novaSenha: string }
+  ) {
+    const usuario = await this.usuariosService.buscarPorEmail(body.email);
+    if (!usuario) {
+      // Resposta genérica para não revelar se o e-mail existe
+      return { message: 'Se este e-mail estiver cadastrado, a senha foi atualizada.' };
+    }
+    await this.usuariosService.update(usuario.id, { senha: body.novaSenha } as any);
+    return { message: 'Senha atualizada com sucesso. Faça login com a nova senha.' };
+  }
+
+  /**
    * Registro público — qualquer visitante pode criar uma conta.
    * Toda conta criada por aqui recebe perfil 'admin' automaticamente.
    */

@@ -182,11 +182,11 @@
             <tr *ngFor="let custo of custosVinculados">
               <td>{{ custo.descricao }}</td>
               <td>
-                <span class="badge" [class.entrada]="custo.tipo === 'entrada'" [class.saida]="custo.tipo === 'saida'">
+                <span class="badge" [class.entrada]="custo.tipo === 'Entrada'" [class.saida]="custo.tipo !== 'Entrada'">
                   {{ custo.tipo }}
                 </span>
               </td>
-              <td [class.positivo]="custo.tipo === 'entrada'" [class.negativo]="custo.tipo === 'saida'">
+              <td [class.positivo]="custo.tipo === 'Entrada'" [class.negativo]="custo.tipo !== 'Entrada'">
                 {{ formatarValor(custo.valor) }}
               </td>
               <td>{{ formatarData(custo.data) }}</td>

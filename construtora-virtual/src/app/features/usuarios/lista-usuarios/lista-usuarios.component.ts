@@ -57,12 +57,12 @@ export class ListaUsuariosComponent implements OnInit {
 
   isAdmin(): boolean {
     const perfil = this.auth.getUsuario()?.perfil?.toLowerCase();
-    return perfil === 'administrador' || perfil === 'admin';
+    return perfil === 'admin';
   }
 
   perfilClass(perfil: string): string {
     const p = perfil?.toLowerCase();
-    if (p === 'administrador' || p === 'admin') return 'badge--admin';
+    if (p === 'admin') return 'badge--admin';
     if (p === 'gerente') return 'badge--gerente';
     return 'badge--comum';
   }
