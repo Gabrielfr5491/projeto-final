@@ -153,6 +153,74 @@ $accent-hover: $orange-600;
   &:active { opacity: 0.85; }
 }
 
+// ── LGPD checkbox ─────────────────────────────────────────────────────────────
+.lgpd-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  margin-top: 0.25rem;
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &__box {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    border-radius: 4px;
+    border: 1.5px solid rgba($black-400, 0.5);
+    background: $black-800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color $transition-fast ease, background $transition-fast ease;
+
+    &::after {
+      content: '';
+      display: none;
+      width: 5px;
+      height: 9px;
+      border: 2px solid $black-50;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+    }
+  }
+
+  &__input:checked ~ &__box {
+    background: $accent-color;
+    border-color: $accent-color;
+
+    &::after { display: block; }
+  }
+
+  &__text {
+    font-size: 0.78rem;
+    color: $black-400;
+    line-height: 1.5;
+
+    strong { color: $black-300; font-weight: $weight-semibold; }
+  }
+
+  &__link {
+    color: $accent-color;
+    text-decoration: none;
+    font-weight: $weight-semibold;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &:hover &__box {
+    border-color: $accent-color;
+  }
+}
+
 .login-aside-carousel {
   position: relative;
   height: 100%;

@@ -12,6 +12,11 @@ export class AuthService {
     return this.http.post<any>(`${this.api}/auth/login`, { email, senha });
   }
 
+  /** Cadastro público — sempre cria com perfil admin */
+  registro(nome: string, email: string, senha: string) {
+    return this.http.post<any>(`${this.api}/auth/registro`, { nome, email, senha });
+  }
+
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');

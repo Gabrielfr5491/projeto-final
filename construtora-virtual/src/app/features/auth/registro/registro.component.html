@@ -79,6 +79,25 @@
           </div>
         </div>
 
+        <!-- LGPD -->
+        <label class="lgpd-check">
+          <input
+            type="checkbox"
+            class="lgpd-check__input"
+            [(ngModel)]="aceitouLgpd"
+            name="aceitouLgpd">
+          <span class="lgpd-check__box"></span>
+          <span class="lgpd-check__text">
+            Li e aceito a
+            <a class="lgpd-check__link" href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noopener noreferrer">
+              Política de Privacidade
+            </a>
+            e os Termos de Uso, em conformidade com a
+            <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong>.
+            Seus dados serão tratados exclusivamente para fins de gestão da sua conta.
+          </span>
+        </label>
+
         <button type="submit" class="btn-login-premium">
           <span>Criar Minha Conta</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">

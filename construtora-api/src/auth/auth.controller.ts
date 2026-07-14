@@ -58,6 +58,29 @@ export class AuthController {
 
   }
 
+  /**
+   * Registro público — qualquer visitante pode criar uma conta.
+   * Toda conta criada por aqui recebe perfil 'admin' automaticamente.
+   */
+  @Post('registro')
+  async registro(
+    @Body() body: { nome: string; email: string; senha: string }
+  ) {
+    const existe = await this.usuariosService.buscarPorEmail(body.email);
+    if (existe) {
+      throw new UnauthorizedException('Este e-mail já está cadastrado.');
+    }
+
+    const novoUsuario = await this.usuariosService.create({
+      nome:   body.nome,
+      email:  body.email,
+      senha:  body.senha,
+      perfil: 'admin' as any,
+    });
+
+    return this.authService.login(novoUsuario);
+  }
+
   /** Cria o primeiro admin do sistema — só funciona se não existir nenhum admin ainda */
   @Post('seed-admin')
   async seedAdmin(
@@ -74,9 +97,9 @@ export class AuthController {
     }
 
     const novoAdmin = await this.usuariosService.create({
-      nome: body.nome,
-      email: body.email,
-      senha: body.senha,
+      nome:   body.nome,
+      email:  body.email,
+      senha:  body.senha,
       perfil: 'admin' as any,
     });
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-import { UsuarioService } from '../../../core/services/usuario.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 
 interface CarouselSlide {
@@ -33,6 +33,8 @@ export class RegistroComponent implements OnInit, OnDestroy {
     confirmarSenha: ''
   };
 
+  aceitouLgpd = false;
+
   currentSlideIndex = 0;
   private carouselTimer: any;
 
@@ -52,7 +54,7 @@ export class RegistroComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private usuarioService: UsuarioService,
+    private authService: AuthService,
     private router: Router,
     private toast: ToastService
   ) {}
@@ -98,28 +100,31 @@ export class RegistroComponent implements OnInit, OnDestroy {
       this.toast.aviso('As senhas não coincidem.');
       return;
     }
-    const novoUsuario = {
-      nome: this.usuario.nome,
-      email: this.usuario.email,
-      senha: this.usuario.senha,
-      perfil: 'admin'
-    };
 
-    this.usuarioService.adicionar(novoUsuario).subscribe({
-      next: () => {
-        this.toast.sucesso('Cadastro realizado com sucesso! Conecte-se para começar.');
-        setTimeout(() => this.router.navigate(['/login']), 1800);
-      },
-      error: (erro) => {
-        console.error(erro);
-        this.toast.erro('Erro ao realizar o cadastro. Verifique se este e-mail já está cadastrado.');
-      }
-    });
+    if (!this.aceitouLgpd) {
+      this.toast.aviso('Você precisa aceitar a Política de Privacidade para continuar.');
+      return;
+    }
+
+    this.authService
+      .registro(this.usuario.nome, this.usuario.email, this.usuario.senha)
+      .subscribe({
+        next: (resposta: any) => {
+          // Já faz login automático com o token retornado
+          localStorage.setItem('token', resposta.access_token);
+          localStorage.setItem('usuario', JSON.stringify(resposta.usuario));
+          this.toast.sucesso('Conta criada com sucesso! Bem-vindo.');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (erro) => {
+          console.error(erro);
+          const msg = erro?.error?.message ?? 'Erro ao realizar o cadastro.';
+          this.toast.erro(msg);
+        }
+      });
   }
 
   private validarEmail(email: string): boolean {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
+    return /\S+@\S+\.\S+/.test(email);
   }
-
 }
