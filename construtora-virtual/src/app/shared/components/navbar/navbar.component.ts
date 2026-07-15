@@ -27,7 +27,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public theme: ThemeService,
     public layout: LayoutService,
     private alertasService: AlertasService,
-  ) {}
+  ) {
+    console.log('✅ NavbarComponent initialized with LayoutService:', !!this.layout);
+  }
 
   ngOnInit(): void {
     // Busca o resumo de alertas ao iniciar e refresca a cada 5 minutos
@@ -52,6 +54,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.resumoAlertas.danger > 0) return 'badge--danger';
     if (this.resumoAlertas.warning > 0) return 'badge--warning';
     return 'badge--info';
+  }
+
+  toggleMenu() {
+    console.log('🍔 Botão hambúrguer clicado!');
+    console.log('Layout service exists?', !!this.layout);
+    if (this.layout) {
+      this.layout.toggleMobileSidebar();
+    } else {
+      console.error('❌ LayoutService não está disponível!');
+    }
   }
 
   logout() {
