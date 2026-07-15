@@ -30,6 +30,60 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+<style>
+  /* FORÇA SCROLL VERTICAL FUNCIONAR NO MOBILE */
+  html, body {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+    height: auto !important;
+  }
+  
+  /* Quando sidebar NÃO está aberta, permite scroll */
+  body:not(.sidebar-open) {
+    overflow-y: auto !important;
+    position: relative !important;
+  }
+</style>
+
+<script>
+  // FORÇA SCROLL FUNCIONAR NO MOBILE - Remove qualquer bloqueio
+  (function() {
+    'use strict';
+    
+    // Monitora mudanças no body style
+    if (typeof MutationObserver !== 'undefined') {
+      const observer = new MutationObserver(function(mutations) {
+        const body = document.body;
+        const hasSidebarOpen = body.classList.contains('sidebar-open');
+        
+        // Se sidebar NÃO está aberta, FORÇA scroll
+        if (!hasSidebarOpen) {
+          if (body.style.position === 'fixed' || body.style.overflow === 'hidden') {
+            console.warn('🔧 FORCE SCROLL: Removendo bloqueio de scroll');
+            body.style.overflow = 'auto';
+            body.style.position = 'relative';
+            body.style.height = 'auto';
+          }
+        }
+      });
+      
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['style', 'class']
+      });
+      
+      console.log('✅ Scroll Monitor ativo');
+    }
+    
+    // Fix para iOS - força scroll touch
+    document.addEventListener('touchmove', function(e) {
+      // Não previne o comportamento padrão = scroll funciona
+    }, { passive: true });
+    
+  })();
+</script>
+
 </head>
 <body ontouchstart="">
   <app-root></app-root>

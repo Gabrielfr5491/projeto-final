@@ -52,29 +52,53 @@ export class LayoutService {
     // Previne scroll do body quando sidebar está aberta (apenas no browser)
     if (this.isBrowser) {
       const body = document.body;
+      const html = document.documentElement;
       
       if (open) {
         console.log('🔒 Bloqueando scroll do body');
+        
+        // Salva a posição atual do scroll
+        const scrollY = window.scrollY;
+        
         body.classList.add('sidebar-open');
         body.style.overflow = 'hidden';
         body.style.position = 'fixed';
         body.style.width = '100%';
-        body.style.height = '100%';
-        body.style.top = '0';
+        body.style.top = `-${scrollY}px`;
         body.style.left = '0';
+        
+        // Armazena a posição do scroll
+        body.dataset['scrollY'] = scrollY.toString();
+        
       } else {
         console.log('🔓 Liberando scroll do body');
+        
+        // Recupera a posição do scroll
+        const scrollY = parseInt(body.dataset['scrollY'] || '0', 10);
+        
         body.classList.remove('sidebar-open');
-        body.style.overflow = '';
-        body.style.position = '';
-        body.style.width = '';
-        body.style.height = '';
-        body.style.top = '';
-        body.style.left = '';
+        
+        // FORÇA o body a ser scrollable novamente
+        body.style.overflow = 'auto';
+        body.style.position = 'relative';
+        body.style.width = 'auto';
+        body.style.height = 'auto';
+        body.style.top = '0';
+        body.style.left = '0';
+        
+        // Também força no html
+        html.style.overflow = 'auto';
+        
+        // Restaura a posição do scroll
+        window.scrollTo(0, scrollY);
+        
+        // Remove o dataset
+        delete body.dataset['scrollY'];
       }
       
       console.log('Body classes:', body.className);
       console.log('Body overflow:', body.style.overflow);
+      console.log('Body position:', body.style.position);
     }
   }
 

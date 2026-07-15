@@ -53,49 +53,13 @@ body {
   font-family: $font-body;
   transition: background-color $transition-base ease, color $transition-base ease;
   
-  // Touch optimization global
+  // Touch optimization - MINIMALISTA
   -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2);
-  -webkit-touch-callout: none;
-  
-  // Permite scroll vertical
-  overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
 }
 
-// Permitir seleção de texto onde for necessário
+// Permitir seleção de texto
 p, span, h1, h2, h3, h4, h5, h6, td, th, label {
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-// Otimização de touch para elementos clicáveis
-button, a, [role="button"], .btn {
-  -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2) !important;
-  -webkit-touch-callout: none !important;
-  touch-action: manipulation !important;
-  cursor: pointer !important;
-  
-  // Garante que o toque seja capturado
-  pointer-events: auto !important;
-  
-  // Previne ghost clicks
-  &:active {
-    transition: none !important;
-  }
-}
-
-// Containers principais - PERMITEM SCROLL
-.dashboard,
-.listagem-container,
-.cadastro-container,
-.screen-container {
-  touch-action: pan-y !important;
-  overflow-y: auto !important;
-}
-
-// Inputs e textareas podem ter comportamento padrão
-input, textarea, select {
-  touch-action: auto;
   -webkit-user-select: text;
   user-select: text;
 }
