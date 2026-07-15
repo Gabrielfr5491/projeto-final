@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
@@ -28,17 +28,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public layout: LayoutService,
     private alertasService: AlertasService,
   ) {
-    console.log('✅ NavbarComponent initialized with LayoutService:', !!this.layout);
+    console.log('✅ NavbarComponent initialized');
+    console.log('LayoutService disponível?', !!this.layout);
   }
 
   ngOnInit(): void {
-    // Busca o resumo de alertas ao iniciar e refresca a cada 5 minutos
     this.sub = interval(5 * 60 * 1000).pipe(
       startWith(0),
       switchMap(() => this.alertasService.resumo()),
     ).subscribe({
       next: r => { this.resumoAlertas = r; },
-      error: () => { /* falha silenciosa, não bloqueia a UI */ },
+      error: () => {},
     });
   }
 
@@ -56,13 +56,32 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return 'badge--info';
   }
 
-  toggleMenu() {
-    console.log('🍔 Botão hambúrguer clicado!');
-    console.log('Layout service exists?', !!this.layout);
+  // Método principal que abre/fecha o menu
+  toggleMenu(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    console.log('🍔 CLICK NO HAMBÚRGUER!');
+    console.log('Tipo de evento:', event?.type);
+    console.log('Window width:', window.innerWidth);
+    
     if (this.layout) {
       this.layout.toggleMobileSidebar();
+      console.log('✅ Toggle chamado com sucesso');
     } else {
-      console.error('❌ LayoutService não está disponível!');
+      console.error('❌ LayoutService não existe!');
+    }
+  }
+
+  // HostListener para capturar touch events
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    const target = event.target as HTMLElement;
+    if (target.closest('.navbar-custom__hamburger')) {
+      console.log('👆 TOUCH START detectado no hambúrguer!');
+      this.toggleMenu(event);
     }
   }
 

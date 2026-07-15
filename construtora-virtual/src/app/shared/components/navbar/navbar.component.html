@@ -1,7 +1,15 @@
 <nav class="navbar-custom" aria-label="Navegação superior">
   
-  <button type="button" class="navbar-custom__hamburger" (click)="toggleMenu()" aria-label="Menu Lateral">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+  <!-- Botão Hambúrguer com múltiplos event listeners -->
+  <button 
+    type="button" 
+    class="navbar-custom__hamburger" 
+    (click)="toggleMenu($event)"
+    (touchstart)="toggleMenu($event)"
+    (mousedown)="toggleMenu($event)"
+    aria-label="Menu Lateral"
+    tabindex="0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
       <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -33,7 +41,6 @@
 
     </button>
 
-    <!-- Botão de alertas com badge -->
     <a routerLink="/alertas"
        class="navbar-custom__btn-action navbar-custom__btn-alertas"
        title="Alertas e notificações">

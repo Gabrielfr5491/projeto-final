@@ -12,37 +12,49 @@ $navbar-height: 70px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 9999; // Muito alto para garantir que está acima de tudo
+  width: 100%;
 
   &__hamburger {
     display: none;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+    background: var(--accent) !important; // Laranja para ver claramente
+    border: 2px solid var(--accent) !important;
+    color: white !important;
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important;
+    min-height: 50px !important;
     border-radius: $radius-md;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    transition: background $transition-fast ease, border-color $transition-fast ease;
+    cursor: pointer !important;
     flex-shrink: 0;
-
+    position: relative;
+    z-index: 10000;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(255, 107, 26, 0.3);
+    
+    // Remove qualquer possível bloqueio
+    pointer-events: auto !important;
+    user-select: none;
+    
     svg {
       display: block;
       pointer-events: none;
+      width: 24px;
+      height: 24px;
     }
 
-    &:hover {
-      background: var(--bg-elevated);
-      border-color: var(--border-strong);
-      color: var(--text-primary);
-    }
-
-    &:active {
+    &:hover, &:active, &:focus {
+      background: var(--accent-hover) !important;
       transform: scale(0.95);
+    }
+
+    // Garante visibilidade em mobile
+    @media (max-width: 768px) {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
   }
 
@@ -189,6 +201,7 @@ $navbar-height: 70px;
   }
 }
 
+// Mobile overrides
 @media (max-width: 768px) {
   .navbar-custom {
     padding: 0 $space-md;
@@ -238,13 +251,13 @@ $navbar-height: 70px;
   .navbar-custom {
     &__actions {
       .navbar-custom__btn-action:first-child {
-        display: none; // Oculta botão de tema em telas muito pequenas
+        display: none;
       }
     }
   }
 }
 
-// ── Botão e badge de alertas ──────────────────────────────────────────────────
+// Alertas badge
 .navbar-custom__btn-alertas {
   text-decoration: none;
   margin-left: 0;
