@@ -1,0 +1,308 @@
+// ============================================
+// TOUCH OPTIMIZATION - REMOVE 300MS DELAY
+// ============================================
+
+// FastClick alternative - Remove 300ms delay globalmente
+html {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+}
+
+body {
+  // Remove tap highlight padrão azul
+  -webkit-tap-highlight-color: rgba(255, 107, 26, 0.15);
+  
+  // Remove callout menu no iOS
+  -webkit-touch-callout: none;
+  
+  // Previne seleção acidental
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// Permitir seleção de texto onde necessário
+p, span, h1, h2, h3, h4, h5, h6, 
+td, th, label, div[class*="label"], 
+div[class*="text"], div[class*="desc"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+// ============================================
+// ELEMENTOS CLICÁVEIS - TOUCH OTIMIZADO
+// ============================================
+
+button,
+a,
+[role="button"],
+[onclick],
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-action,
+.btn-create,
+.btn-edit,
+.btn-delete,
+.metric-card,
+.grafico-card,
+.custom-table tbody tr,
+.navbar-custom__hamburger,
+.navbar-custom__btn-action,
+.sidebar__link {
+  // Remove delay de 300ms
+  touch-action: manipulation !important;
+  -ms-touch-action: manipulation !important;
+  
+  // Tap highlight customizado
+  -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2) !important;
+  
+  // Remove callout
+  -webkit-touch-callout: none !important;
+  
+  // Garante que seja clicável
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  
+  // Remove user-select para evitar seleção acidental
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  
+  // Transição instantânea no active
+  &:active {
+    transition-duration: 0s !important;
+  }
+}
+
+// ============================================
+// SVG DENTRO DE BOTÕES - NÃO INTERCEPTA CLIQUES
+// ============================================
+
+svg, svg * {
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+// ============================================
+// INPUTS - COMPORTAMENTO NORMAL
+// ============================================
+
+input,
+textarea,
+select {
+  // Permitir comportamento padrão
+  touch-action: auto !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  
+  // Permitir seleção de texto
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+// ============================================
+// LINKS - TOUCH OTIMIZADO
+// ============================================
+
+a {
+  // Remove underline padrão do tap
+  -webkit-tap-highlight-color: rgba(255, 107, 26, 0.15) !important;
+  
+  // Remove delay
+  touch-action: manipulation !important;
+  
+  // Remove callout no iOS
+  -webkit-touch-callout: none !important;
+}
+
+// ============================================
+// BOTÕES - FEEDBACK VISUAL IMEDIATO
+// ============================================
+
+button, .btn {
+  // Remove outline padrão
+  outline: none !important;
+  
+  // Feedback visual no touch
+  &:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+// ============================================
+// CARDS CLICÁVEIS - TOUCH FEEDBACK
+// ============================================
+
+.metric-card,
+.grafico-card,
+.budget-card {
+  touch-action: manipulation !important;
+  
+  &:active {
+    opacity: 0.9;
+    transform: translateY(0) !important;
+  }
+}
+
+// ============================================
+// TABELAS - LINHAS CLICÁVEIS
+// ============================================
+
+.custom-table tbody tr {
+  touch-action: manipulation !important;
+  
+  &:active {
+    background-color: var(--border) !important;
+  }
+}
+
+// ============================================
+// MENU HAMBÚRGUER - PRIORIDADE MÁXIMA
+// ============================================
+
+.navbar-custom__hamburger {
+  // Força o maior z-index possível
+  z-index: 999999 !important;
+  position: relative !important;
+  
+  // Remove qualquer possível bloqueio
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  
+  // Garante que seja visível e clicável
+  visibility: visible !important;
+  opacity: 1 !important;
+  
+  // Área de toque generosa
+  min-width: 50px !important;
+  min-height: 50px !important;
+  
+  // Feedback visual forte
+  &:active {
+    transform: scale(0.9) !important;
+    opacity: 0.8 !important;
+  }
+}
+
+// ============================================
+// SIDEBAR - TOUCH SUAVE
+// ============================================
+
+.sidebar {
+  // Scroll suave
+  -webkit-overflow-scrolling: touch;
+  
+  // Previne bounce
+  overscroll-behavior: contain;
+  
+  &__link {
+    // Área de toque generosa
+    min-height: 48px !important;
+    
+    // Feedback visual
+    &:active {
+      background-color: var(--bg-elevated) !important;
+    }
+  }
+}
+
+// ============================================
+// BACKDROP - CLICÁVEL EM TODA ÁREA
+// ============================================
+
+.sidebar-backdrop {
+  touch-action: manipulation !important;
+  cursor: pointer !important;
+  
+  &:active {
+    opacity: 0.8 !important;
+  }
+}
+
+// ============================================
+// FORMS - OTIMIZAÇÃO MOBILE
+// ============================================
+
+.form-group {
+  input, select, textarea {
+    // Fonte mínima de 16px previne zoom no iOS
+    font-size: 16px !important;
+    
+    // Padding generoso para toque
+    min-height: 44px !important;
+  }
+}
+
+// ============================================
+// SCROLLBARS - OCULTOS MAS FUNCIONAIS
+// ============================================
+
+.table-responsive,
+.sidebar,
+*::-webkit-scrollbar {
+  // Scrollbar fina em mobile
+  scrollbar-width: thin;
+}
+
+// ============================================
+// PREVINE ZOOM INDESEJADO
+// ============================================
+
+@media (max-width: 768px) {
+  // Garante que nada seja menor que 16px
+  * {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
+// ============================================
+// ANIMATION PERFORMANCE
+// ============================================
+
+button, a, .btn, .card, .metric-card {
+  // GPU acceleration
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+// ============================================
+// IOS ESPECÍFICO
+// ============================================
+
+@supports (-webkit-touch-callout: none) {
+  // Remove bounce scroll global
+  body {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .dashboard,
+  .listagem-container,
+  .cadastro-container,
+  .screen-container {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: 100vh;
+  }
+}
+
+// ============================================
+// ANDROID ESPECÍFICO
+// ============================================
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+  // Remove highlight azul do Android
+  * {
+    -webkit-tap-highlight-color: rgba(255, 107, 26, 0.15) !important;
+  }
+}

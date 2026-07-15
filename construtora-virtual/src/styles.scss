@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use './styles/_variables.scss' as *;
+@use './styles/_touch-optimization.scss'; // PRIMEIRO - Prioridade máxima
 @use './styles/_mobile-fixes.scss';
 @use './styles/_utilities.scss';
 @import 'bootstrap/dist/css/bootstrap.min.css';
@@ -51,6 +52,51 @@ body {
   color: var(--text-main);
   font-family: $font-body;
   transition: background-color $transition-base ease, color $transition-base ease;
+  
+  // Touch optimization global
+  -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+// Permitir seleção de texto onde for necessário
+p, span, h1, h2, h3, h4, h5, h6, td, th, label {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+// Otimização de touch para TODOS os elementos clicáveis
+button, a, [role="button"], .btn, .metric-card, .grafico-card, 
+.table-container tbody tr, .btn-action, .btn-primary, .btn-secondary {
+  -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2) !important;
+  -webkit-touch-callout: none !important;
+  touch-action: manipulation !important;
+  cursor: pointer !important;
+  
+  // Remove delay de 300ms no mobile
+  -ms-touch-action: manipulation !important;
+  
+  // Garante que o toque seja capturado
+  pointer-events: auto !important;
+  
+  // Previne ghost clicks
+  &:active {
+    transition: none !important;
+  }
+}
+
+// Remove delay de 300ms GLOBALMENTE
+* {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+}
+
+// Inputs e textareas podem ter comportamento padrão
+input, textarea, select {
+  touch-action: auto;
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 // ── CONTAINERS ────────────────────────────────────────────────────────────────
