@@ -19,22 +19,37 @@ $navbar-height: 70px;
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-secondary);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: $radius-md;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: background $transition-fast ease, border-color $transition-fast ease;
+    flex-shrink: 0;
+
+    svg {
+      display: block;
+      pointer-events: none;
+    }
 
     &:hover {
       background: var(--bg-elevated);
       border-color: var(--border-strong);
       color: var(--text-primary);
     }
+
+    &:active {
+      transform: scale(0.95);
+    }
   }
 
-  &__welcome { display: flex; flex-direction: column; }
+  &__welcome { 
+    display: flex; 
+    flex-direction: column;
+  }
 
   &__greeting {
     font-size: 0.9rem;
@@ -55,7 +70,11 @@ $navbar-height: 70px;
     gap: $space-lg;
   }
 
-  &__actions { display: flex; align-items: center; }
+  &__actions { 
+    display: flex; 
+    align-items: center;
+    gap: $space-xs;
+  }
 
   &__btn-action {
     background: transparent;
@@ -63,17 +82,31 @@ $navbar-height: 70px;
     color: var(--text-secondary);
     width: 36px;
     height: 36px;
+    min-width: 36px;
+    min-height: 36px;
     border-radius: $radius-md;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: background $transition-fast ease, border-color $transition-fast ease, color $transition-fast ease;
+    flex-shrink: 0;
+
+    svg {
+      pointer-events: none;
+    }
 
     &:hover {
       background: var(--bg-elevated);
       border-color: var(--border-strong);
       color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 
@@ -92,6 +125,8 @@ $navbar-height: 70px;
   &__avatar {
     width: 36px;
     height: 36px;
+    min-width: 36px;
+    min-height: 36px;
     border-radius: $radius-md;
     background: var(--accent);
     color: #fff;
@@ -101,9 +136,19 @@ $navbar-height: 70px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+
+    @media (max-width: 768px) {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
+    }
   }
 
-  &__user-info { display: flex; flex-direction: column; }
+  &__user-info { 
+    display: flex; 
+    flex-direction: column;
+  }
 
   &__user-name {
     font-size: 0.85rem;
@@ -132,6 +177,10 @@ $navbar-height: 70px;
     cursor: pointer;
     transition: color $transition-fast ease, background $transition-fast ease, border-color $transition-fast ease;
 
+    svg {
+      pointer-events: none;
+    }
+
     &:hover {
       color: var(--danger);
       background: rgba(199, 62, 58, 0.08);
@@ -143,16 +192,62 @@ $navbar-height: 70px;
 @media (max-width: 768px) {
   .navbar-custom {
     padding: 0 $space-md;
+    height: 60px;
 
-    &__hamburger { display: flex; }
-    &__welcome, &__user-info, &__divider { display: none; }
+    &__hamburger { 
+      display: flex !important;
+      order: -1;
+    }
+    
+    &__welcome { 
+      display: none !important;
+    }
+    
+    &__right {
+      gap: $space-sm;
+      flex: 1;
+      justify-content: flex-end;
+    }
+    
+    &__user-info { 
+      display: none !important;
+    }
+    
+    &__divider { 
+      display: none !important;
+    }
+
+    &__btn-logout {
+      span {
+        display: none;
+      }
+      
+      padding: $space-xs;
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+    }
+
+    &__actions {
+      gap: $space-xs;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-custom {
+    &__actions {
+      .navbar-custom__btn-action:first-child {
+        display: none; // Oculta botão de tema em telas muito pequenas
+      }
+    }
   }
 }
 
 // ── Botão e badge de alertas ──────────────────────────────────────────────────
 .navbar-custom__btn-alertas {
   text-decoration: none;
-  margin-left: $space-xs;
+  margin-left: 0;
 }
 
 .navbar-custom__alertas-wrap {
@@ -166,16 +261,16 @@ $navbar-height: 70px;
   position: absolute;
   top: -7px;
   right: -9px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 3px;
-  border-radius: 8px;
-  font-size: 0.58rem;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  font-size: 0.6rem;
   font-weight: $weight-bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid var(--bg-card);
+  border: 2px solid var(--bg-card);
   pointer-events: none;
   background: $warning;
   color: #fff;

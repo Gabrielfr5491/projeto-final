@@ -133,12 +133,13 @@ $sidebar-collapsed: 72px;
     gap: 10px;
     color: var(--text-secondary);
     text-decoration: none;
-    padding: 0.55rem 0.85rem;
+    padding: 0.65rem 0.85rem;
     border-radius: 5px;
     font-size: 0.875rem;
     font-weight: $weight-medium;
     white-space: nowrap;
     transition: background 160ms ease, color 160ms ease;
+    min-height: 40px;
 
     .sidebar__icon {
       width: 17px;
@@ -177,6 +178,11 @@ $sidebar-collapsed: 72px;
         color: var(--accent);
       }
     }
+
+    @media (max-width: 768px) {
+      min-height: 48px;
+      padding: 0.75rem 0.85rem;
+    }
   }
 
   @media (max-width: 768px) {
@@ -197,16 +203,20 @@ $sidebar-collapsed: 72px;
 
     .sidebar__brand {
       justify-content: center !important;
+      padding: 1.2rem 1.5rem !important;
     }
 
     .sidebar__link {
       justify-content: flex-start !important;
-      padding: 0.65rem 0.85rem !important;
-      min-height: 44px !important;
+      padding: 0.75rem 0.85rem !important;
 
       .sidebar__icon {
         margin: 0 !important;
       }
+    }
+
+    .sidebar__toggle {
+      display: none !important;
     }
   }
 }

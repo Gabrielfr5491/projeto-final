@@ -21,10 +21,12 @@ export class LayoutService {
 
   toggleMobileSidebar() {
     const newValue = !this.mobileSidebarOpen.value;
+    console.log('🍔 Toggle Mobile Sidebar:', newValue);
     this.setMobileSidebarOpen(newValue);
   }
 
   setMobileSidebarOpen(open: boolean) {
+    console.log('📱 Set Mobile Sidebar:', open);
     this.mobileSidebarOpen.next(open);
     
     // Previne scroll do body quando sidebar mobile está aberta
@@ -34,11 +36,13 @@ export class LayoutService {
         document.body.style.overflow = 'hidden';
         document.body.style.position = 'fixed';
         document.body.style.width = '100%';
+        document.body.style.height = '100%';
       } else {
         document.body.classList.remove('sidebar-open');
         document.body.style.overflow = '';
         document.body.style.position = '';
         document.body.style.width = '';
+        document.body.style.height = '';
       }
     }
   }
