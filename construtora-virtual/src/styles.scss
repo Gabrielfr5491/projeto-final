@@ -56,8 +56,10 @@ body {
   // Touch optimization global
   -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2);
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
+  
+  // Permite scroll vertical
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 // Permitir seleção de texto onde for necessário
@@ -66,16 +68,12 @@ p, span, h1, h2, h3, h4, h5, h6, td, th, label {
   user-select: text;
 }
 
-// Otimização de touch para TODOS os elementos clicáveis
-button, a, [role="button"], .btn, .metric-card, .grafico-card, 
-.table-container tbody tr, .btn-action, .btn-primary, .btn-secondary {
+// Otimização de touch para elementos clicáveis
+button, a, [role="button"], .btn {
   -webkit-tap-highlight-color: rgba(255, 107, 26, 0.2) !important;
   -webkit-touch-callout: none !important;
   touch-action: manipulation !important;
   cursor: pointer !important;
-  
-  // Remove delay de 300ms no mobile
-  -ms-touch-action: manipulation !important;
   
   // Garante que o toque seja capturado
   pointer-events: auto !important;
@@ -86,10 +84,13 @@ button, a, [role="button"], .btn, .metric-card, .grafico-card,
   }
 }
 
-// Remove delay de 300ms GLOBALMENTE
-* {
-  touch-action: manipulation;
-  -ms-touch-action: manipulation;
+// Containers principais - PERMITEM SCROLL
+.dashboard,
+.listagem-container,
+.cadastro-container,
+.screen-container {
+  touch-action: pan-y !important;
+  overflow-y: auto !important;
 }
 
 // Inputs e textareas podem ter comportamento padrão
