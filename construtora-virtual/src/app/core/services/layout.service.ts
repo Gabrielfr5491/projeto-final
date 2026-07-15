@@ -20,10 +20,26 @@ export class LayoutService {
   }
 
   toggleMobileSidebar() {
-    this.mobileSidebarOpen.next(!this.mobileSidebarOpen.value);
+    const newValue = !this.mobileSidebarOpen.value;
+    this.setMobileSidebarOpen(newValue);
   }
 
   setMobileSidebarOpen(open: boolean) {
     this.mobileSidebarOpen.next(open);
+    
+    // Previne scroll do body quando sidebar mobile está aberta
+    if (typeof document !== 'undefined') {
+      if (open) {
+        document.body.classList.add('sidebar-open');
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      } else {
+        document.body.classList.remove('sidebar-open');
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }
+    }
   }
 }

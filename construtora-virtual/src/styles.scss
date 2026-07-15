@@ -1,5 +1,7 @@
 @use 'sass:color';
 @use './styles/_variables.scss' as *;
+@use './styles/_mobile-fixes.scss';
+@use './styles/_utilities.scss';
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap');
@@ -58,8 +60,14 @@ body {
   background-color: var(--bg-dashboard);
   color: var(--text-main);
   font-family: $font-body;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 
-  @media (max-width: 768px) { padding: 1.25rem; }
+  @media (max-width: 768px) { 
+    padding: 1.25rem; 
+    min-height: -webkit-fill-available;
+  }
 }
 
 // ── CABEÇALHOS ────────────────────────────────────────────────────────────────

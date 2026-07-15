@@ -181,8 +181,10 @@ $sidebar-collapsed: 72px;
 
   @media (max-width: 768px) {
     transform: translateX(-100%);
-    width: 250px !important;
+    width: 280px !important;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 
     &.mobile-open {
       transform: translateX(0);
@@ -199,7 +201,8 @@ $sidebar-collapsed: 72px;
 
     .sidebar__link {
       justify-content: flex-start !important;
-      padding: 0.55rem 0.85rem !important;
+      padding: 0.65rem 0.85rem !important;
+      min-height: 44px !important;
 
       .sidebar__icon {
         margin: 0 !important;

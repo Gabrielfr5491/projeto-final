@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription, interval } from 'rxjs';
-import { switchMap, startWith } from 'rxjs/operators';
+import { switchMap, startWith, filter } from 'rxjs/operators';
 
 import { LayoutService } from '../../../core/services/layout.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -21,11 +21,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
   temCritico = false;
 
   private sub?: Subscription;
+  private routerSub?: Subscription;
 
   constructor(
     public layout: LayoutService,
     public auth: AuthService,
     private alertasService: AlertasService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +41,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
       },
       error: () => {},
     });
+
+    // Fecha sidebar mobile quando navegar para nova rota
+    this.routerSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      if (window.innerWidth <= 768) {
+        this.layout.setMobileSidebarOpen(false);
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+    this.routerSub?.unsubscribe();
   }
 
   isAdmin(): boolean    { return this.auth.isAdmin(); }

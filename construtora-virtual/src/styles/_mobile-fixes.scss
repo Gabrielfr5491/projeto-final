@@ -1,0 +1,241 @@
+// ============================================
+// CORREÇÕES DE RESPONSIVIDADE MOBILE
+// ============================================
+@use './_variables.scss' as *;
+
+// Previne zoom indesejado em inputs no iOS
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important; // iOS não dá zoom se for >= 16px
+  }
+}
+
+// Fix para viewport height em mobile (problema com barra de endereço)
+.dashboard-structure,
+.listagem-container,
+.cadastro-container,
+.dashboard,
+.screen-container {
+  @media (max-width: 768px) {
+    min-height: 100vh;
+    min-height: -webkit-fill-available; // Safari iOS fix
+  }
+}
+
+// Previne overflow horizontal
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    // Desabilita pull-to-refresh no iOS que pode causar problemas
+    overscroll-behavior-y: contain;
+  }
+}
+
+// Fix para tabelas em mobile - scroll horizontal suave
+.table-card,
+.table-responsive,
+.responsive-wrapper {
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    // Esconde scrollbar mas mantém funcionalidade
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 2px;
+    }
+  }
+}
+
+// Fix para modais e overlays em mobile
+.modal,
+.overlay,
+.sidebar-backdrop {
+  @media (max-width: 768px) {
+    position: fixed !important;
+    touch-action: none; // Previne scroll do body quando modal está aberto
+  }
+}
+
+// Quando sidebar mobile está aberta, previne scroll do body
+body.sidebar-open {
+  @media (max-width: 768px) {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Fix para safe areas (notch do iPhone)
+@supports (padding: max(0px)) {
+  .dashboard-structure,
+  .navbar-custom {
+    padding-left: max($space-md, env(safe-area-inset-left));
+    padding-right: max($space-md, env(safe-area-inset-right));
+  }
+  
+  .sidebar {
+    padding-bottom: max($space-md, env(safe-area-inset-bottom));
+  }
+}
+
+// Melhora tap targets para mobile (mínimo 44x44px)
+@media (max-width: 768px) {
+  button,
+  .btn-action,
+  a[role="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  // Aumenta área de toque de links pequenos
+  a {
+    &:not(.btn-primary):not(.btn-secondary) {
+      padding: $space-xs;
+      margin: -#{$space-xs};
+    }
+  }
+}
+
+// Fix para form-actions em mobile
+.form-actions {
+  @media (max-width: 768px) {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-card);
+    padding: $space-md;
+    margin: $space-md -#{$space-md} -#{$space-md};
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+}
+
+// Fix para header responsivo
+.header-screen,
+.listagem-header,
+.cadastro-header {
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.35rem !important;
+    }
+    
+    p {
+      font-size: 0.85rem !important;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Fix para cards em mobile
+.form-card,
+.cadastro-card,
+.card {
+  @media (max-width: 768px) {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    margin: 0 -#{$space-md};
+  }
+}
+
+// Melhora legibilidade de texto em mobile
+@media (max-width: 768px) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+// Fix para select em mobile
+select {
+  @media (max-width: 768px) {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238A8A8A' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px !important;
+  }
+}
+
+// Fix para inputs com ícones
+.input-with-icon {
+  @media (max-width: 768px) {
+    input {
+      padding-left: 40px !important;
+    }
+    
+    .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+// Reduz espaçamento em mobile para aproveitar melhor o espaço
+@media (max-width: 768px) {
+  .products-section,
+  .form-divider {
+    margin-top: $space-lg;
+    margin-bottom: $space-lg;
+  }
+  
+  .product-row {
+    padding: $space-md !important;
+  }
+  
+  .form-grid,
+  .cadastro-form {
+    gap: $space-md !important;
+  }
+}
+
+// Fix para toasts/notifications em mobile
+.toast,
+.notification,
+.alert {
+  @media (max-width: 768px) {
+    left: $space-md !important;
+    right: $space-md !important;
+    bottom: $space-md !important;
+    width: calc(100% - #{$space-md * 2}) !important;
+  }
+}
+
+// Previne pinch zoom (se necessário para app-like experience)
+// Descomente se quiser comportamento de app nativo
+// @media (max-width: 768px) {
+//   * {
+//     touch-action: manipulation;
+//   }
+// }
